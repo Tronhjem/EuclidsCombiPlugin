@@ -131,6 +131,9 @@ bool EuclidCombinatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 
 void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    // ===============================================================
+    // AUDIO STUFF
+    // ===============================================================
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -139,16 +142,21 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, numSamples);
     
+    // ===============================================================
+    // MIDI stuff
+    // ===============================================================
+    
+    int prevBeat = mTransportData.beat;
     FillPositionData(mTransportData);
-   
-    bool hasAdvanced = false;
-    if (hasAdvanced)
+    
+    bool hasAdvanced = prevBeat != mTransportData.beat;
+    if (hasAdvanced && mTransportData.isPlaying)
     {
         auto on = juce::MidiMessage::noteOn(1, 36, 1.f);
-        auto off = juce::MidiMessage::noteOff(1, 36, 1.f);
-        
         midiMessages.addEvent(on, 0);
-        midiMessages.addEvent(off, 22050);
+        
+        auto off = juce::MidiMessage::noteOff(1, 36, 1.f);
+        midiMessages.addEvent(off, 11025);
     }
 }
 
