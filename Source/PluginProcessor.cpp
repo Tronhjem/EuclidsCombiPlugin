@@ -148,8 +148,8 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     
     int prevBeat = mTransportData.beat;
     FillPositionData(mTransportData);
-    
     bool hasAdvanced = prevBeat != mTransportData.beat;
+
     if (hasAdvanced && mTransportData.isPlaying)
     {
         auto on = juce::MidiMessage::noteOn(1, 36, 1.f);
