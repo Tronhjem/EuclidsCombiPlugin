@@ -15,8 +15,9 @@ struct TransportData
     double bpm = 0.0;
     double time = 0.0;
     double ppq = 0.0;
-    
+    double timeInSamples = 0;
     bool isPlaying = false;
+
     int bar = 0;
     int beat = 0;
 };
@@ -67,11 +68,13 @@ public:
     
 private:
     //==============================================================================
-    
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
     
     int triggers[8] = {1, 0, 0, 0, 1, 0, 0, 0};
-    
+    const int gridResolution = (int)((44100.f / 1000.f) * 500.f);
+    int stepCount = -1;
+    bool triggeredThisFrame = false;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessor)
 };

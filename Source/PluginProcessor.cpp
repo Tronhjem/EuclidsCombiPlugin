@@ -145,18 +145,32 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // ===============================================================
     // MIDI stuff
     // ===============================================================
-    
-    int prevBeat = mTransportData.beat;
-    FillPositionData(mTransportData);
-    bool hasAdvanced = prevBeat != mTransportData.beat;
 
-    if (hasAdvanced && mTransportData.isPlaying)
+    FillPositionData(mTransportData);
+
+    if (mTransportData.isPlaying)
     {
-        auto on = juce::MidiMessage::noteOn(1, 36, 1.f);
-        midiMessages.addEvent(on, 0);
-        
-        auto off = juce::MidiMessage::noteOff(1, 36, 1.f);
-        midiMessages.addEvent(off, 11025);
+        if (stepCount < 0)
+            stepCount = (int)(mTransportData.timeInSamples / gridResolution);
+
+        int nextSample = gridResolution * stepCount;
+		if (mTransportData.timeInSamples + numSamples >= nextSample)
+		{
+			int scheduled = nextSample - mTransportData.timeInSamples;
+
+			// Fire MIDI notes.
+			auto on = juce::MidiMessage::noteOn(1, 64, 1.f);
+			midiMessages.addEvent(on, scheduled);
+			
+			auto off = juce::MidiMessage::noteOff(1, 64, 1.f);
+			midiMessages.addEvent(off, scheduled + 11025);
+
+			++stepCount;
+		}
+    }
+    else
+    {
+        stepCount = -1;
     }
 }
 
@@ -180,6 +194,11 @@ void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
         data.ppq = static_cast<double>(*positionInfo->getPpqPosition());
     }
     
+    if(positionInfo->getTimeInSamples().hasValue())
+    {
+        data.timeInSamples = static_cast<double>(*positionInfo->getTimeInSamples());
+    }
+
     data.isPlaying = static_cast<bool>(positionInfo->getIsPlaying());
     
     if(positionInfo->getTimeSignature().hasValue())
