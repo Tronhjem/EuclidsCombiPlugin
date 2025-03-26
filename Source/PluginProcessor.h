@@ -66,15 +66,19 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     const TransportData& GetPositionData() { return mTransportData; };
     
+    TransportData mTransportData;
+    int mGridResolution = (int)((44100.f / 1000.f) * 500.f);
+    double mSampleRate = 44100.0;
+    
+    // ================
+    // UNUSED
+    int mStepCount = 0;
+    int triggers[8] = {1, 0, 0, 0, 1, 0, 0, 0};
+    // ================
+    
 private:
     //==============================================================================
     void FillPositionData(TransportData& data);
-    TransportData mTransportData;
-    
-    int triggers[8] = {1, 0, 0, 0, 1, 0, 0, 0};
-    const int gridResolution = (int)((44100.f / 1000.f) * 500.f);
-    int stepCount = -1;
-    bool triggeredThisFrame = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessor)
 };

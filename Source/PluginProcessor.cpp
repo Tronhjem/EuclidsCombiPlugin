@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <cmath>
 
 //==============================================================================
 EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
@@ -95,6 +96,7 @@ void EuclidCombinatorAudioProcessor::prepareToPlay (double sampleRate, int sampl
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    mSampleRate = sampleRate;
 }
 
 void EuclidCombinatorAudioProcessor::releaseResources()
@@ -138,39 +140,33 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    int numSamples = buffer.getNumSamples();
+    int bufferLength = buffer.getNumSamples();
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, numSamples);
+        buffer.clear (i, 0, bufferLength);
     
     // ===============================================================
     // MIDI stuff
     // ===============================================================
 
     FillPositionData(mTransportData);
-
+    
+    mGridResolution = static_cast<int>(mSampleRate * (60.0 / mTransportData.bpm));
+    
+    const int stepCount = static_cast<int>(ceil(mTransportData.timeInSamples / mGridResolution));
     if (mTransportData.isPlaying)
     {
-        if (stepCount < 0)
-            stepCount = (int)(mTransportData.timeInSamples / gridResolution);
+        const int nextSample = mGridResolution * stepCount;
+        if (mTransportData.timeInSamples + bufferLength >= nextSample)
+        {
+            int scheduledTime = nextSample - mTransportData.timeInSamples;
 
-        int nextSample = gridResolution * stepCount;
-		if (mTransportData.timeInSamples + numSamples >= nextSample)
-		{
-			int scheduled = nextSample - mTransportData.timeInSamples;
-
-			// Fire MIDI notes.
-			auto on = juce::MidiMessage::noteOn(1, 64, 1.f);
-			midiMessages.addEvent(on, scheduled);
-			
-			auto off = juce::MidiMessage::noteOff(1, 64, 1.f);
-			midiMessages.addEvent(off, scheduled + 11025);
-
-			++stepCount;
-		}
-    }
-    else
-    {
-        stepCount = -1;
+            // Fire MIDI notes.
+            auto on = juce::MidiMessage::noteOn(1, 64, 1.f);
+            midiMessages.addEvent(on, scheduledTime);
+            
+            auto off = juce::MidiMessage::noteOff(1, 64, 1.f);
+            midiMessages.addEvent(off, scheduledTime + 11025);
+        }
     }
 }
 

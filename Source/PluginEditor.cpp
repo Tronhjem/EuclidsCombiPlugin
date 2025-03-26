@@ -51,14 +51,14 @@ void EuclidCombinatorAudioProcessorEditor::paint (juce::Graphics& g)
     
     isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
     
-    auto barString = juce::String(data.bar + 1);
-    barCountLabel.setText(barString, juce::dontSendNotification);
+    int nextstep = audioProcessor.mStepCount * audioProcessor.mGridResolution;
+    auto stepCountString = juce::String(audioProcessor.mStepCount);
+    auto nextStepString = juce::String(nextstep);
+    auto sampleString = juce::String(data.timeInSamples);
     
-    auto beatString = juce::String(data.beat + 1);
-    beatCountLabel.setText(beatString, juce::dontSendNotification);
-    
-    auto ppqString = juce::String(data.ppq);
-    ppqLabel.setText(ppqString, juce::dontSendNotification);
+    barCountLabel.setText(stepCountString, juce::dontSendNotification);
+    beatCountLabel.setText(nextStepString, juce::dontSendNotification);
+    ppqLabel.setText(sampleString, juce::dontSendNotification);
 }
 
 void EuclidCombinatorAudioProcessorEditor::resized()
