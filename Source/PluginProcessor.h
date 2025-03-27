@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Sequence.h"
 
 struct TransportData
 {
@@ -69,11 +70,12 @@ public:
     TransportData mTransportData;
     int mGridResolution = (int)((44100.f / 1000.f) * 500.f);
     double mSampleRate = 44100.0;
-    
+    Sequence<8> seq{ {1, 0, 0, 0, 1, 0, 0, 0 } };
+    Test s;
+
     // ================
     // UNUSED
     int mStepCount = 0;
-    int triggers[8] = {1, 0, 0, 0, 1, 0, 0, 0};
     // ================
     
 private:
