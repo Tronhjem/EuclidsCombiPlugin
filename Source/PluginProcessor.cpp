@@ -150,44 +150,38 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
     FillPositionData(mTransportData);
     
-    mGridResolution = static_cast<int>(mSampleRate * (60.0 / mTransportData.bpm));
+    mGridResolution = static_cast<int>(mSampleRate * (60.0 / (mTransportData.bpm * mBpmDivide)));
     
     const int stepCount = static_cast<int>(ceil(mTransportData.timeInSamples / mGridResolution));
+    
     if (mTransportData.isPlaying)
     {
         const int nextSample = mGridResolution * stepCount;
         if (mTransportData.timeInSamples + bufferLength >= nextSample)
         {
             int scheduledTime = nextSample - mTransportData.timeInSamples;
-
-            // Fire MIDI notes.
-            auto on = juce::MidiMessage::noteOn(1, 64, 1.f);
-            midiMessages.addEvent(on, scheduledTime);
             
-            auto off = juce::MidiMessage::noteOff(1, 64, 1.f);
-            midiMessages.addEvent(off, scheduledTime + 11025);
+            int localStep = stepCount % LengthOfTrigger;
+            if (mTriggers[localStep] == 1)
+            {
+                // Fire MIDI notes.
+                auto on = juce::MidiMessage::noteOn(1, 64, 1.f);
+                midiMessages.addEvent(on, scheduledTime);
+                
+                auto off = juce::MidiMessage::noteOff(1, 64, 1.f);
+                midiMessages.addEvent(off, scheduledTime + mNoteLength);
+            }
         }
     }
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
 {
-    AudioPlayHead* playHead = getPlayHead();
-    auto positionInfo = playHead->getPosition();
+    auto positionInfo = getPlayHead()->getPosition();
     
     if(positionInfo->getBpm().hasValue())
     {
         data.bpm = static_cast<double>(*positionInfo->getBpm());
-    }
-    
-    if(positionInfo->getTimeInSeconds().hasValue())
-    {
-        data.time = static_cast<double>(*positionInfo->getTimeInSeconds());
-    }
-    
-    if(positionInfo->getPpqPosition().hasValue())
-    {
-        data.ppq = static_cast<double>(*positionInfo->getPpqPosition());
     }
     
     if(positionInfo->getTimeInSamples().hasValue())
@@ -197,15 +191,25 @@ void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
 
     data.isPlaying = static_cast<bool>(positionInfo->getIsPlaying());
     
-    if(positionInfo->getTimeSignature().hasValue())
-    {
-        auto timeSig = *positionInfo->getTimeSignature();
-        int barLength = timeSig.numerator;
-        
-        int beatCount = static_cast<int>(data.time / (60.0 / data.bpm));
-        data.beat =  beatCount % barLength;
-        data.bar = static_cast<int> (beatCount / barLength);
-    }
+//    if(positionInfo->getTimeInSeconds().hasValue())
+//    {
+//        data.time = static_cast<double>(*positionInfo->getTimeInSeconds());
+//    }
+    
+//    if(positionInfo->getPpqPosition().hasValue())
+//    {
+//        data.ppq = static_cast<double>(*positionInfo->getPpqPosition());
+//    }
+    
+//    if(positionInfo->getTimeSignature().hasValue())
+//    {
+//        auto timeSig = *positionInfo->getTimeSignature();
+//        int barLength = timeSig.numerator;
+//
+//        int beatCount = static_cast<int>(data.time / (60.0 / data.bpm));
+//        data.beat =  beatCount % barLength;
+//        data.bar = static_cast<int> (beatCount / barLength);
+//    }
 }
 
 //==============================================================================

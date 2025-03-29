@@ -10,16 +10,18 @@
 
 #include <JuceHeader.h>
 
+constexpr int LengthOfTrigger = 8;
+
 struct TransportData
 {
     double bpm = 0.0;
-    double time = 0.0;
-    double ppq = 0.0;
     double timeInSamples = 0;
     bool isPlaying = false;
 
-    int bar = 0;
-    int beat = 0;
+//    double time = 0.0;
+//    double ppq = 0.0;
+//    int bar = 0;
+//    int beat = 0;
 };
 
 class EuclidCombinatorAudioProcessor  : public juce::AudioProcessor
@@ -69,11 +71,14 @@ public:
     TransportData mTransportData;
     int mGridResolution = (int)((44100.f / 1000.f) * 500.f);
     double mSampleRate = 44100.0;
+    double mBpmDivide = 4.0;
+    
+    int mTriggers[LengthOfTrigger] = {1, 0, 0, 0, 1, 0, 1, 1};
+    const int mNoteLength = 11025;
     
     // ================
     // UNUSED
     int mStepCount = 0;
-    int triggers[8] = {1, 0, 0, 0, 1, 0, 0, 0};
     // ================
     
 private:
