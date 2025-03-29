@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Sequence.h"
 
 constexpr int LengthOfTrigger = 8;
 
@@ -72,10 +73,10 @@ public:
     int mGridResolution = (int)((44100.f / 1000.f) * 500.f);
     double mSampleRate = 44100.0;
     double mBpmDivide = 4.0;
-    
     int mTriggers[LengthOfTrigger] = {1, 0, 0, 0, 1, 0, 1, 1};
     const int mNoteLength = 11025;
-    
+    Sequence<8> seq{ {1, 0, 0, 0, 1, 0, 0, 0 } };
+
     // ================
     // UNUSED
     int mStepCount = 0;

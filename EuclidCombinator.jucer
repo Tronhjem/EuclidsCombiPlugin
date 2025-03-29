@@ -6,6 +6,8 @@
               pluginManufacturer="SonoTron" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
+      <FILE id="l82RpR" name="Sequence.cpp" compile="1" resource="0" file="Source/Sequence.cpp"/>
+      <FILE id="wtWHB1" name="Sequence.h" compile="0" resource="0" file="Source/Sequence.h"/>
       <FILE id="zlpITL" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="kQzwxu" name="PluginProcessor.h" compile="0" resource="0"
