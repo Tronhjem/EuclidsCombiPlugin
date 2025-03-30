@@ -24,6 +24,7 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
                        )
 #endif
 {
+    euclidEngine = std::make_unique<EuclidsCombinatorEngine>();
 }
 
 EuclidCombinatorAudioProcessor::~EuclidCombinatorAudioProcessor()
@@ -151,7 +152,7 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // ===============================================================
 
     FillPositionData(mTransportData);
-    euclidEngine.Tick(mTransportData, buffer, midiMessages);
+    euclidEngine->Tick(mTransportData, bufferLength, midiMessages);
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)

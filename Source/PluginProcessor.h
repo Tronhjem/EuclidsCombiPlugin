@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <memory>
 #include "EuclidsCombinator.hpp"
 
 
@@ -62,7 +63,7 @@ private:
     //==============================================================================
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
-    EuclidsCombinatorEngine euclidEngine;
+    std::unique_ptr<EuclidsCombinatorEngine> euclidEngine;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessor)
 };

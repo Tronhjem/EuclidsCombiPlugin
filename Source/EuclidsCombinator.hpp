@@ -17,10 +17,10 @@ class EuclidsCombinatorEngine
 public:
     EuclidsCombinatorEngine();
     ~EuclidsCombinatorEngine();
-    void Tick(const TransportData& transportData, juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages);
+    void Tick(const TransportData& transportData, const int bufferLength, juce::MidiBuffer& midiMessages);
     
 private:
     double mBpmDivide = 1.0;
-    int mTimeSincePost = 0;
+    MidiScheduler mMidiScheduler;
     Output* mOutput;
 };
