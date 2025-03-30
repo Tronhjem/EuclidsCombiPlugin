@@ -1,18 +1,12 @@
 #pragma once
 #include <array>
-
-typedef unsigned short int UINT;
-
-class Test
-{
-	int s = 90;
-};
+#include "Types.h"
 
 template <int Size> 
 class Sequence 
 {
 public:
-	Sequence(std::array<UINT, Size> triggers)
+	Sequence(std::array<uint_8, Size> triggers)
 	{
 		mTriggers = triggers;
 	}
@@ -23,11 +17,11 @@ public:
 			mTriggers[i] = 0;
 	}
 
-	const UINT& operator [](const int i) const
+	const uint_8& operator [](const int i) const
 	{
 		return mTriggers[i];
 	}
 
 private:
-	std::array<UINT, Size>	mTriggers;
+	std::array<uint_8, Size>	mTriggers;
 };

@@ -8,7 +8,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include <cmath>
+
+//#include "TransportData.h"
 
 //==============================================================================
 EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
@@ -144,63 +145,43 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, bufferLength);
     
+    
     // ===============================================================
     // MIDI stuff
     // ===============================================================
 
     FillPositionData(mTransportData);
-    
-    mGridResolution = static_cast<int>(mSampleRate * (60.0 / (mTransportData.bpm * mBpmDivide)));
-    
-    const int stepCount = static_cast<int>(ceil(mTransportData.timeInSamples / mGridResolution));
-    
-    if (mTransportData.isPlaying)
-    {
-        const int nextSample = mGridResolution * stepCount;
-        if (mTransportData.timeInSamples + bufferLength >= nextSample)
-        {
-            int scheduledTime = nextSample - mTransportData.timeInSamples;
-            
-            int localStep = stepCount % LengthOfTrigger;
-            if (mTriggers[localStep] == 1)
-            {
-                // Fire MIDI notes.
-                auto on = juce::MidiMessage::noteOn(1, 64, 1.f);
-                midiMessages.addEvent(on, scheduledTime);
-                
-                auto off = juce::MidiMessage::noteOff(1, 64, 1.f);
-                midiMessages.addEvent(off, scheduledTime + mNoteLength);
-            }
-        }
-    }
+    euclidEngine.Tick(mTransportData, buffer, midiMessages);
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
 {
     auto positionInfo = getPlayHead()->getPosition();
-    
+
     if(positionInfo->getBpm().hasValue())
     {
         data.bpm = static_cast<double>(*positionInfo->getBpm());
     }
-    
+
     if(positionInfo->getTimeInSamples().hasValue())
     {
-        data.timeInSamples = static_cast<double>(*positionInfo->getTimeInSamples());
+        data.timeInSamples = static_cast<int64_t>(*positionInfo->getTimeInSamples());
     }
 
     data.isPlaying = static_cast<bool>(positionInfo->getIsPlaying());
-    
+
+    data.sampleRate = mSampleRate;
+
 //    if(positionInfo->getTimeInSeconds().hasValue())
 //    {
 //        data.time = static_cast<double>(*positionInfo->getTimeInSeconds());
 //    }
-    
+
 //    if(positionInfo->getPpqPosition().hasValue())
 //    {
 //        data.ppq = static_cast<double>(*positionInfo->getPpqPosition());
 //    }
-    
+
 //    if(positionInfo->getTimeSignature().hasValue())
 //    {
 //        auto timeSig = *positionInfo->getTimeSignature();

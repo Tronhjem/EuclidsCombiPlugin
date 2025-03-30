@@ -47,18 +47,18 @@ void EuclidCombinatorAudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
     
-    const TransportData& data = audioProcessor.GetPositionData();
+//    const TransportData& data = audioProcessor.GetPositionData();
     
-    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
+//    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
     
-    int nextstep = audioProcessor.mStepCount * audioProcessor.mGridResolution;
-    auto stepCountString = juce::String(audioProcessor.mStepCount);
-    auto nextStepString = juce::String(nextstep);
-    auto sampleString = juce::String(data.timeInSamples);
+//    int nextstep = audioProcessor.mStepCount * audioProcessor.mGridResolution;
+//    auto stepCountString = juce::String(audioProcessor.mStepCount);
+//    auto nextStepString = juce::String(nextstep);
+//    auto sampleString = juce::String(data.timeInSamples);
     
-    barCountLabel.setText(stepCountString, juce::dontSendNotification);
-    beatCountLabel.setText(nextStepString, juce::dontSendNotification);
-    ppqLabel.setText(sampleString, juce::dontSendNotification);
+//    barCountLabel.setText(stepCountString, juce::dontSendNotification);
+//    beatCountLabel.setText(nextStepString, juce::dontSendNotification);
+//    ppqLabel.setText(sampleString, juce::dontSendNotification);
 }
 
 void EuclidCombinatorAudioProcessorEditor::resized()
