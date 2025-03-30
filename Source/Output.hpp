@@ -4,8 +4,7 @@
 //  Created by Christian Tronhjem on 29.03.25.
 //
 
-#ifndef Output_hpp
-#define Output_hpp
+#pragma once
 
 #include "Track.hpp"
 
@@ -19,5 +18,3 @@ private:
     Track mTrack;
     
 };
-
-#endif /* Output_hpp */

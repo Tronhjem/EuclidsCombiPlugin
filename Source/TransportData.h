@@ -5,8 +5,7 @@
 //  Created by Christian Tronhjem on 30.03.25.
 //
 
-#ifndef TransportData_h
-#define TransportData_h
+#pragma once
 
 struct TransportData
 {
@@ -21,4 +20,3 @@ struct TransportData
 //    int beat = 0;
 };
 
-#endif /* TransportData_h */

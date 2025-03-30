@@ -4,12 +4,13 @@
 //  Created by Christian Tronhjem on 29.03.25.
 //
 
-#ifndef EuclidsCombinator_hpp
-#define EuclidsCombinator_hpp
+#pragma once
+
+#include <JuceHeader.h>
 
 #include "Output.hpp"
 #include "TransportData.h"
-#include <JuceHeader.h>
+#include "MidiScheduler.h"
 
 class EuclidsCombinatorEngine
 {
@@ -23,5 +24,3 @@ private:
     int mTimeSincePost = 0;
     Output* mOutput;
 };
-
-#endif /* EuclidsCombinator_hpp */

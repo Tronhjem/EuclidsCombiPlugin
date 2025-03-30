@@ -4,8 +4,7 @@
 //  Created by Christian Tronhjem on 29.03.25.
 //
 
-#ifndef Track_hpp
-#define Track_hpp
+#pragma once
 
 #include "Sequence.h"
 
@@ -21,5 +20,3 @@ private:
     Sequence<8> mSequence;
     
 };
-
-#endif /* Track_hpp */
