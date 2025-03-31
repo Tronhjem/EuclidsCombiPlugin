@@ -25,6 +25,9 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
 #endif
 {
     euclidEngine = std::make_unique<EuclidsCombinatorEngine>();
+    mTransportData.timeInSamples = 0;
+    mTransportData.bpm = 120.0;
+    mTransportData.sampleRate = 44100;
 }
 
 EuclidCombinatorAudioProcessor::~EuclidCombinatorAudioProcessor()
@@ -147,12 +150,12 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         buffer.clear (i, 0, bufferLength);
     
     
-    // ===============================================================
-    // MIDI stuff
-    // ===============================================================
-
     FillPositionData(mTransportData);
+//    mTransportData.isPlaying = true;
+    
     euclidEngine->Tick(mTransportData, bufferLength, midiMessages);
+    
+//    mTransportData.timeInSamples += bufferLength;
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)

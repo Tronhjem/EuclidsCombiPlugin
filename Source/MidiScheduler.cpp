@@ -8,10 +8,14 @@
 
 MidiScheduler::MidiScheduler()
 {
-    mScheduledMidiMessages.resize(10);
+//    mScheduledMidiMessages.resize(10);
 }
 
-void MidiScheduler::PostMidi(uint_8 channel, uint_8 noteNumber, uint_8 velocity, int durationInSamples, int timeStamp)
+void MidiScheduler::PostMidiNote(uint_8 channel,
+                             uint_8 noteNumber,
+                             uint_8 velocity,
+                             int durationInSamples,
+                             int timeStamp)
 {
     int timeStampOn = timeStamp;
     int timeStampOff = timeStamp + durationInSamples;
@@ -21,6 +25,7 @@ void MidiScheduler::PostMidi(uint_8 channel, uint_8 noteNumber, uint_8 velocity,
                                             channel,
                                             noteNumber,
                                             velocity,
+                                            MidiType::Note,
                                             timeStampOn});
     
     // Note Off
@@ -28,26 +33,28 @@ void MidiScheduler::PostMidi(uint_8 channel, uint_8 noteNumber, uint_8 velocity,
                                             channel,
                                             noteNumber,
                                             0,
+                                            MidiType::Note,
                                             timeStampOff});
 }
 
-void MidiScheduler::ProcessMidiPosts(juce::MidiBuffer &midiMessages, int64_t positionInSamples)
+void MidiScheduler::ProcessMidiPosts(juce::MidiBuffer& midiMessages,
+                                     int nextTickTime,
+                                     int bufferLength,
+                                     int64_t endOfBufferPosition)
 {
-    for(unsigned long i = mScheduledMidiMessages.size() - 1; i >= 0; --i)
+    for(int i = (int)mScheduledMidiMessages.size() - 1; i >= 0; --i)
     {
-        int scheduledTime = 0;
-        if (mScheduledMidiMessages[i].schuledTime) // ?????? check here.
+        const ScheduledMidi& message = mScheduledMidiMessages[i];
+        if (message.schuledTime <= endOfBufferPosition)
         {
-            
-            if (mScheduledMidiMessages[i].velocity > 0)
+            const int relativePositionInBuffer = static_cast<int>(message.schuledTime - (endOfBufferPosition - bufferLength));
+            if (static_cast<int>(message.velocity) > 0)
             {
-                auto on = juce::MidiMessage::noteOn(1, 64, (uint_8)120);
-                midiMessages.addEvent(on, scheduledTime);
+                midiMessages.addEvent(juce::MidiMessage::noteOn(1, 64, (uint_8)120), relativePositionInBuffer);
             }
             else
             {
-                auto on = juce::MidiMessage::noteOff(1, 64);
-                midiMessages.addEvent(on, scheduledTime);
+                midiMessages.addEvent(juce::MidiMessage::noteOff(1, 64), relativePositionInBuffer);
             }
             
             mScheduledMidiMessages.erase(mScheduledMidiMessages.begin() + i);
