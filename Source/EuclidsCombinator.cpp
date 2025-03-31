@@ -39,11 +39,11 @@ void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
             
             
             // Dummy post
-            mMidiScheduler.PostMidi(MidiType::Note, 1, 64, 127, 11025, nextTickTime);
+            mMidiScheduler.PostMidiNote(1, 64, 127, 11025, nextTickTime);
             
-            // Process all Midi.
         }
         
+        // Process all Midi.
         mMidiScheduler.ProcessMidiPosts(midiMessages, nextTickTime, bufferLength, endOfBufferPosition);
     }
 }

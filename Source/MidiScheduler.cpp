@@ -17,24 +17,12 @@ void MidiScheduler::PostMidiNote(uint_8 channel,
                              int durationInSamples,
                              int timeStamp)
 {
-    int timeStampOn = timeStamp;
-    int timeStampOff = timeStamp + durationInSamples;
-    
     // Note On
-    mScheduledMidiMessages.emplace_back(ScheduledMidi{
-                                            channel,
-                                            noteNumber,
-                                            velocity,
-                                            MidiType::Note,
-                                            timeStampOn});
+    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOn(channel, noteNumber, velocity), timeStamp});
     
+    int timeStampOff = timeStamp + durationInSamples;
     // Note Off
-    mScheduledMidiMessages.emplace_back(ScheduledMidi{
-                                            channel,
-                                            noteNumber,
-                                            0,
-                                            MidiType::Note,
-                                            timeStampOff});
+    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOff(channel, noteNumber), timeStampOff});
 }
 
 void MidiScheduler::ProcessMidiPosts(juce::MidiBuffer& midiMessages,
@@ -48,14 +36,7 @@ void MidiScheduler::ProcessMidiPosts(juce::MidiBuffer& midiMessages,
         if (message.schuledTime <= endOfBufferPosition)
         {
             const int relativePositionInBuffer = static_cast<int>(message.schuledTime - (endOfBufferPosition - bufferLength));
-            if (static_cast<int>(message.velocity) > 0)
-            {
-                midiMessages.addEvent(juce::MidiMessage::noteOn(1, 64, (uint_8)120), relativePositionInBuffer);
-            }
-            else
-            {
-                midiMessages.addEvent(juce::MidiMessage::noteOff(1, 64), relativePositionInBuffer);
-            }
+            midiMessages.addEvent(message.midiData, relativePositionInBuffer);
             
             mScheduledMidiMessages.erase(mScheduledMidiMessages.begin() + i);
         }
