@@ -10,7 +10,7 @@
 
 #include "Types.h"
 
-enum class MidiType : uint_8
+enum class MidiType : uChar
 {
     Note = 0,
     CC = 1
@@ -31,7 +31,8 @@ class MidiScheduler
 public:
     MidiScheduler();
     
-    void PostMidiNote(const uint_8 channel, const uint_8 noteNumber, const uint_8 velocity, const int durationInSamples, const int timeStamp);
+    void PostMidiNote(const uChar channel, const uChar noteNumber, const uChar velocity, const int durationInSamples, const int timeStamp);
+    void PostMidiCC(const uChar channel, const uChar cc, const uChar value, const int timeStamp);
     void ProcessMidiPosts(juce::MidiBuffer& midiMessages, int bufferLength, int64_t endOfBufferPosition);
     void ClearAllData(juce::MidiBuffer& midiMessages);
     

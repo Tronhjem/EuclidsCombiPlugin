@@ -11,15 +11,20 @@ MidiScheduler::MidiScheduler()
 //    mScheduledMidiMessages.resize(10);
 }
 
-void MidiScheduler::PostMidiNote(const uint_8 channel,
-                             const uint_8 noteNumber,
-                             const uint_8 velocity,
+void MidiScheduler::PostMidiNote(const uChar channel,
+                             const uChar noteNumber,
+                             const uChar velocity,
                              const int durationInSamples,
                              const int timeStamp)
 {
     const int timeStampOff = timeStamp + durationInSamples;
     mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOn(channel, noteNumber, velocity), timeStamp});
     mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOff(channel, noteNumber), timeStampOff});
+}
+
+void MidiScheduler::PostMidiCC(const uChar channel, const uChar cc, const uChar value, const int timeStamp)
+{
+    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::controllerEvent(channel, cc, value), timeStamp});
 }
 
 void MidiScheduler::ProcessMidiPosts(juce::MidiBuffer& midiMessages,

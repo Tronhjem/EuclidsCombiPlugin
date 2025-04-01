@@ -13,16 +13,16 @@ constexpr int MaxSize = 32;
 class LogicSequence 
 {
 public:
-    LogicSequence(const uint8_t* start, int length);
+    LogicSequence(const uChar* start, int length);
     
-	const uint_8& operator [](const int i) const
+	const uChar& operator [](const int i) const
 	{
 		return mTriggers[i % mLength];
 	}
 
 private:
-    inline void SetSequence(const uint8_t* start, const int length);
+    inline void SetSequence(const uChar* start, const int length);
     
     int mLength;
-	std::array<uint_8, MaxSize> mTriggers;
+	std::array<uChar, MaxSize> mTriggers;
 };

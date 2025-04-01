@@ -1,11 +1,11 @@
 #include "LogicSequence.h"
 
-LogicSequence::LogicSequence(const uint8_t* start, int length)
+LogicSequence::LogicSequence(const uChar* start, int length)
 {
     SetSequence(start, length);
 }
 
-inline void LogicSequence::SetSequence(const uint8_t* start, const int length)
+inline void LogicSequence::SetSequence(const uChar* start, const int length)
 {
     if(length <= MaxSize)
     {

@@ -8,4 +8,4 @@
 #pragma once
 
 //typedef unsigned short int UINT;
-typedef unsigned char uint_8;
+typedef unsigned char uChar;
