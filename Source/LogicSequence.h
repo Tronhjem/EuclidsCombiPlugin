@@ -2,21 +2,16 @@
 #include <array>
 #include "Types.h"
 
-constexpr int MaxSize = 32;
+constexpr int MaxSize = sizeof(Trigger) * 4;
 
 class LogicSequence 
 {
 public:
     LogicSequence(const uChar* start, int length);
-    
-	const uChar& operator [](const int i) const
-	{
-		return mTriggers[i % mLength];
-	}
-
+    const uChar operator [](const int i) const;
+   
 private:
     inline void SetSequence(const uChar* start, const int length);
-    
-    int mLength;
-	std::array<uChar, MaxSize> mTriggers;
+    int8_t mLength;
+    Trigger mTrigger;
 };
