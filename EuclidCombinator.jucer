@@ -7,7 +7,7 @@
   <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
       <FILE id="QTffte" name="MidiScheduler.cpp" compile="1" resource="0"
-            file="Source/MidiScheduler.cpp"/>
+            file="Source/MidiScheduler.cpp" xcodeResource="0"/>
       <FILE id="JpcasT" name="MidiScheduler.h" compile="0" resource="0" file="Source/MidiScheduler.h"/>
       <FILE id="QUnyWS" name="TransportData.h" compile="0" resource="0" file="Source/TransportData.h"/>
       <FILE id="vRDytI" name="Types.h" compile="0" resource="0" file="Source/Types.h"/>
@@ -17,8 +17,6 @@
             file="Source/EuclidsCombinator.cpp"/>
       <FILE id="vmIszc" name="Track.hpp" compile="0" resource="0" file="Source/Track.hpp"/>
       <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
-      <FILE id="PVUzX5" name="Output.hpp" compile="0" resource="0" file="Source/Output.hpp"/>
-      <FILE id="XJe2j6" name="Output.cpp" compile="1" resource="0" file="Source/Output.cpp"/>
       <FILE id="l82RpR" name="Sequence.cpp" compile="1" resource="0" file="Source/Sequence.cpp"/>
       <FILE id="wtWHB1" name="Sequence.h" compile="0" resource="0" file="Source/Sequence.h"/>
       <FILE id="zlpITL" name="PluginProcessor.cpp" compile="1" resource="0"
