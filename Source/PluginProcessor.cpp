@@ -9,8 +9,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//#include "TransportData.h"
-
 //==============================================================================
 EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -25,9 +23,11 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
 #endif
 {
     euclidEngine = std::make_unique<EuclidsCombinatorEngine>();
+    
     mTransportData.timeInSamples = 0;
     mTransportData.bpm = 120.0;
     mTransportData.sampleRate = 44100;
+    
 }
 
 EuclidCombinatorAudioProcessor::~EuclidCombinatorAudioProcessor()
@@ -149,13 +149,12 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, bufferLength);
     
-    
     FillPositionData(mTransportData);
-//    mTransportData.isPlaying = true;
+//    mTransportData.isPlaying = true; // Set the playing to true automatically when standalone
     
     euclidEngine->Tick(mTransportData, bufferLength, midiMessages);
     
-//    mTransportData.timeInSamples += bufferLength;
+//    mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)

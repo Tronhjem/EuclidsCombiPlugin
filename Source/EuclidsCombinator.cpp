@@ -9,13 +9,17 @@
 
 EuclidsCombinatorEngine::EuclidsCombinatorEngine()
 {
-    mOutput = new Output(1);
+    std::array<uint8_t, 8> logic2 = {1,1,1,1,0,0,0,0};
+    std::array<uint8_t, 8> logic =  {1,0,0,1,0,1,1,1};
+    Sequence seq1 {&logic[0], 8};
+    mTracks.emplace_back(Track{seq1, 1, 64});
+    
+    Sequence seq2 {&logic2[0], 8};
+    mTracks.emplace_back(Track{seq2, 1, 64 + 12});
 }
 
 EuclidsCombinatorEngine::~EuclidsCombinatorEngine()
 {
-    if(mOutput != nullptr)
-        delete mOutput;
 }
 
 void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
@@ -33,17 +37,17 @@ void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
         // Check if we should tick in this buffer.
         if (endOfBufferPosition >= nextTickTime)
         {
-            // Evaluate outputs.
-            //...for output in outpus:
-                // output.tick();
-            
-            
-            // Dummy post
-            mMidiScheduler.PostMidiNote(1, 64, 127, 11025, nextTickTime);
-            
+            for(Track& track : mTracks)
+            {
+                track.Tick(mMidiScheduler, nextTickTime, stepCount);
+            }
         }
         
         // Process all Midi.
-        mMidiScheduler.ProcessMidiPosts(midiMessages, nextTickTime, bufferLength, endOfBufferPosition);
+        mMidiScheduler.ProcessMidiPosts(midiMessages, bufferLength, endOfBufferPosition);
+    }
+    else
+    {
+        mMidiScheduler.ClearAllData(midiMessages);
     }
 }

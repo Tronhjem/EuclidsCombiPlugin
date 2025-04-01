@@ -47,9 +47,11 @@ void EuclidCombinatorAudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
     
-//    const TransportData& data = audioProcessor.GetPositionData();
+    const TransportData& data = audioProcessor.GetPositionData();
     
-//    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
+#if (JucePlugin_Build_Standalone == 0)
+    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
+#endif
     
 //    int nextstep = audioProcessor.mStepCount * audioProcessor.mGridResolution;
 //    auto stepCountString = juce::String(audioProcessor.mStepCount);

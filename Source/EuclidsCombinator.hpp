@@ -8,7 +8,7 @@
 
 #include <JuceHeader.h>
 
-#include "Output.hpp"
+#include "Track.hpp"
 #include "TransportData.h"
 #include "MidiScheduler.h"
 
@@ -22,5 +22,5 @@ public:
 private:
     double mBpmDivide = 1.0;
     MidiScheduler mMidiScheduler;
-    Output* mOutput;
+    std::vector<Track> mTracks;
 };

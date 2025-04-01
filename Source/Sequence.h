@@ -8,26 +8,37 @@
 #include <array>
 #include "Types.h"
 
-template <int Size> 
+//template <int Size>
+constexpr int MaxSize = 32;
 class Sequence 
 {
 public:
-	Sequence(std::array<uint_8, Size> triggers)
-	{
-		mTriggers = triggers;
-	}
-
-	Sequence()
-	{
-		for (int i = 0; i < Size; ++i) 
-			mTriggers[i] = 0;
-	}
+	Sequence(const uint8_t* start, int length)
+    {
+        SetSequence(start, length);
+    }
+    
+    void SetSequence(const uint8_t* start, int length)
+    {
+        if(length <= MaxSize)
+        {
+            for (int i = 0; i < length; ++i)
+                mTriggers[i] = start[i];
+            
+            mLength = length;
+        }
+        else
+        {
+            mLength = 0;
+        }
+    }
 
 	const uint_8& operator [](const int i) const
 	{
-		return mTriggers[i];
+		return mTriggers[i % mLength];
 	}
 
 private:
-	std::array<uint_8, Size>	mTriggers;
+    int mLength;
+	std::array<uint_8, MaxSize> mTriggers;
 };
