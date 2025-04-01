@@ -8,19 +8,16 @@ LogicSequence::LogicSequence(const uChar* start, int length)
 inline void LogicSequence::SetSequence(const uChar* start, const int length)
 {
 #if DEBUG
-    assert(length <= MaxSize);
+    assert(length <= MAX_LOGIC_SEQUENCE_LENGTH);
 #endif
     
-    if(length <= MaxSize)
+    mTrigger = 0;
+    for (int i = 0; i < length; ++i)
     {
-        mTrigger = 0;
-        for (int i = 0; i < length; ++i)
-        {
-            mTrigger |= start[i] << i;
-        }
-        
-        mLength = length;
+        mTrigger |= start[i] << i;
     }
+    
+    mLength = length;
 }
 
 const uChar LogicSequence::operator [](const int i) const

@@ -2,8 +2,6 @@
 #include <array>
 #include "Types.h"
 
-constexpr int MaxSize = sizeof(Trigger) * 4;
-
 class LogicSequence 
 {
 public:
