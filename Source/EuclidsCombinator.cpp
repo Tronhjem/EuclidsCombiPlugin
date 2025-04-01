@@ -11,10 +11,10 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine()
 {
     std::array<uint8_t, 8> logic2 = {1,1,1,1,0,0,0,0};
     std::array<uint8_t, 8> logic =  {1,0,0,1,0,1,1,1};
-    Sequence seq1 {&logic[0], 8};
+    LogicSequence seq1 {&logic[0], 8};
     mTracks.emplace_back(Track{seq1, 1, 64});
     
-    Sequence seq2 {&logic2[0], 8};
+    LogicSequence seq2 {&logic2[0], 8};
     mTracks.emplace_back(Track{seq2, 1, 64 + 12});
 }
 

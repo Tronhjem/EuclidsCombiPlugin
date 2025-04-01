@@ -17,8 +17,9 @@
             file="Source/EuclidsCombinator.cpp"/>
       <FILE id="vmIszc" name="Track.hpp" compile="0" resource="0" file="Source/Track.hpp"/>
       <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
-      <FILE id="l82RpR" name="Sequence.cpp" compile="1" resource="0" file="Source/Sequence.cpp"/>
-      <FILE id="wtWHB1" name="Sequence.h" compile="0" resource="0" file="Source/Sequence.h"/>
+      <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
+            file="Source/LogicSequence.cpp"/>
+      <FILE id="wtWHB1" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
       <FILE id="zlpITL" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="kQzwxu" name="PluginProcessor.h" compile="0" resource="0"
