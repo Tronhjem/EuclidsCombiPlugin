@@ -1,10 +1,5 @@
-//
-//  MidiScheduler.h
-//
-//  Created by Christian Tronhjem on 30.03.25.
-//
-
 #pragma once
+
 #include <JuceHeader.h>
 #include <vector>
 

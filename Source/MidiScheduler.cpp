@@ -1,28 +1,24 @@
-//
-//  MidiScheduler.cpp
-//
-//  Created by Christian Tronhjem on 30.03.25.
-//
-
 #include "MidiScheduler.h"
 
 MidiScheduler::MidiScheduler()
 {
-//    mScheduledMidiMessages.resize(10);
 }
 
 void MidiScheduler::PostMidiNote(const uChar channel,
-                             const uChar noteNumber,
-                             const uChar velocity,
-                             const int durationInSamples,
-                             const int timeStamp)
+                                 const uChar noteNumber,
+                                 const uChar velocity,
+                                 const int durationInSamples,
+                                 const int timeStamp)
 {
     const int timeStampOff = timeStamp + durationInSamples;
     mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOn(channel, noteNumber, velocity), timeStamp});
     mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOff(channel, noteNumber), timeStampOff});
 }
 
-void MidiScheduler::PostMidiCC(const uChar channel, const uChar cc, const uChar value, const int timeStamp)
+void MidiScheduler::PostMidiCC(const uChar channel,
+                               const uChar cc,
+                               const uChar value,
+                               const int timeStamp)
 {
     mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::controllerEvent(channel, cc, value), timeStamp});
 }

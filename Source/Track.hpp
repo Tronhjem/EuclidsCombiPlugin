@@ -1,9 +1,3 @@
-//
-//  Track.hpp
-//
-//  Created by Christian Tronhjem on 29.03.25.
-//
-
 #pragma once
 
 #include "LogicSequence.h"

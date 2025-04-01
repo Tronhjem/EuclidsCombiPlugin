@@ -1,10 +1,3 @@
-//
-//  TransportData.h
-//  EuclidsCombinator
-//
-//  Created by Christian Tronhjem on 30.03.25.
-//
-
 #pragma once
 
 struct TransportData
