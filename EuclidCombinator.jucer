@@ -6,15 +6,29 @@
               pluginManufacturer="SonoTron" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
-      <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
-        <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
-              file="Source/LogicSequence.cpp"/>
-        <FILE id="wtWHB1" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
-        <FILE id="Mm5aP7" name="CombinedLogicSequence.cpp" compile="1" resource="0"
-              file="Source/CombinedLogicSequence.cpp"/>
-        <FILE id="x2K6wo" name="CombinedLogicSequence.h" compile="0" resource="0"
-              file="Source/CombinedLogicSequence.h"/>
+      <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
+        <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
+          <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
+                file="Source/LogicSequence.cpp"/>
+          <FILE id="wtWHB1" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
+          <FILE id="Mm5aP7" name="CombinedLogicSequence.cpp" compile="1" resource="0"
+                file="Source/CombinedLogicSequence.cpp"/>
+          <FILE id="x2K6wo" name="CombinedLogicSequence.h" compile="0" resource="0"
+                file="Source/CombinedLogicSequence.h"/>
+        </GROUP>
+        <FILE id="vmIszc" name="Track.hpp" compile="0" resource="0" file="Source/Track.hpp"/>
+        <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
       </GROUP>
+      <GROUP id="{F1896013-22DD-58BE-C991-2EA418BBF7AB}" name="Juce">
+        <FILE id="zlpITL" name="PluginProcessor.cpp" compile="1" resource="0"
+              file="Source/PluginProcessor.cpp"/>
+        <FILE id="kQzwxu" name="PluginProcessor.h" compile="0" resource="0"
+              file="Source/PluginProcessor.h"/>
+        <FILE id="zn7Zk7" name="PluginEditor.cpp" compile="1" resource="0"
+              file="Source/PluginEditor.cpp"/>
+        <FILE id="ekqdmb" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      </GROUP>
+      <FILE id="T3Fsod" name="Utility.h" compile="0" resource="0" file="Source/Utility.h"/>
       <FILE id="QTffte" name="MidiScheduler.cpp" compile="1" resource="0"
             file="Source/MidiScheduler.cpp" xcodeResource="0"/>
       <FILE id="JpcasT" name="MidiScheduler.h" compile="0" resource="0" file="Source/MidiScheduler.h"/>
@@ -24,15 +38,6 @@
             file="Source/EuclidsCombinator.hpp"/>
       <FILE id="JPoBML" name="EuclidsCombinator.cpp" compile="1" resource="0"
             file="Source/EuclidsCombinator.cpp"/>
-      <FILE id="vmIszc" name="Track.hpp" compile="0" resource="0" file="Source/Track.hpp"/>
-      <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
-      <FILE id="zlpITL" name="PluginProcessor.cpp" compile="1" resource="0"
-            file="Source/PluginProcessor.cpp"/>
-      <FILE id="kQzwxu" name="PluginProcessor.h" compile="0" resource="0"
-            file="Source/PluginProcessor.h"/>
-      <FILE id="zn7Zk7" name="PluginEditor.cpp" compile="1" resource="0"
-            file="Source/PluginEditor.cpp"/>
-      <FILE id="ekqdmb" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
