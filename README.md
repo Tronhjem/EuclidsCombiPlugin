@@ -1,9 +1,10 @@
-### #WIP 
+#### Project is WIP 
 
 Starting work on the plugin version  of Euclids Combinator. 
 Prototype can be found here: https://github.com/Tronhjem/EuclidsCombinator
 
-#### Euclids Combinator
+
+### Euclids Combinator
 
 This is a sequencer that generates and combines sequences using euclidean algorithms or manual input. 
 It uses logic operations like &, ^, and | to combine sequences into tracks that trigger specific notes. 
