@@ -11,10 +11,10 @@
           <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
                 file="Source/LogicSequence.cpp"/>
           <FILE id="wtWHB1" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
-          <FILE id="Mm5aP7" name="CombinedLogicSequence.cpp" compile="1" resource="0"
-                file="Source/CombinedLogicSequence.cpp"/>
-          <FILE id="x2K6wo" name="CombinedLogicSequence.h" compile="0" resource="0"
-                file="Source/CombinedLogicSequence.h"/>
+          <FILE id="Mm5aP7" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
+                file="Source/LogicSequenceCombiner.cpp"/>
+          <FILE id="x2K6wo" name="LogicSequenceCombiner.h" compile="0" resource="0"
+                file="Source/LogicSequenceCombiner.h"/>
         </GROUP>
         <FILE id="vmIszc" name="Track.hpp" compile="0" resource="0" file="Source/Track.hpp"/>
         <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
