@@ -3,6 +3,7 @@
 #include "LogicSequence.h"
 #include <vector>
 
+
 enum class Operation : uChar
 {
     AND,
@@ -47,3 +48,4 @@ private:
     std::vector<LogicSequence> mLogicSequences;
     std::vector<Operation> mOperations;
 };
+

@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include  "UnitTests.h"
 
 //==============================================================================
 EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
@@ -22,6 +23,12 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
                        )
 #endif
 {
+    juce::UnitTestRunner runner;
+    MyTest test1;
+    Array<UnitTest*> tests;
+    tests.add(&test1);
+    runner.runTests(tests);
+    
     euclidEngine = std::make_unique<EuclidsCombinatorEngine>();
     
     mTransportData.timeInSamples = 0;

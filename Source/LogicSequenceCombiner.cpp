@@ -1,6 +1,5 @@
 #include "LogicSequenceCombiner.h"
 
-
 const uChar LogicSequenceCombiner::operator [](const int index) const
 {
     const int length = static_cast<int>(mLogicSequences.size());
@@ -16,5 +15,22 @@ const uChar LogicSequenceCombiner::operator [](const int index) const
 
 uChar LogicSequenceCombiner::Evaluate(const uChar a, const uChar b, const Operation operation) const
 {
-    return 0;
+    switch (operation)
+    {
+        case Operation::AND:
+        {
+            return a & b;
+        }
+        case Operation::OR:
+        {
+            return a | b;
+        }
+        case Operation::XOR:
+        {
+            return a ^ b;
+        }
+            
+        default:
+            return 0;
+    }
 }

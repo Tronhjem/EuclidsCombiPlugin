@@ -6,6 +6,8 @@
 #include "TransportData.h"
 #include "MidiScheduler.h"
 
+
+
 class EuclidsCombinatorEngine
 {
 public:
@@ -17,4 +19,6 @@ private:
     double mBpmDivide = 1.0;
     MidiScheduler mMidiScheduler;
     std::vector<Track> mTracks;
+    
+    juce::UnitTestRunner testRunner;
 };

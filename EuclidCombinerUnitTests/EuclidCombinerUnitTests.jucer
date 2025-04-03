@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="I6NKaC" name="EuclidCombinerUnitTests" projectType="consoleapp"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
+              jucerFormatVersion="1">
+  <MAINGROUP id="KXJX3f" name="EuclidCombinerUnitTests">
+    <GROUP id="{99D7554C-0247-92F8-F092-B98D5967FFD8}" name="FileRefs">
+      <FILE id="W0SZuF" name="EuclidsCombinator.cpp" compile="1" resource="0"
+            file="../Source/EuclidsCombinator.cpp"/>
+      <FILE id="EhhZ8L" name="EuclidsCombinator.hpp" compile="0" resource="0"
+            file="../Source/EuclidsCombinator.hpp"/>
+      <FILE id="J6MAef" name="LogicSequence.cpp" compile="1" resource="0"
+            file="../Source/LogicSequence.cpp"/>
+      <FILE id="or4EK5" name="LogicSequence.h" compile="0" resource="0" file="../Source/LogicSequence.h"/>
+      <FILE id="leGEND" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
+            file="../Source/LogicSequenceCombiner.cpp"/>
+      <FILE id="NCCUDO" name="LogicSequenceCombiner.h" compile="0" resource="0"
+            file="../Source/LogicSequenceCombiner.h"/>
+      <FILE id="du5cLx" name="MidiScheduler.cpp" compile="1" resource="0"
+            file="../Source/MidiScheduler.cpp"/>
+      <FILE id="oQjIWD" name="MidiScheduler.h" compile="0" resource="0" file="../Source/MidiScheduler.h"/>
+      <FILE id="ngcAHL" name="Track.cpp" compile="1" resource="0" file="../Source/Track.cpp"/>
+      <FILE id="AupM6n" name="Track.hpp" compile="0" resource="0" file="../Source/Track.hpp"/>
+      <FILE id="SH0k54" name="TransportData.h" compile="0" resource="0" file="../Source/TransportData.h"/>
+      <FILE id="rptxnx" name="Types.h" compile="0" resource="0" file="../Source/Types.h"/>
+      <FILE id="qVl54z" name="Utility.h" compile="0" resource="0" file="../Source/Utility.h"/>
+    </GROUP>
+    <GROUP id="{A8C95B41-B00B-6994-8AA7-9BDE10B1B3F2}" name="Source">
+      <FILE id="ahmOTJ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="F3X6HT" name="test_LogicSequence.h" compile="0" resource="0"
+            file="Source/test_LogicSequence.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="EuclidCombinerUnitTests"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="EuclidCombinerUnitTests"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+</JUCERPROJECT>
