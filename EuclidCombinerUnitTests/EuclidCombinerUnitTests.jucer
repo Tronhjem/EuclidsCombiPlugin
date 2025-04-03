@@ -29,6 +29,8 @@
       <FILE id="ahmOTJ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="F3X6HT" name="test_LogicSequence.h" compile="0" resource="0"
             file="Source/test_LogicSequence.h"/>
+      <FILE id="o7wNbT" name="test_LogicSequenceCombiner.h" compile="0" resource="0"
+            file="Source/test_LogicSequenceCombiner.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>

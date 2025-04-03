@@ -11,20 +11,6 @@ enum class Operation : uChar
     XOR
 };
 
-//class LogicCombiner
-//{
-//public:
-//    LogicCombiner(Trigger trigger, Operation operation) :
-//        mTrigger(trigger),
-//        mOperation(operation)
-//    {
-//    }
-//
-//private:
-//    Trigger mTrigger;
-//    Operation mOperation;
-//};
-
 class LogicSequenceCombiner
 {
 public:
@@ -33,7 +19,7 @@ public:
         mLogicSequences.emplace_back(logicSeq);
     }
     
-    void AddTrigger(LogicSequence logicSeq, Operation operation)
+    void AddLogic(LogicSequence logicSeq, Operation operation)
     {
         mLogicSequences.emplace_back(logicSeq);
         mOperations.emplace_back(operation);
