@@ -81,7 +81,6 @@ public:
                 expect (combiner[i] == ((seq1[i] & seq2[i]) | seq3[i]));
                 expect (combiner[i] == ((sequence1[i] & sequence2[i]) | sequence3[i]));
             }
-            
         }
     }
 };

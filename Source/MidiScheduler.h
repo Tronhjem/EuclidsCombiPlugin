@@ -13,10 +13,6 @@ enum class MidiType : uChar
 
 struct ScheduledMidi
 {
-//    uint_8 channel;
-//    uint_8 noteNumber;
-//    uint_8 velocity;
-//    MidiType type;
     juce::MidiMessage midiData;
     int schuledTime;
 };
