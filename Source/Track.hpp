@@ -10,6 +10,8 @@ public:
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
     
 private:
+    Track& operator= (const Track&) = delete;
+    
     int mMidiOut;
     int mInternalCount;
     int mNote;

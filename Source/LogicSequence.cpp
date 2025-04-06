@@ -22,7 +22,7 @@ inline void LogicSequence::SetSequence(const uChar* start, const int length)
 
 const uChar LogicSequence::operator [](const int i) const
 {
-    Trigger index = static_cast<Trigger>(i % mLength);
+    LogicContainer index = static_cast<LogicContainer>(i % mLength);
     uChar value = ((1 << index) & mTrigger) >> index;
     return value;
 }
