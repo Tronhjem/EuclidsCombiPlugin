@@ -8,6 +8,9 @@
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
         <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
+          <FILE id="q27wf3" name="DataSequence.cpp" compile="1" resource="0"
+                file="Source/DataSequence.cpp"/>
+          <FILE id="nmLxuS" name="DataSequence.h" compile="0" resource="0" file="Source/DataSequence.h"/>
           <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
                 file="Source/LogicSequence.cpp"/>
           <FILE id="wtWHB1" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
