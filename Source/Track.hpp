@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LogicSequence.h"
 #include "MidiScheduler.h"
+#include "LogicSequenceCombiner.h"
 
 class Track
 {
@@ -13,5 +13,5 @@ private:
     int mMidiOut;
     int mInternalCount;
     int mNote;
-    LogicSequence mSequence;
+    LogicSequenceCombiner mCombinedSequences;
 };

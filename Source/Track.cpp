@@ -6,14 +6,13 @@ Track::Track(LogicSequence sequence, int output, int note) :
         mMidiOut(output),
         mInternalCount(0),
         mNote(note),
-        mSequence(sequence)
+        mCombinedSequences(sequence)
 {
-    
 }
  
 void Track::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
 {
-    if(mSequence[globalCount] == uCharTrue)
+    if(mCombinedSequences[globalCount] == uCharTrue)
     {
         midiScheduler.PostMidiNote(mMidiOut, mNote, 127, 11025, nextTickTime);
         mInternalCount++;

@@ -14,6 +14,10 @@ void LogicSequenceCombiner::AddLogic(LogicSequence logicSeq, Operation operation
 
 const uChar LogicSequenceCombiner::operator [](const int index) const
 {
+#if DEBUG
+    assert(mLogicSequences.size() - 1 == mOperations.size());
+#endif
+    
     const int length = static_cast<int>(mLogicSequences.size());
     
     uChar result = mLogicSequences[0][index];
