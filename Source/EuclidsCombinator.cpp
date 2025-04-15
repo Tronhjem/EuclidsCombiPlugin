@@ -1,5 +1,5 @@
-#include "EuclidsCombinator.hpp"
 #include <cmath>
+#include "EuclidsCombinator.hpp"
 
 EuclidsCombinatorEngine::EuclidsCombinatorEngine()
 {
