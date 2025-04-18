@@ -6,6 +6,26 @@
               pluginManufacturer="SonoTron" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
+      <GROUP id="{30FFA290-F69D-BDAA-5EC5-1ED675D19463}" name="ParsingAndCompiling">
+        <FILE id="a9rPAm" name="Compiler.cpp" compile="1" resource="0" file="Source/Parsing/Compiler.cpp"/>
+        <FILE id="P0yEsJ" name="Compiler.h" compile="0" resource="0" file="Source/Parsing/Compiler.h"/>
+        <FILE id="kK6scZ" name="CustomMemory.cpp" compile="1" resource="0"
+              file="Source/Parsing/CustomMemory.cpp"/>
+        <FILE id="jeTdrL" name="CustomMemory.h" compile="0" resource="0" file="Source/Parsing/CustomMemory.h"/>
+        <FILE id="NP6K9d" name="FileLoader.cpp" compile="1" resource="0" file="Source/Parsing/FileLoader.cpp"/>
+        <FILE id="XQOayw" name="FileLoader.h" compile="0" resource="0" file="Source/Parsing/FileLoader.h"/>
+        <FILE id="u9f24F" name="Logger.cpp" compile="1" resource="0" file="Source/Parsing/Logger.cpp"/>
+        <FILE id="YoULsd" name="Logger.h" compile="0" resource="0" file="Source/Parsing/Logger.h"/>
+        <FILE id="VlsVHn" name="Parser.cpp" compile="1" resource="0" file="Source/Parsing/Parser.cpp"/>
+        <FILE id="vME4l6" name="Parser.h" compile="0" resource="0" file="Source/Parsing/Parser.h"/>
+        <FILE id="cqqatJ" name="Scanner.cpp" compile="1" resource="0" file="Source/Parsing/Scanner.cpp"/>
+        <FILE id="ZFPKcY" name="Scanner.h" compile="0" resource="0" file="Source/Parsing/Scanner.h"/>
+        <FILE id="EWNw5V" name="ScopedTimer.h" compile="0" resource="0" file="Source/Parsing/ScopedTimer.h"/>
+        <FILE id="LyHjKe" name="Token.cpp" compile="1" resource="0" file="Source/Parsing/Token.cpp"/>
+        <FILE id="Zj0vwk" name="Token.h" compile="0" resource="0" file="Source/Parsing/Token.h"/>
+        <FILE id="BQcEob" name="VM.cpp" compile="1" resource="0" file="Source/Parsing/VM.cpp"/>
+        <FILE id="Q18la5" name="VM.h" compile="0" resource="0" file="Source/Parsing/VM.h"/>
+      </GROUP>
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
         <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
           <FILE id="q27wf3" name="DataSequence.cpp" compile="1" resource="0"

@@ -10,9 +10,9 @@ class Logger;
 class Scanner
 {
 public:
-    Scanner(char* data, Logger& logger);
+    Scanner(Logger& logger);
     ~Scanner();
-    bool ScanTokens();
+    bool ScanTokens(char *data);
 
     std::vector<Token>& GetTokens() { return mTokens; }
 

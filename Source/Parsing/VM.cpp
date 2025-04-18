@@ -1,22 +1,45 @@
+#include <iostream>
 #include "VM.h"
-#include "Compiler.h"
 #include "Logger.h"
+#include "Scanner.h"
+#include "Compiler.h"
 #include "ScopedTimer.h"
+#include "FileLoader.h"
 
 #include <iostream>
+
+#include <vector>
+#include <memory>
+
+VM::VM() 
+{
+    mLogger = std::make_unique<Logger>();
+    mFileLoader = std::make_unique<FileLoader>();
+
+    mScanner = std::make_unique<Scanner>(*mLogger);
+    mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mLogger);
+}
+
+void VM::PrepareFile(const char* filePath)
+{
+    mFileLoader->LoadFile(filePath);
+    mScanner->ScanTokens(mFileLoader->GetFileStart());
+    mCompiler->Compile();
+}
 
 void VM::Run()
 {
     ScopedTimer timer("VM Run");
 
-    auto consume = [&]() -> Instruction&
+    int currentIndex = 0;
+    auto consume = [&]() -> Instruction &
     {
-        return mInstructions[mCurrentIndex++];
+        return mCompiler->GetInstructions()[currentIndex++];
     };
 
-    auto peek = [&]() -> const Instruction&
+    auto peek = [&]() -> const Instruction &
     {
-        return mInstructions[mCurrentIndex];
+        return mCompiler->GetInstructions()[currentIndex];
     };
 
     for(;;)

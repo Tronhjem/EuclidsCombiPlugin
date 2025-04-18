@@ -6,6 +6,9 @@
 
 class Instruction;
 class Logger;
+class Scanner;
+class Compiler;
+class FileLoader;
 
 class ManagedMemory
 {
@@ -57,14 +60,15 @@ private:
 class VM
 {
 public:
-    VM(std::vector<Instruction>& instructions, Logger& log) : mInstructions(instructions), mLogger(log) {}
+    VM();
+    void PrepareFile(const char* filePath);
     void Run();
 
 private:
-    Logger& mLogger;
-    ManagedMemory mMemory;
-    Stack mStack;
-    std::vector<Instruction>& mInstructions;
     std::unordered_map<std::string, double> mVariables;
-    int mCurrentIndex = 0;
+    std::unique_ptr<Logger> mLogger;
+    std::unique_ptr<Scanner> mScanner;
+    std::unique_ptr<Compiler> mCompiler;
+    std::unique_ptr<FileLoader> mFileLoader;
+    Stack mStack;
 };

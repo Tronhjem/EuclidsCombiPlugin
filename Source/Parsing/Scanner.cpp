@@ -4,10 +4,8 @@
 #include <stdio.h>
 #include "ScopedTimer.h"
 
-Scanner::Scanner(char *data, Logger &logger) : mData(data), mLogger(logger)
+Scanner::Scanner(Logger &logger) : mLogger(logger)
 {
-    mCurrent = data;
-    mStart = data;
 }
 
 Scanner::~Scanner()
@@ -60,9 +58,13 @@ void Scanner::SkipWhiteSpace()// append char
     }
 }
 
-bool Scanner::ScanTokens()
+bool Scanner::ScanTokens(char* data)
 {
     ScopedTimer timer("ScanTokens");
+
+    mCurrent = data;
+    mStart = data;
+    mData = data;
 
     for (;;)
     {
