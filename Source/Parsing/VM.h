@@ -1,14 +1,16 @@
 #pragma once
 #include <array>
 #include <vector>
+#include <memory>
 #include <unordered_map>
 #include <string>
 
+#include "Logger.h"
+#include "Scanner.h"
+#include "Compiler.h"
+#include "FileLoader.h"
+
 class Instruction;
-class Logger;
-class Scanner;
-class Compiler;
-class FileLoader;
 
 class ManagedMemory
 {

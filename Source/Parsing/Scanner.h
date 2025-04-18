@@ -35,7 +35,7 @@ private:
 
 private:
     Logger& mLogger;
-    const char* mData;
+    // const char* mData;
     std::vector<Token> mTokens;
 
     char* mStart;

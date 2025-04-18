@@ -29,10 +29,9 @@ void Compiler::ParseExpression()
         mInstructions.emplace_back(Instruction{code});
     };
 
-
     while (Peek().mTokenType != TokenType::EOL && Peek().mTokenType != TokenType::END)
     {
-        Token &currentToken = Consume();
+        Token& currentToken = Consume();
         switch (currentToken.mTokenType)
         {
             case TokenType::IDENTIFIER:

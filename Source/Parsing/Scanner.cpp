@@ -64,13 +64,9 @@ bool Scanner::ScanTokens(char* data)
 
     mCurrent = data;
     mStart = data;
-    mData = data;
 
     for (;;)
     {
-        if (mCurrent[1] == '\0')
-            return true;
-            
         Token t = ScanToken();
 
         if(t.mTokenType != TokenType::EOL)

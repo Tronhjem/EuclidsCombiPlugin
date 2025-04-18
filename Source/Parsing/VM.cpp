@@ -1,13 +1,5 @@
-#include <iostream>
-#include <vector>
-#include <memory>
-
 #include "VM.h"
-#include "Logger.h"
-#include "Scanner.h"
-#include "Compiler.h"
 #include "ScopedTimer.h"
-#include "FileLoader.h"
 
 VM::VM() 
 {
