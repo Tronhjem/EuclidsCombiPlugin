@@ -1,4 +1,7 @@
 #include <iostream>
+#include <vector>
+#include <memory>
+
 #include "VM.h"
 #include "Logger.h"
 #include "Scanner.h"
@@ -6,16 +9,10 @@
 #include "ScopedTimer.h"
 #include "FileLoader.h"
 
-#include <iostream>
-
-#include <vector>
-#include <memory>
-
 VM::VM() 
 {
     mLogger = std::make_unique<Logger>();
     mFileLoader = std::make_unique<FileLoader>();
-
     mScanner = std::make_unique<Scanner>(*mLogger);
     mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mLogger);
 }

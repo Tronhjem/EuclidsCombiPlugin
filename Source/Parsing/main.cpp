@@ -1,16 +1,12 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <memory>
+// #include <fstream>
+// #include <sstream>
+// #include <string>
+// #include <vector>
+// #include <memory>
 
-#include "Scanner.h"
-#include "Logger.h"
-#include "Compiler.h"
 #include "VM.h"
 #include "ScopedTimer.h"
-#include "CustomMemory.h"
 
 int main(int argc, char* argv[])
 {
@@ -21,9 +17,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    std::ifstream file(argv[1]);
     std::unique_ptr<VM> vm;
-
     {
         ScopedTimer timer ("Construct classes");
         vm = std::make_unique<VM>();
