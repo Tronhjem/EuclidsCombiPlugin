@@ -5,6 +5,7 @@
 #include "Track.hpp"
 #include "TransportData.h"
 #include "MidiScheduler.h"
+#include "Parsing/VM.h"
 
 class EuclidsCombinatorEngine
 {
@@ -17,4 +18,5 @@ private:
     double mBpmDivide = 1.0;
     MidiScheduler mMidiScheduler;
     std::vector<Track> mTracks;
+    VM* mVM;
 };

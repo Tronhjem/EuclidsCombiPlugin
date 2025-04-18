@@ -2,7 +2,7 @@
 #include <vector>
 #include "Token.h"
 
-class Logger;
+class ErrorReporting;
 
 enum class OpCode : int
 {
@@ -53,7 +53,7 @@ public:
 class Compiler
 {
 public:
-    Compiler(std::vector<Token>& tokens, Logger& log) : mTokens(tokens), mLogger(log) { }
+    Compiler(std::vector<Token>& tokens, ErrorReporting& log) : mTokens(tokens), mErrorReporting(log) { }
     bool Compile();
     std::vector<Instruction>& GetInstructions() { return mInstructions; }
 
@@ -63,8 +63,8 @@ private:
     void ParseExpression();
     void ThrowUnexpectedCharError();
 
-    Logger& mLogger;
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;
+    ErrorReporting& mErrorReporting;
     std::vector<Instruction> mInstructions;
 };

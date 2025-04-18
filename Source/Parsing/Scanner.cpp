@@ -1,10 +1,10 @@
 #include "Scanner.h"
-#include "Logger.h"
+#include "ErrorReporting.h"
 #include "Token.h"
 #include <stdio.h>
 #include "ScopedTimer.h"
 
-Scanner::Scanner(Logger &logger) : mLogger(logger)
+Scanner::Scanner(ErrorReporting &logger) : mErrorReporting(logger)
 {
 }
 
@@ -72,13 +72,13 @@ bool Scanner::ScanTokens(char* data)
         if(t.mTokenType != TokenType::EOL)
         {
             std::string mes = std::string(t.mStart, t.mLength);
-            mLogger.LogMessage(mes);
+            mErrorReporting.LogMessage(mes);
         }
 
         if(t.GetType() == TokenType::ERROR)
         {
             std::string errorString = std::string(t.mStart, t.mLength);
-            mLogger.LogError(mCurrentLine, errorString);
+            mErrorReporting.LogError(mCurrentLine, errorString);
             return false;
         }
 

@@ -1,5 +1,5 @@
 #include "Compiler.h"
-#include "Logger.h"
+#include "ErrorReporting.h"
 #include "ScopedTimer.h"
 
 Token& Compiler::Consume()
@@ -138,5 +138,5 @@ void Compiler::ThrowUnexpectedCharError()
     const Token &tokenForError = Peek();
     std::string token = std::string(tokenForError.mStart, tokenForError.mLength);
     std::string message = std::string("Unexpected Char ") + token;
-    mLogger.LogError(Peek().mLine, message);
+    mErrorReporting.LogError(Peek().mLine, message);
 }

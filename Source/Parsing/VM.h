@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "Logger.h"
+#include "ErrorReporting.h"
 #include "Scanner.h"
 #include "Compiler.h"
 #include "FileLoader.h"
@@ -63,12 +63,12 @@ class VM
 {
 public:
     VM();
-    void PrepareFile(const char* filePath);
+    void Prepare(const char* filePath);
     void Run();
 
 private:
     std::unordered_map<std::string, double> mVariables;
-    std::unique_ptr<Logger> mLogger;
+    std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unique_ptr<Scanner> mScanner;
     std::unique_ptr<Compiler> mCompiler;
     std::unique_ptr<FileLoader> mFileLoader;

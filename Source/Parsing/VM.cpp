@@ -3,13 +3,13 @@
 
 VM::VM() 
 {
-    mLogger = std::make_unique<Logger>();
+    mErrorReporting = std::make_unique<ErrorReporting>();
     mFileLoader = std::make_unique<FileLoader>();
-    mScanner = std::make_unique<Scanner>(*mLogger);
-    mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mLogger);
+    mScanner = std::make_unique<Scanner>(*mErrorReporting);
+    mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mErrorReporting);
 }
 
-void VM::PrepareFile(const char* filePath)
+void VM::Prepare(const char* filePath)
 {
     mFileLoader->LoadFile(filePath);
     mScanner->ScanTokens(mFileLoader->GetFileStart());
@@ -26,10 +26,10 @@ void VM::Run()
         return mCompiler->GetInstructions()[currentIndex++];
     };
 
-    auto peek = [&]() -> const Instruction &
-    {
-        return mCompiler->GetInstructions()[currentIndex];
-    };
+//    auto peek = [&]() -> const Instruction &
+//    {
+//        return mCompiler->GetInstructions()[currentIndex];
+//    };
 
     for(;;)
     {

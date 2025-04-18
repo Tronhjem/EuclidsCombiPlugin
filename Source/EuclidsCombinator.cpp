@@ -10,6 +10,10 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine()
     
     LogicSequence seq2 {&logic2[0], 8};
     mTracks.emplace_back(Track{seq2, 1, 64 + 12});
+    
+    mVM = new VM();
+    mVM->Prepare("/Users/christiantronhjem/dev/EuclidsCombiPlugin/Source/Parsing/myFile.e");
+    mVM->Run();
 }
 
 EuclidsCombinatorEngine::~EuclidsCombinatorEngine()

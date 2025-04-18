@@ -6,16 +6,18 @@
               pluginManufacturer="SonoTron" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
-      <GROUP id="{30FFA290-F69D-BDAA-5EC5-1ED675D19463}" name="ParsingAndCompiling">
+      <GROUP id="{30FFA290-F69D-BDAA-5EC5-1ED675D19463}" name="Parsing">
         <FILE id="a9rPAm" name="Compiler.cpp" compile="1" resource="0" file="Source/Parsing/Compiler.cpp"/>
         <FILE id="P0yEsJ" name="Compiler.h" compile="0" resource="0" file="Source/Parsing/Compiler.h"/>
         <FILE id="kK6scZ" name="CustomMemory.cpp" compile="1" resource="0"
               file="Source/Parsing/CustomMemory.cpp"/>
         <FILE id="jeTdrL" name="CustomMemory.h" compile="0" resource="0" file="Source/Parsing/CustomMemory.h"/>
+        <FILE id="CBDruV" name="ErrorReporting.cpp" compile="1" resource="0"
+              file="Source/Parsing/ErrorReporting.cpp"/>
+        <FILE id="mdfXAn" name="ErrorReporting.h" compile="0" resource="0"
+              file="Source/Parsing/ErrorReporting.h"/>
         <FILE id="NP6K9d" name="FileLoader.cpp" compile="1" resource="0" file="Source/Parsing/FileLoader.cpp"/>
         <FILE id="XQOayw" name="FileLoader.h" compile="0" resource="0" file="Source/Parsing/FileLoader.h"/>
-        <FILE id="u9f24F" name="Logger.cpp" compile="1" resource="0" file="Source/Parsing/Logger.cpp"/>
-        <FILE id="YoULsd" name="Logger.h" compile="0" resource="0" file="Source/Parsing/Logger.h"/>
         <FILE id="VlsVHn" name="Parser.cpp" compile="1" resource="0" file="Source/Parsing/Parser.cpp"/>
         <FILE id="vME4l6" name="Parser.h" compile="0" resource="0" file="Source/Parsing/Parser.h"/>
         <FILE id="cqqatJ" name="Scanner.cpp" compile="1" resource="0" file="Source/Parsing/Scanner.cpp"/>

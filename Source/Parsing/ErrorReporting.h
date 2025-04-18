@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class Logger
+class ErrorReporting
 {
 public:
     void LogError(int line, std::string& message);

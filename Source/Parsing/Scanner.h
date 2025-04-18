@@ -4,13 +4,12 @@
 #include <string>
 #include "Token.h"
 
-class Logger;
-
+class ErrorReporting;
 
 class Scanner
 {
 public:
-    Scanner(Logger& logger);
+    Scanner(ErrorReporting& logger);
     ~Scanner();
     bool ScanTokens(char *data);
 
@@ -34,7 +33,7 @@ private:
     bool IsDigit(char c);
 
 private:
-    Logger& mLogger;
+    ErrorReporting& mErrorReporting;
     // const char* mData;
     std::vector<Token> mTokens;
 
