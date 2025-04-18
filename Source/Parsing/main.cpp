@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
         vm = std::make_unique<VM>();
     }
 
-    vm->PrepareFile(argv[1]);
+    vm->Prepare(argv[1]);
     vm->Run();
     
     std::cout << "Program end" << std::endl;
