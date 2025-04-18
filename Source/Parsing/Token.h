@@ -9,6 +9,8 @@ enum class TokenType
     RIGHT_PAREN,
     LEFT_BRACE,
     RIGHT_BRACE,
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
     COMMA,
     DOT,
     MINUS,
@@ -50,6 +52,8 @@ enum class TokenType
     VAR,
     WHILE,
     ERROR,
+
+    EOL,
     END,
 };
 
@@ -63,14 +67,12 @@ public:
         
     TokenType GetType() { return mTokenType; }
 
+    TokenType mTokenType;
     const char* mStart;
     int mLength;
+    int mLine;
 
 private:
     Token() = delete;
-
-    TokenType mTokenType;
-    int mLine;
-
 };
 

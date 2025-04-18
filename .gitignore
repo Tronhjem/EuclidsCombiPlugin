@@ -1,4 +1,10 @@
+*
+!*.*
+
 Builds/
 JuceLibraryCode/
 .DS_Store
+.vscode/
+*.dSYM
+
 

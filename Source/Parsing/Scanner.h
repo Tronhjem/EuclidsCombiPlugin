@@ -6,18 +6,20 @@
 
 class Logger;
 
+
 class Scanner
 {
-// Functions
 public:
     Scanner(char* data, Logger& logger);
     ~Scanner();
-    void ScanTokens();
+    bool ScanTokens();
+
+    std::vector<Token>& GetTokens() { return mTokens; }
 
 private:
     Token ScanToken();
     Token MakeToken(TokenType token);
-    Token MakeErrorToken(const char*);
+    Token MakeErrorToken(char* message, char symbol);
     Token BuildString();
     Token BuildDigit();
     Token BuildIdentifier();
@@ -31,9 +33,6 @@ private:
     bool IsAlpha(char c);
     bool IsDigit(char c);
 
-// Members
-public:
-
 private:
     Logger& mLogger;
     const char* mData;
@@ -42,4 +41,6 @@ private:
     char* mStart;
     char* mCurrent;
     int mCurrentLine = 1;
+    char ERROR_UNEXPECTED_CHAR[50] = "ERROR: Unexpected character ";
+    char ERROR_NO_END_QUOTE[50] = "ERROR: Expected \" but didn't find one ";
 };
