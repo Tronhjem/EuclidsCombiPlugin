@@ -58,7 +58,7 @@ void Scanner::SkipWhiteSpace()// append char
     }
 }
 
-bool Scanner::ScanTokens(char* data)
+bool Scanner::ScanFile(char* data)
 {
     ScopedTimer timer("ScanTokens");
 
@@ -69,11 +69,11 @@ bool Scanner::ScanTokens(char* data)
     {
         Token t = ScanToken();
 
-        if(t.mTokenType != TokenType::EOL)
-        {
-            std::string mes = std::string(t.mStart, t.mLength);
-            mErrorReporting.LogMessage(mes);
-        }
+        // if(t.mTokenType != TokenType::EOL)
+        // {
+        //     std::string mes = std::string(t.mStart, t.mLength);
+        //     mErrorReporting.LogMessage(mes);
+        // }
 
         if(t.GetType() == TokenType::ERROR)
         {

@@ -12,7 +12,7 @@ VM::VM()
 void VM::Prepare(const char* filePath)
 {
     mFileLoader->LoadFile(filePath);
-    mScanner->ScanTokens(mFileLoader->GetFileStart());
+    mScanner->ScanFile(mFileLoader->GetFileStart());
     mCompiler->Compile();
 }
 
@@ -26,14 +26,9 @@ void VM::Run()
         return mCompiler->GetInstructions()[currentIndex++];
     };
 
-//    auto peek = [&]() -> const Instruction &
-//    {
-//        return mCompiler->GetInstructions()[currentIndex];
-//    };
-
     for(;;)
     {
-        Instruction& instruction = consume();
+        const Instruction& instruction = consume();
 
         switch(instruction.opCode)
         {
@@ -51,8 +46,17 @@ void VM::Run()
 
             case(OpCode::GET_IDENTIFIER):
             {
-                double value = mVariables[instruction.mNameValue];
-                mStack.Push(value);
+                if (mVariables.find(instruction.mNameValue) != mVariables.end())
+                {
+                    double value = mVariables[instruction.mNameValue];
+                    mStack.Push(value);
+                }
+                else
+                {
+                    std::string error = std::string("VM: Variable not defined");
+                    mErrorReporting->LogError(error);
+                    return;
+                }
                 break;
             }
 
@@ -61,16 +65,26 @@ void VM::Run()
                 break;
 
             case(OpCode::SUBTRACT):
-                mStack.Push(mStack.Pop() - mStack.Pop()); 
+            {
+                double b = mStack.Pop();
+                double a = mStack.Pop();
+                mStack.Push(a - b); 
                 break;
+            }
 
             case(OpCode::MULTIPLY):
+            {
                 mStack.Push(mStack.Pop() * mStack.Pop()); 
                 break;
+            }
 
             case(OpCode::DIVIDE):
-                mStack.Push(mStack.Pop() / mStack.Pop()); 
+            {
+                double b = mStack.Pop();
+                double a = mStack.Pop();
+                mStack.Push(a / b); 
                 break;
+            }
 
             case(OpCode::PRINT):
             {

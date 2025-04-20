@@ -11,7 +11,7 @@ class Scanner
 public:
     Scanner(ErrorReporting& logger);
     ~Scanner();
-    bool ScanTokens(char *data);
+    bool ScanFile(char *data);
 
     std::vector<Token>& GetTokens() { return mTokens; }
 

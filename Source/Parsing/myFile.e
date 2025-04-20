@@ -3,8 +3,6 @@
 
 c = 50
 u = 10
+o = u / c
 
-print c + u
-print c - u
-print c * u
-print c / u
+print 20 / 10

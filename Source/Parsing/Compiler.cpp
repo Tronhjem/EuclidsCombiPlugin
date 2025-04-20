@@ -12,7 +12,7 @@ Token& Compiler::Peek()
     return mTokens[mCurrentIndex];
 }
 
-void Compiler::ParseExpression()
+void Compiler::CompileExpression()
 {
     auto makeIdentifier = [&](Token& token)
     {
@@ -20,13 +20,36 @@ void Compiler::ParseExpression()
         mInstructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER, name});
     };
 
+    auto makeNumber = [&](Token& token)
+    {
+        // std::string name = std::string(token.mStart, token.mLength);
+        char *end = const_cast<char *>(token.mStart) + token.mLength;
+        double value = std::strtod(token.mStart, &end);
+
+        mInstructions.emplace_back(Instruction{OpCode::CONSTANT, value});
+        // mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER, name});
+    };
+
     auto binaryExpression = [&](OpCode code) 
     {
         Token& toDoBinary = Consume();
         if(toDoBinary.mTokenType == TokenType::IDENTIFIER)
+        {
             makeIdentifier(toDoBinary);
+        }
+        else if (toDoBinary.mTokenType == TokenType::NUMBER)
+        {
+            makeNumber(toDoBinary);
+        }
+        else
+        {
+            // ERROR
+            ThrowUnexpectedCharError();
+            return;
+        }
 
         mInstructions.emplace_back(Instruction{code});
+
     };
 
     while (Peek().mTokenType != TokenType::EOL && Peek().mTokenType != TokenType::END)
@@ -38,6 +61,11 @@ void Compiler::ParseExpression()
                 makeIdentifier(currentToken);
                 break;
 
+            case TokenType::NUMBER:
+                makeNumber(currentToken);
+                break;
+
+            // Operations
             case TokenType::PLUS:
                 binaryExpression(OpCode::ADD);
                 break;
@@ -55,7 +83,10 @@ void Compiler::ParseExpression()
                 break;
 
             default:
-                break;
+            {
+                ThrowUnexpectedCharError();
+                return;
+            }
         }
     }
 }
@@ -79,19 +110,9 @@ bool Compiler::Compile()
                     Consume(); // consumes the equal sign
 
                     TokenType tokenType = Peek().mTokenType;
-                    if (tokenType == TokenType::NUMBER)
+                    if (tokenType == TokenType::NUMBER || tokenType == TokenType::IDENTIFIER)
                     {
-                        Token& numberToken = Consume();
-                        char *end = const_cast<char *>(numberToken.mStart) + numberToken.mLength;
-                        double value = std::strtod(numberToken.mStart, &end);
-
-                        mInstructions.emplace_back(Instruction{OpCode::CONSTANT, value});
-                        mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER, name});
-
-                    }
-                    else if (tokenType == TokenType::IDENTIFIER)
-                    {
-                        ParseExpression();
+                        CompileExpression();
                         mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER, name});
                     }
                     else
@@ -106,9 +127,9 @@ bool Compiler::Compile()
 
             case TokenType::PRINT:
             {
-                if(Peek().mTokenType == TokenType::IDENTIFIER)
+                if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
                 {
-                    ParseExpression();
+                    CompileExpression();
                     mInstructions.emplace_back(Instruction{OpCode::PRINT});
                 }
                 else
@@ -137,6 +158,6 @@ void Compiler::ThrowUnexpectedCharError()
 {
     const Token &tokenForError = Peek();
     std::string token = std::string(tokenForError.mStart, tokenForError.mLength);
-    std::string message = std::string("Unexpected Char ") + token;
+    std::string message = std::string("Compiler: Unexpected Char ") + token;
     mErrorReporting.LogError(Peek().mLine, message);
 }

@@ -60,7 +60,7 @@ public:
 private:
     Token& Consume();
     Token& Peek();
-    void ParseExpression();
+    void CompileExpression();
     void ThrowUnexpectedCharError();
 
     int mCurrentIndex = 0;
