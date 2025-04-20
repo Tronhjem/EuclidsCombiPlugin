@@ -7,8 +7,9 @@ class ErrorReporting;
 enum class OpCode : int
 {
     CONSTANT = 0,
-    GET_IDENTIFIER = 1,
-    SET_IDENTIFIER = 2,
+    GET_IDENTIFIER,
+    SET_IDENTIFIER_VALUE,
+    SET_IDENTIFIER_ARRAY,
 
     // Operations
     ADD,
@@ -24,13 +25,13 @@ enum class OpCode : int
 class Instruction {
 public:
     explicit Instruction(OpCode code) : opCode(code) {}
-    explicit Instruction(OpCode code, int value) : opCode(code), mIntValue(value) {}
+    // explicit Instruction(OpCode code, int value) : opCode(code), mIntValue(value) {}
     explicit Instruction(OpCode code, double value) : opCode(code), mDoubleValue(value) {}
     explicit Instruction(OpCode code, std::string name) : opCode(code), mNameValue(name) {}
 
     OpCode opCode;
     // union {
-    int mIntValue = 0;
+    // int mIntValue = 0;
     double mDoubleValue = 0.0;
     std::string mNameValue;
     // };
@@ -60,8 +61,12 @@ public:
 private:
     Token& Consume();
     Token& Peek();
+    inline void ThrowUnexpectedCharError();
+    inline void MakeIdentifier(Token& token);
+    inline void MakeNumber(Token& token);
+
     void CompileExpression();
-    void ThrowUnexpectedCharError();
+    int CompileArray();
 
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;

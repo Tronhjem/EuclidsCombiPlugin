@@ -12,34 +12,63 @@ Token& Compiler::Peek()
     return mTokens[mCurrentIndex];
 }
 
+
+void Compiler::MakeIdentifier(Token& token)
+{
+    std::string name = std::string(token.mStart, token.mLength);
+    mInstructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER, name});
+}
+
+void Compiler::MakeNumber(Token& token)
+{
+    char *end = const_cast<char *>(token.mStart) + token.mLength;
+    double value = std::strtod(token.mStart, &end);
+    mInstructions.emplace_back(Instruction{OpCode::CONSTANT, value});
+}
+
+int Compiler::CompileArray()
+{
+    Consume(); // For the Left Bracket
+
+    int valueCounter = 0;
+    while (Peek().mTokenType != TokenType::RIGHT_BRACKET)
+    {
+        Token& currentToken = Consume();
+        switch(currentToken.mTokenType)
+        {
+            case TokenType::COMMA:
+            {
+                break;
+            }
+            case TokenType::NUMBER:
+            {
+                MakeNumber(currentToken);
+                ++valueCounter;
+                break;
+            }
+
+            case TokenType::EOL:
+            case TokenType::END:
+            default:
+                ThrowUnexpectedCharError();
+                return 0;
+        }
+    }
+    return valueCounter;
+}
+
 void Compiler::CompileExpression()
 {
-    auto makeIdentifier = [&](Token& token)
-    {
-        std::string name = std::string(token.mStart, token.mLength);
-        mInstructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER, name});
-    };
-
-    auto makeNumber = [&](Token& token)
-    {
-        // std::string name = std::string(token.mStart, token.mLength);
-        char *end = const_cast<char *>(token.mStart) + token.mLength;
-        double value = std::strtod(token.mStart, &end);
-
-        mInstructions.emplace_back(Instruction{OpCode::CONSTANT, value});
-        // mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER, name});
-    };
-
     auto binaryExpression = [&](OpCode code) 
     {
         Token& toDoBinary = Consume();
         if(toDoBinary.mTokenType == TokenType::IDENTIFIER)
         {
-            makeIdentifier(toDoBinary);
+            MakeIdentifier(toDoBinary);
         }
         else if (toDoBinary.mTokenType == TokenType::NUMBER)
         {
-            makeNumber(toDoBinary);
+            MakeNumber(toDoBinary);
         }
         else
         {
@@ -58,11 +87,11 @@ void Compiler::CompileExpression()
         switch (currentToken.mTokenType)
         {
             case TokenType::IDENTIFIER:
-                makeIdentifier(currentToken);
+                MakeIdentifier(currentToken);
                 break;
 
             case TokenType::NUMBER:
-                makeNumber(currentToken);
+                MakeNumber(currentToken);
                 break;
 
             // Operations
@@ -110,10 +139,16 @@ bool Compiler::Compile()
                     Consume(); // consumes the equal sign
 
                     TokenType tokenType = Peek().mTokenType;
-                    if (tokenType == TokenType::NUMBER || tokenType == TokenType::IDENTIFIER)
+                    if(tokenType == TokenType::LEFT_BRACKET)
+                    {
+                        int arrayLength = CompileArray();
+                        mInstructions.emplace_back(Instruction{OpCode::CONSTANT, (double)arrayLength});
+                        mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
+                    }
+                    else if (tokenType == TokenType::NUMBER || tokenType == TokenType::IDENTIFIER)
                     {
                         CompileExpression();
-                        mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER, name});
+                        mInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
                     }
                     else
                     {

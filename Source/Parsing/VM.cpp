@@ -38,9 +38,21 @@ void VM::Run()
                 break;
             }
             
-            case (OpCode::SET_IDENTIFIER):
+            case (OpCode::SET_IDENTIFIER_VALUE):
             {
                 mVariables[instruction.mNameValue] = mStack.Pop();
+                break;
+            }
+
+            case (OpCode::SET_IDENTIFIER_ARRAY):
+            {
+                int arrayLength = (int)mStack.Pop();
+                double data[arrayLength];
+                for (int i = arrayLength - 1; i >=0; --i)
+                {
+                    data[i] = mStack.Pop();
+                }
+                
                 break;
             }
 
@@ -61,8 +73,10 @@ void VM::Run()
             }
 
             case(OpCode::ADD):
+            {
                 mStack.Push(mStack.Pop() + mStack.Pop());
                 break;
+            }
 
             case(OpCode::SUBTRACT):
             {
