@@ -61,7 +61,7 @@ public:
 private:
     Token& Consume();
     Token& Peek();
-    inline void ThrowUnexpectedCharError();
+    inline void ThrowUnexpectedTokenError();
     inline void MakeIdentifier(Token& token);
     inline void MakeNumber(Token& token);
 

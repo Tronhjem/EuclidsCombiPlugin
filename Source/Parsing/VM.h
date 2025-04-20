@@ -63,7 +63,7 @@ class VM
 {
 public:
     VM();
-    void Prepare(const char* filePath);
+    bool Prepare(const char* filePath);
     void Run();
 
 private:

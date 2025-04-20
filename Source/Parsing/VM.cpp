@@ -9,11 +9,16 @@ VM::VM()
     mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mErrorReporting);
 }
 
-void VM::Prepare(const char* filePath)
+bool VM::Prepare(const char* filePath)
 {
-    mFileLoader->LoadFile(filePath);
-    mScanner->ScanFile(mFileLoader->GetFileStart());
-    mCompiler->Compile();
+    bool success = true;
+    if(success &= mFileLoader->LoadFile(filePath))
+    {
+        if (success &= mScanner->ScanFile(mFileLoader->GetFileStart()))
+            success &= mCompiler->Compile();
+    }
+
+    return success;
 }
 
 void VM::Run()

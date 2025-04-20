@@ -50,10 +50,12 @@ int Compiler::CompileArray()
             case TokenType::EOL:
             case TokenType::END:
             default:
-                ThrowUnexpectedCharError();
+                ThrowUnexpectedTokenError();
                 return 0;
         }
     }
+    Consume(); // Consuming right bracket. 
+    
     return valueCounter;
 }
 
@@ -73,7 +75,7 @@ void Compiler::CompileExpression()
         else
         {
             // ERROR
-            ThrowUnexpectedCharError();
+            ThrowUnexpectedTokenError();
             return;
         }
 
@@ -113,7 +115,7 @@ void Compiler::CompileExpression()
 
             default:
             {
-                ThrowUnexpectedCharError();
+                ThrowUnexpectedTokenError();
                 return;
             }
         }
@@ -152,7 +154,7 @@ bool Compiler::Compile()
                     }
                     else
                     {
-                        ThrowUnexpectedCharError();
+                        ThrowUnexpectedTokenError();
                         return false;
                     }
                 }
@@ -169,7 +171,7 @@ bool Compiler::Compile()
                 }
                 else
                 {
-                    ThrowUnexpectedCharError();
+                    ThrowUnexpectedTokenError();
                     return false;
                 }
                 break;
@@ -183,16 +185,16 @@ bool Compiler::Compile()
                 break;
 
             default:
-                ThrowUnexpectedCharError();
+                ThrowUnexpectedTokenError();
                 return false;
         }
     }
 }
 
-void Compiler::ThrowUnexpectedCharError()
+void Compiler::ThrowUnexpectedTokenError()
 {
     const Token &tokenForError = Peek();
     std::string token = std::string(tokenForError.mStart, tokenForError.mLength);
-    std::string message = std::string("Compiler: Unexpected Char ") + token;
+    std::string message = std::string("Compiler: Unexpected Token ") + token;
     mErrorReporting.LogError(Peek().mLine, message);
 }
