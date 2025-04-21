@@ -8,6 +8,7 @@ enum class OpCode : int
 {
     CONSTANT = 0,
     GET_IDENTIFIER,
+    GET_IDENTIFIER_WITH_INDEX,
     SET_IDENTIFIER_VALUE,
     SET_IDENTIFIER_ARRAY,
 
@@ -25,30 +26,12 @@ enum class OpCode : int
 class Instruction {
 public:
     explicit Instruction(OpCode code) : opCode(code) {}
-    // explicit Instruction(OpCode code, int value) : opCode(code), mIntValue(value) {}
     explicit Instruction(OpCode code, double value) : opCode(code), mDoubleValue(value) {}
     explicit Instruction(OpCode code, std::string name) : opCode(code), mNameValue(name) {}
 
     OpCode opCode;
-    // union {
-    // int mIntValue = 0;
     double mDoubleValue = 0.0;
     std::string mNameValue;
-    // };
-
-    // Instruction(Instruction& instruction)
-    // {
-    // }
-
-    // Instruction(Instruction&& instruction)
-    // {
-    //     opCode = instruction.opCode;
-    //     mCharData = instruction.mCharData;
-    //     mIntValue = instruction.mIntValue;
-    //     mDoubleValue = instruction.mDoubleValue;
-
-    //     instruction.mCharData = nullptr;
-    // }
 };
 
 class Compiler
@@ -61,9 +44,10 @@ public:
 private:
     Token& Consume();
     Token& Peek();
-    inline void ThrowUnexpectedTokenError();
-    inline void MakeIdentifier(Token& token);
-    inline void MakeNumber(Token& token);
+    Token& PeekNext();
+    inline void ThrowUnexpectedTokenError(Token& tokenForError);
+    inline void MakeIdentifierGetter(Token& token);
+    inline void MakeConstant(Token& token);
 
     void CompileExpression();
     int CompileArray();

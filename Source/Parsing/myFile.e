@@ -1,8 +1,11 @@
-a = [0,1,0,0]
-// b = [1,1,1,1]
-
 c = 50
-u = 10
-o = u / c
 
-print 20 / 10
+a = [c + 10, 100, 2, 0]
+o = a[0] * a[1]
+
+//print 50
+//print c
+//print o / 10
+//print u
+print a[0]
+print o

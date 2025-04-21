@@ -45,7 +45,8 @@ void VM::Run()
             
             case (OpCode::SET_IDENTIFIER_VALUE):
             {
-                mVariables[instruction.mNameValue] = mStack.Pop();
+                double value = mStack.Pop();
+                mVariables[instruction.mNameValue] = VarData{value};
                 break;
             }
 
@@ -57,7 +58,9 @@ void VM::Run()
                 {
                     data[i] = mStack.Pop();
                 }
-                
+
+                std::vector<double> vectorData {data, data + arrayLength};
+                mVariables[instruction.mNameValue] = VarData{0.0, vectorData};
                 break;
             }
 
@@ -65,7 +68,24 @@ void VM::Run()
             {
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
-                    double value = mVariables[instruction.mNameValue];
+                    double value = mVariables[instruction.mNameValue].mDoubleValue;
+                    mStack.Push(value);
+                }
+                else
+                {
+                    std::string error = std::string("VM: Variable not defined");
+                    mErrorReporting->LogError(error);
+                    return;
+                }
+                break;
+            }
+
+            case (OpCode::GET_IDENTIFIER_WITH_INDEX):
+            {
+                int index = (int) mStack.Pop();
+                if (mVariables.find(instruction.mNameValue) != mVariables.end())
+                {
+                    double value = mVariables[instruction.mNameValue].mArrayData[index];
                     mStack.Push(value);
                 }
                 else
@@ -116,6 +136,8 @@ void VM::Run()
                 return;
 
             default:
+                std::string err {"Unexpected Operation code"};
+                mErrorReporting->LogError(err);
                 break;
         }
     }

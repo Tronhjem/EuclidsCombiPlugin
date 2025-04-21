@@ -59,6 +59,12 @@ private:
     int stackPointer = 0;
 };
 
+struct VarData
+{
+    double mDoubleValue;
+    std::vector<double> mArrayData;
+};
+
 class VM
 {
 public:
@@ -67,7 +73,7 @@ public:
     void Run();
 
 private:
-    std::unordered_map<std::string, double> mVariables;
+    std::unordered_map<std::string, VarData> mVariables;
     std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unique_ptr<Scanner> mScanner;
     std::unique_ptr<Compiler> mCompiler;

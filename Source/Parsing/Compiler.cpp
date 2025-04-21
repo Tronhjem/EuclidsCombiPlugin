@@ -9,19 +9,31 @@ Token& Compiler::Consume()
 
 Token& Compiler::Peek()
 {
+    assert(mCurrentIndex < mTokens.size());
     return mTokens[mCurrentIndex];
 }
 
-
-void Compiler::MakeIdentifier(Token& token)
+void Compiler::MakeIdentifierGetter(Token& token)
 {
     std::string name = std::string(token.mStart, token.mLength);
-    mInstructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER, name});
+    if (Peek().mTokenType == TokenType::LEFT_BRACKET)
+    {
+        Consume(); // for consuming left bracket
+        Token& indexToken = Consume();
+        MakeConstant(indexToken);
+        Consume(); // for consuming right bracket
+
+        mInstructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER_WITH_INDEX, name});
+    }
+    else
+    {
+        mInstructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER, name});
+    }
 }
 
-void Compiler::MakeNumber(Token& token)
+void Compiler::MakeConstant(Token& token)
 {
-    char *end = const_cast<char *>(token.mStart) + token.mLength;
+    char* end = const_cast<char *>(token.mStart) + token.mLength;
     double value = std::strtod(token.mStart, &end);
     mInstructions.emplace_back(Instruction{OpCode::CONSTANT, value});
 }
@@ -33,16 +45,19 @@ int Compiler::CompileArray()
     int valueCounter = 0;
     while (Peek().mTokenType != TokenType::RIGHT_BRACKET)
     {
-        Token& currentToken = Consume();
+        Token& currentToken = Peek();
         switch(currentToken.mTokenType)
         {
             case TokenType::COMMA:
             {
+                Consume();
                 break;
             }
+
             case TokenType::NUMBER:
+            case TokenType::IDENTIFIER:
             {
-                MakeNumber(currentToken);
+                CompileExpression();
                 ++valueCounter;
                 break;
             }
@@ -50,7 +65,7 @@ int Compiler::CompileArray()
             case TokenType::EOL:
             case TokenType::END:
             default:
-                ThrowUnexpectedTokenError();
+                ThrowUnexpectedTokenError(currentToken);
                 return 0;
         }
     }
@@ -66,34 +81,38 @@ void Compiler::CompileExpression()
         Token& toDoBinary = Consume();
         if(toDoBinary.mTokenType == TokenType::IDENTIFIER)
         {
-            MakeIdentifier(toDoBinary);
+            MakeIdentifierGetter(toDoBinary);
         }
         else if (toDoBinary.mTokenType == TokenType::NUMBER)
         {
-            MakeNumber(toDoBinary);
+            MakeConstant(toDoBinary);
         }
         else
         {
             // ERROR
-            ThrowUnexpectedTokenError();
+            ThrowUnexpectedTokenError(toDoBinary);
             return;
         }
 
         mInstructions.emplace_back(Instruction{code});
-
     };
-
-    while (Peek().mTokenType != TokenType::EOL && Peek().mTokenType != TokenType::END)
+    
+    Token& debug = Peek();
+    while (Peek().mTokenType != TokenType::EOL && 
+           Peek().mTokenType != TokenType::END &&
+           Peek().mTokenType != TokenType::COMMA &&
+           Peek().mTokenType != TokenType::RIGHT_BRACKET &&
+           Peek().mTokenType != TokenType::RIGHT_PAREN)
     {
         Token& currentToken = Consume();
         switch (currentToken.mTokenType)
         {
             case TokenType::IDENTIFIER:
-                MakeIdentifier(currentToken);
+                MakeIdentifierGetter(currentToken);
                 break;
 
             case TokenType::NUMBER:
-                MakeNumber(currentToken);
+                MakeConstant(currentToken);
                 break;
 
             // Operations
@@ -115,7 +134,7 @@ void Compiler::CompileExpression()
 
             default:
             {
-                ThrowUnexpectedTokenError();
+                ThrowUnexpectedTokenError(currentToken);
                 return;
             }
         }
@@ -154,7 +173,7 @@ bool Compiler::Compile()
                     }
                     else
                     {
-                        ThrowUnexpectedTokenError();
+                        ThrowUnexpectedTokenError(token);
                         return false;
                     }
                 }
@@ -171,7 +190,7 @@ bool Compiler::Compile()
                 }
                 else
                 {
-                    ThrowUnexpectedTokenError();
+                    ThrowUnexpectedTokenError(token);
                     return false;
                 }
                 break;
@@ -185,15 +204,14 @@ bool Compiler::Compile()
                 break;
 
             default:
-                ThrowUnexpectedTokenError();
+                ThrowUnexpectedTokenError(token);
                 return false;
         }
     }
 }
 
-void Compiler::ThrowUnexpectedTokenError()
+void Compiler::ThrowUnexpectedTokenError(Token& tokenForError)
 {
-    const Token &tokenForError = Peek();
     std::string token = std::string(tokenForError.mStart, tokenForError.mLength);
     std::string message = std::string("Compiler: Unexpected Token ") + token;
     mErrorReporting.LogError(Peek().mLine, message);
