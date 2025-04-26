@@ -65,7 +65,6 @@ private:
 
 struct VarData
 {
-    uChar mDataValue;
     std::vector<uChar> mArrayData;
 };
 

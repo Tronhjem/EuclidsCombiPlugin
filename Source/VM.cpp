@@ -39,14 +39,15 @@ void VM::ProcessOpCodes()
         {
             case (OpCode::CONSTANT):
             {
-                mStack.Push(instruction.mDataValue); 
+                mStack.Push(instruction.mDataValue);
                 break;
             }
             
             case (OpCode::SET_IDENTIFIER_VALUE):
             {
                 uChar value = mStack.Pop();
-                mVariables[instruction.mNameValue] = VarData{value};
+                std::vector<uChar> vectorData {value};
+                mVariables[instruction.mNameValue] = VarData{vectorData};
                 break;
             }
 
@@ -60,7 +61,7 @@ void VM::ProcessOpCodes()
                 }
 
                 std::vector<uChar> vectorData {data, data + arrayLength};
-                mVariables[instruction.mNameValue] = VarData{0, vectorData};
+                mVariables[instruction.mNameValue] = VarData{vectorData};
                 break;
             }
 
@@ -68,7 +69,7 @@ void VM::ProcessOpCodes()
             {
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
-                    double value = mVariables[instruction.mNameValue].mDataValue;
+                    uChar value = mVariables[instruction.mNameValue].mArrayData[0];
                     mStack.Push(value);
                 }
                 else
@@ -85,7 +86,7 @@ void VM::ProcessOpCodes()
                 int index = (int) mStack.Pop();
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
-                    double value = mVariables[instruction.mNameValue].mArrayData[index];
+                    uChar value = mVariables[instruction.mNameValue].mArrayData[index];
                     mStack.Push(value);
                 }
                 else
@@ -105,8 +106,8 @@ void VM::ProcessOpCodes()
 
             case(OpCode::SUBTRACT):
             {
-                double b = mStack.Pop();
-                double a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
                 mStack.Push(a - b); 
                 break;
             }
@@ -119,16 +120,16 @@ void VM::ProcessOpCodes()
 
             case(OpCode::DIVIDE):
             {
-                double b = mStack.Pop();
-                double a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
                 mStack.Push(a / b); 
                 break;
             }
 
             case(OpCode::PRINT):
             {
-                double value = mStack.Pop();
-                std::cout << "PRINT: " << value << std::endl;
+                uChar value = mStack.Pop();
+                std::cout << "PRINT: " << (int)value << std::endl;
                 break;
             }
 
