@@ -13,6 +13,7 @@
 #include "Track.h"
 #include "Types.h"
 #include "MidiScheduler.h"
+#include "DataSequence.h"
 
 class Instruction;
 
@@ -63,10 +64,6 @@ private:
     int stackPointer = 0;
 };
 
-struct VarData
-{
-    std::vector<uChar> mArrayData;
-};
 
 class VM
 {
@@ -77,7 +74,7 @@ public:
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
 
 private:
-    std::unordered_map<std::string, VarData> mVariables;
+    std::unordered_map<std::string, DataSequence> mVariables;
     std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unique_ptr<Scanner> mScanner;
     std::unique_ptr<Compiler> mCompiler;

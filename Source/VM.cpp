@@ -47,7 +47,7 @@ void VM::ProcessOpCodes()
             {
                 uChar value = mStack.Pop();
                 std::vector<uChar> vectorData {value};
-                mVariables[instruction.mNameValue] = VarData{vectorData};
+                mVariables[instruction.mNameValue] = DataSequence{vectorData};
                 break;
             }
 
@@ -61,7 +61,7 @@ void VM::ProcessOpCodes()
                 }
 
                 std::vector<uChar> vectorData {data, data + arrayLength};
-                mVariables[instruction.mNameValue] = VarData{vectorData};
+                mVariables[instruction.mNameValue] = DataSequence{vectorData};
                 break;
             }
 
@@ -69,7 +69,7 @@ void VM::ProcessOpCodes()
             {
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
-                    uChar value = mVariables[instruction.mNameValue].mArrayData[0];
+                    uChar value = mVariables[instruction.mNameValue].GetValue(0);
                     mStack.Push(value);
                 }
                 else
@@ -86,7 +86,7 @@ void VM::ProcessOpCodes()
                 int index = (int) mStack.Pop();
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
-                    uChar value = mVariables[instruction.mNameValue].mArrayData[index];
+                    uChar value = mVariables[instruction.mNameValue].GetValue(index);
                     mStack.Push(value);
                 }
                 else

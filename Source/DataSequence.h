@@ -15,14 +15,27 @@ enum class DataSequenceType : uChar
 class DataSequence
 {
 public:
-    DataSequence(uChar* start, int length, DataSequenceType seqType);
-    uChar GetNextValue();
+    DataSequence() {}
+    DataSequence(const std::vector<uChar>& data);
+    uChar GetValue(int index);
+    
+//    DataSequence(const DataSequence& copy)
+//    {
+//        mData = std::move(copy.mData);
+//    }
+//    
+//    DataSequence(DataSequence&& copy)
+//    {
+//        mData = std::move(copy.mData);
+//    }
+//    
+//    DataSequence& operator= (const DataSequence& other)
+//    {
+//        mData = std::move(other.mData);
+//        return *this;
+//    }
     
 private:
-    DataSequence& operator= (const DataSequence&) = delete;
-    
     inline void SetSequence(uChar* start, int length);
-    DataSequenceType mType;
-    uChar mInternalPosition;
     std::vector<uChar> mData;
 };

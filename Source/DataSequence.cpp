@@ -1,9 +1,7 @@
 #include "DataSequence.h"
 
-DataSequence::DataSequence(uChar* start, int length, DataSequenceType seqType) :
-    mType(seqType)
+DataSequence::DataSequence(const std::vector<uChar>& data) : mData(data)
 {
-    SetSequence(start, length);
 }
 
 void DataSequence::SetSequence(uChar *start, int length)
@@ -14,9 +12,8 @@ void DataSequence::SetSequence(uChar *start, int length)
     }
 }
 
-uChar DataSequence::GetNextValue()
+uChar DataSequence::GetValue(int index)
 {
-    uChar temp = mData[mInternalPosition];
-    mInternalPosition = ++mInternalPosition % mData.size();
-    return temp;
+    int indexWrapped = index % mData.size();
+    return mData[indexWrapped];
 }
