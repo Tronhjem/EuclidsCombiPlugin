@@ -12,7 +12,7 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine()
     mTracks.emplace_back(Track{seq2, 1, 64 + 12});
     
     mVM = std::make_unique<VM>();
-    mVM->Prepare("/Users/christiantronhjem/dev/EuclidsCombiPlugin/Source/Parsing/myFile.e");
+    mVM->Prepare("/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e");
     mVM->ProcessOpCodes();
 }
 
@@ -34,14 +34,15 @@ void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
         
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.
-        if (endOfBufferPosition >= nextTickTime)
-        {
-            for(Track& track : mTracks)
-            {
-                track.Tick(mMidiScheduler, nextTickTime, stepCount);
-            }
-        }
-        
+        mVM->Tick(mMidiScheduler, nextTickTime, stepCount);
+//        if (endOfBufferPosition >= nextTickTime)
+//        {
+//            for(Track& track : mTracks)
+//            {
+//                track.Tick(mMidiScheduler, nextTickTime, stepCount);
+//            }
+//        }
+//
         // Process all Midi.
         mMidiScheduler.ProcessMidiPosts(midiMessages, bufferLength, endOfBufferPosition);
     }

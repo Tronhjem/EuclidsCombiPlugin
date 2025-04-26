@@ -143,7 +143,7 @@ void VM::ProcessOpCodes()
     }
 }
 
-void VM::Tick(double globalCount)
+void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
 {
 
 }

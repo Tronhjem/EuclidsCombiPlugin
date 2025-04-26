@@ -35,6 +35,19 @@ void Compiler::MakeIdentifierGetter(Token& token)
 void Compiler::MakeConstant(Token& token)
 {
     int value = std::stoi(std::string(token.mStart, token.mLength));
+    if (value > 255)
+    {
+        value = 255;
+        std::string message = std::string("Compiler: value can only be between 0 and 255, correcting to 255");
+        mErrorReporting.LogWarning(message);
+    }
+    if (value < 0)
+    {
+        value = 0;
+        std::string message = std::string("Compiler: value can only be between 0 and 255, correcting to 0");
+        mErrorReporting.LogWarning(message);
+    }
+    
     mInstructions.emplace_back(Instruction{OpCode::CONSTANT, (uChar)value});
 }
 

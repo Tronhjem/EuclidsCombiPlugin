@@ -11,8 +11,6 @@
         <FILE id="vkabua" name="ScopedTimer.h" compile="0" resource="0" file="Source/ScopedTimer.h"/>
       </GROUP>
       <GROUP id="{35B764F8-FA3B-1DCC-C112-5E416009EE3B}" name="Compiling">
-        <FILE id="xXdmjU" name="VM.h" compile="0" resource="0" file="Source/VM.h"/>
-        <FILE id="Gm9JlK" name="VM.cpp" compile="1" resource="0" file="Source/VM.cpp"/>
         <FILE id="SNG1tN" name="Compiler.h" compile="0" resource="0" file="Source/Compiler.h"/>
         <FILE id="w67Yy5" name="Compiler.cpp" compile="1" resource="0" file="Source/Compiler.cpp"/>
         <FILE id="IDCXRG" name="CustomMemory.h" compile="0" resource="0" file="Source/CustomMemory.h"/>
@@ -59,6 +57,8 @@
       <FILE id="IFOmAR" name="MidiScheduler.h" compile="0" resource="0" file="Source/MidiScheduler.h"/>
       <FILE id="QTffte" name="MidiScheduler.cpp" compile="1" resource="0"
             file="Source/MidiScheduler.cpp" xcodeResource="0"/>
+      <FILE id="xXdmjU" name="VM.h" compile="0" resource="0" file="Source/VM.h"/>
+      <FILE id="Gm9JlK" name="VM.cpp" compile="1" resource="0" file="Source/VM.cpp"/>
       <FILE id="t94g8H" name="EuclidsCombinator.h" compile="0" resource="0"
             file="Source/EuclidsCombinator.h"/>
       <FILE id="JPoBML" name="EuclidsCombinator.cpp" compile="1" resource="0"

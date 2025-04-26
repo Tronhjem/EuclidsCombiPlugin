@@ -12,6 +12,7 @@
 #include "FileLoader.h"
 #include "Track.h"
 #include "Types.h"
+#include "MidiScheduler.h"
 
 class Instruction;
 
@@ -74,7 +75,7 @@ public:
     VM();
     bool Prepare(const char* filePath);
     void ProcessOpCodes();
-    void Tick(double globalCount);
+    void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
 
 private:
     std::unordered_map<std::string, VarData> mVariables;
