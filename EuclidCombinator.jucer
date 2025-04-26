@@ -6,61 +6,61 @@
               pluginManufacturer="SonoTron" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
-      <GROUP id="{30FFA290-F69D-BDAA-5EC5-1ED675D19463}" name="Parsing">
-        <FILE id="a9rPAm" name="Compiler.cpp" compile="1" resource="0" file="Source/Parsing/Compiler.cpp"/>
-        <FILE id="P0yEsJ" name="Compiler.h" compile="0" resource="0" file="Source/Parsing/Compiler.h"/>
-        <FILE id="kK6scZ" name="CustomMemory.cpp" compile="1" resource="0"
-              file="Source/Parsing/CustomMemory.cpp"/>
-        <FILE id="jeTdrL" name="CustomMemory.h" compile="0" resource="0" file="Source/Parsing/CustomMemory.h"/>
-        <FILE id="CBDruV" name="ErrorReporting.cpp" compile="1" resource="0"
-              file="Source/Parsing/ErrorReporting.cpp"/>
-        <FILE id="mdfXAn" name="ErrorReporting.h" compile="0" resource="0"
-              file="Source/Parsing/ErrorReporting.h"/>
-        <FILE id="NP6K9d" name="FileLoader.cpp" compile="1" resource="0" file="Source/Parsing/FileLoader.cpp"/>
-        <FILE id="XQOayw" name="FileLoader.h" compile="0" resource="0" file="Source/Parsing/FileLoader.h"/>
-        <FILE id="VlsVHn" name="Parser.cpp" compile="1" resource="0" file="Source/Parsing/Parser.cpp"/>
-        <FILE id="vME4l6" name="Parser.h" compile="0" resource="0" file="Source/Parsing/Parser.h"/>
-        <FILE id="cqqatJ" name="Scanner.cpp" compile="1" resource="0" file="Source/Parsing/Scanner.cpp"/>
-        <FILE id="ZFPKcY" name="Scanner.h" compile="0" resource="0" file="Source/Parsing/Scanner.h"/>
-        <FILE id="EWNw5V" name="ScopedTimer.h" compile="0" resource="0" file="Source/Parsing/ScopedTimer.h"/>
-        <FILE id="LyHjKe" name="Token.cpp" compile="1" resource="0" file="Source/Parsing/Token.cpp"/>
-        <FILE id="Zj0vwk" name="Token.h" compile="0" resource="0" file="Source/Parsing/Token.h"/>
-        <FILE id="BQcEob" name="VM.cpp" compile="1" resource="0" file="Source/Parsing/VM.cpp"/>
-        <FILE id="Q18la5" name="VM.h" compile="0" resource="0" file="Source/Parsing/VM.h"/>
+      <GROUP id="{D2C2D092-CD57-6EE7-43FD-43F0A64B0C7F}" name="Utils">
+        <FILE id="ahSwq9" name="Utility.h" compile="0" resource="0" file="Source/Utility.h"/>
+        <FILE id="vkabua" name="ScopedTimer.h" compile="0" resource="0" file="Source/ScopedTimer.h"/>
+      </GROUP>
+      <GROUP id="{35B764F8-FA3B-1DCC-C112-5E416009EE3B}" name="Compiling">
+        <FILE id="xXdmjU" name="VM.h" compile="0" resource="0" file="Source/VM.h"/>
+        <FILE id="Gm9JlK" name="VM.cpp" compile="1" resource="0" file="Source/VM.cpp"/>
+        <FILE id="SNG1tN" name="Compiler.h" compile="0" resource="0" file="Source/Compiler.h"/>
+        <FILE id="w67Yy5" name="Compiler.cpp" compile="1" resource="0" file="Source/Compiler.cpp"/>
+        <FILE id="IDCXRG" name="CustomMemory.h" compile="0" resource="0" file="Source/CustomMemory.h"/>
+        <FILE id="D9GHJu" name="CustomMemory.cpp" compile="1" resource="0"
+              file="Source/CustomMemory.cpp"/>
+        <FILE id="po5xCv" name="ErrorReporting.h" compile="0" resource="0"
+              file="Source/ErrorReporting.h"/>
+        <FILE id="R2PzWU" name="ErrorReporting.cpp" compile="1" resource="0"
+              file="Source/ErrorReporting.cpp"/>
+        <FILE id="Qjgl9t" name="FileLoader.h" compile="0" resource="0" file="Source/FileLoader.h"/>
+        <FILE id="RGe2aN" name="FileLoader.cpp" compile="1" resource="0" file="Source/FileLoader.cpp"/>
+        <FILE id="OOzKtq" name="Scanner.h" compile="0" resource="0" file="Source/Scanner.h"/>
+        <FILE id="uFmPHU" name="Scanner.cpp" compile="1" resource="0" file="Source/Scanner.cpp"/>
+        <FILE id="X28Tv4" name="Token.h" compile="0" resource="0" file="Source/Token.h"/>
+        <FILE id="I0GPcG" name="Token.cpp" compile="1" resource="0" file="Source/Token.cpp"/>
       </GROUP>
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
+        <FILE id="N9qchT" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
+        <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
         <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
+          <FILE id="UBDucC" name="DataSequence.h" compile="0" resource="0" file="Source/DataSequence.h"/>
           <FILE id="q27wf3" name="DataSequence.cpp" compile="1" resource="0"
                 file="Source/DataSequence.cpp"/>
-          <FILE id="nmLxuS" name="DataSequence.h" compile="0" resource="0" file="Source/DataSequence.h"/>
+          <FILE id="QNveVN" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
           <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
                 file="Source/LogicSequence.cpp"/>
-          <FILE id="wtWHB1" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
+          <FILE id="iHwIpO" name="LogicSequenceCombiner.h" compile="0" resource="0"
+                file="Source/LogicSequenceCombiner.h"/>
           <FILE id="Mm5aP7" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
                 file="Source/LogicSequenceCombiner.cpp"/>
-          <FILE id="x2K6wo" name="LogicSequenceCombiner.h" compile="0" resource="0"
-                file="Source/LogicSequenceCombiner.h"/>
         </GROUP>
-        <FILE id="vmIszc" name="Track.hpp" compile="0" resource="0" file="Source/Track.hpp"/>
-        <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
       </GROUP>
       <GROUP id="{F1896013-22DD-58BE-C991-2EA418BBF7AB}" name="Juce">
+        <FILE id="EU0GQv" name="PluginProcessor.h" compile="0" resource="0"
+              file="Source/PluginProcessor.h"/>
         <FILE id="zlpITL" name="PluginProcessor.cpp" compile="1" resource="0"
               file="Source/PluginProcessor.cpp"/>
-        <FILE id="kQzwxu" name="PluginProcessor.h" compile="0" resource="0"
-              file="Source/PluginProcessor.h"/>
+        <FILE id="qjYTDK" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
         <FILE id="zn7Zk7" name="PluginEditor.cpp" compile="1" resource="0"
               file="Source/PluginEditor.cpp"/>
-        <FILE id="ekqdmb" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       </GROUP>
-      <FILE id="T3Fsod" name="Utility.h" compile="0" resource="0" file="Source/Utility.h"/>
+      <FILE id="gYku1Q" name="Types.h" compile="0" resource="0" file="Source/Types.h"/>
+      <FILE id="Od2hLp" name="TransportData.h" compile="0" resource="0" file="Source/TransportData.h"/>
+      <FILE id="IFOmAR" name="MidiScheduler.h" compile="0" resource="0" file="Source/MidiScheduler.h"/>
       <FILE id="QTffte" name="MidiScheduler.cpp" compile="1" resource="0"
             file="Source/MidiScheduler.cpp" xcodeResource="0"/>
-      <FILE id="JpcasT" name="MidiScheduler.h" compile="0" resource="0" file="Source/MidiScheduler.h"/>
-      <FILE id="QUnyWS" name="TransportData.h" compile="0" resource="0" file="Source/TransportData.h"/>
-      <FILE id="vRDytI" name="Types.h" compile="0" resource="0" file="Source/Types.h"/>
-      <FILE id="XOfop6" name="EuclidsCombinator.hpp" compile="0" resource="0"
-            file="Source/EuclidsCombinator.hpp"/>
+      <FILE id="t94g8H" name="EuclidsCombinator.h" compile="0" resource="0"
+            file="Source/EuclidsCombinator.h"/>
       <FILE id="JPoBML" name="EuclidsCombinator.cpp" compile="1" resource="0"
             file="Source/EuclidsCombinator.cpp"/>
     </GROUP>

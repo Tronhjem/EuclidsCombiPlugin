@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include <memory>
-#include "EuclidsCombinator.hpp"
+#include "EuclidsCombinator.h"
 
 
 class EuclidCombinatorAudioProcessor  : public juce::AudioProcessor

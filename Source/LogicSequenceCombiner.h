@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Types.h"
-#include "LogicSequence.h"
 #include <vector>
 
-enum class Operation : uChar
+#include "Types.h"
+#include "LogicSequence.h"
+
+enum class Operation
 {
     AND,
     OR,
@@ -16,14 +17,9 @@ class LogicSequenceCombiner
 public:
     LogicSequenceCombiner(LogicSequence logicSeq);
     void AddLogic(LogicSequence logicSeq, Operation operation);
-    const uChar operator [](const int i) const;
-    
-private:
-    LogicSequenceCombiner() = delete;
-    
+    const uChar operator [](const int index) const;
     uChar Evaluate(const uChar a, const uChar b, const Operation operation) const;
-    
+private:
     std::vector<LogicSequence> mLogicSequences;
     std::vector<Operation> mOperations;
 };
-

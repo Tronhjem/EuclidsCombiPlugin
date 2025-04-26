@@ -1,6 +1,5 @@
 #include "LogicSequenceCombiner.h"
 
-
 LogicSequenceCombiner::LogicSequenceCombiner(LogicSequence logicSeq)
 {
     mLogicSequences.emplace_back(logicSeq);

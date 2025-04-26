@@ -1,5 +1,5 @@
 #include <cmath>
-#include "EuclidsCombinator.hpp"
+#include "EuclidsCombinator.h"
 
 EuclidsCombinatorEngine::EuclidsCombinatorEngine()
 {
@@ -11,13 +11,14 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine()
     LogicSequence seq2 {&logic2[0], 8};
     mTracks.emplace_back(Track{seq2, 1, 64 + 12});
     
-    mVM = new VM();
+    mVM = std::make_unique<VM>();
     mVM->Prepare("/Users/christiantronhjem/dev/EuclidsCombiPlugin/Source/Parsing/myFile.e");
-    mVM->Run();
+    mVM->ProcessOpCodes();
 }
 
 EuclidsCombinatorEngine::~EuclidsCombinatorEngine()
 {
+    
 }
 
 void EuclidsCombinatorEngine::Tick(const TransportData& transportData,

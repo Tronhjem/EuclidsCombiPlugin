@@ -1,4 +1,5 @@
 #include "LogicSequence.h"
+#include <assert.h>
 
 LogicSequence::LogicSequence(const uChar* start, int length)
 {
