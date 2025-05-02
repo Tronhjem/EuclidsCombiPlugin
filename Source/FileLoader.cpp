@@ -8,7 +8,6 @@
 
 FileLoader::FileLoader()
 {
-
 }
 
 bool FileLoader::LoadFile(const char* filePath)

@@ -185,7 +185,6 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
                 break;
             }
                 
-                
             default:
             {
                 ThrowUnexpectedTokenError(currentToken);

@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-namespace
 unsigned int WriteArrayToBytes(unsigned int* start, unsigned int length)
 {
     unsigned int array = 0;

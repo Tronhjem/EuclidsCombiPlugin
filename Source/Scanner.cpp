@@ -139,8 +139,6 @@ Token Scanner::ScanToken()
             return MakeToken(TokenType::MINUS);
         case '+':
             return MakeToken(TokenType::PLUS);
-        case ';':
-            return MakeToken(TokenType::SEMICOLON);
         case '*':
             return MakeToken(TokenType::STAR);
         case '/':
@@ -150,6 +148,8 @@ Token Scanner::ScanToken()
             return MakeErrorToken(ERROR_UNEXPECTED_CHAR, c);
             
         // UNUSED
+//        case ';':
+//            return MakeToken(TokenType::SEMICOLON);
 //        case '{':
 //            return MakeToken(TokenType::LEFT_BRACE);
 //        case '}':

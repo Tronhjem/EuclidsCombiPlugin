@@ -7,27 +7,29 @@ enum class TokenType
     // Single-character tokens.
     LEFT_PAREN = 0,
     RIGHT_PAREN,
-    LEFT_BRACE,
-    RIGHT_BRACE,
+//    LEFT_BRACE,
+//    RIGHT_BRACE,
     LEFT_BRACKET,
     RIGHT_BRACKET,
     COMMA,
+//    SEMICOLON,
+    
+    // MATH
     DOT,
     MINUS,
     PLUS,
-    SEMICOLON,
     SLASH,
     STAR,
 
     // One or two character tokens.
-    BANG,
-    BANG_EQUAL,
     EQUAL,
     EQUAL_EQUAL,
-    GREATER,
-    GREATER_EQUAL,
-    LESS,
-    LESS_EQUAL,
+//    BANG,
+//    BANG_EQUAL,
+//    GREATER,
+//    GREATER_EQUAL,
+//    LESS,
+//    LESS_EQUAL,
 
     // Literals.
     IDENTIFIER,
@@ -40,26 +42,27 @@ enum class TokenType
     XOR,
     
     // Keywords.
-    CLASS,
-    ELSE,
-    FALSE,
-    FUN,
-    FOR,
-    IF,
-    NIL,
     PRINT,
-    RETURN,
-    SUPER,
-    THIS,
-    TRUE,
-    VAR,
-    WHILE,
+//    CLASS,
+//    ELSE,
+//    FALSE,
+//    FUN,
+//    FOR,
+//    IF,
+//    NIL,
+//    RETURN,
+//    SUPER,
+//    THIS,
+//    TRUE,
+//    VAR,
+//    WHILE,
     ERROR,
     
-    // Midi Specific
+    // Specific
     TRACK,
 
-    EOL,
+    // ENDS
+    EOL, // End Of Line
     END,
 };
 
