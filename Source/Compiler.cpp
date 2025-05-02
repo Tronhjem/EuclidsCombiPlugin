@@ -1,7 +1,8 @@
+#include <string>
+
 #include "Compiler.h"
 #include "ErrorReporting.h"
 #include "ScopedTimer.h"
-#include <string>
 
 Token& Compiler::Consume()
 {

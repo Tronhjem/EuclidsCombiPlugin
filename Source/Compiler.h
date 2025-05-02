@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include "Token.h"
 #include "Types.h"
 #include "Instruction.h"

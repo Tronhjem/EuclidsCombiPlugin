@@ -1,7 +1,8 @@
+#include <stdio.h>
+
 #include "Scanner.h"
 #include "ErrorReporting.h"
 #include "Token.h"
-#include <stdio.h>
 #include "ScopedTimer.h"
 
 Scanner::Scanner(ErrorReporting &logger) : mErrorReporting(logger)

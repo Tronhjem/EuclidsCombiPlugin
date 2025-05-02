@@ -1,4 +1,5 @@
 #include <cmath>
+
 #include "EuclidsCombinator.h"
 
 EuclidsCombinatorEngine::EuclidsCombinatorEngine() :

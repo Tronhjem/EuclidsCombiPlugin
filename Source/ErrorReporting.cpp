@@ -1,5 +1,6 @@
-#include "ErrorReporting.h"
 #include <iostream>
+
+#include "ErrorReporting.h"
 
 void ErrorReporting::LogError(int line, std::string& message)
 {

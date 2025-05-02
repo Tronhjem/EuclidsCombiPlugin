@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include <memory>
+
 #include "EuclidsCombinator.h"
 
 
