@@ -16,7 +16,7 @@ void ErrorReporting::LogWarning(int line, std::string &message)
     std::cout << "[Warning] " << message << " at line: " << line << std::endl;
 }
 
-void ErrorReporting::LogWarning(std::string &message)
+void ErrorReporting::LogWarning(std::string& message)
 {
     std::cout << "[Warning] " << message << std::endl;
 }

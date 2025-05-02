@@ -2,6 +2,7 @@
 
 #include <string>
 
+//TODO: make this take line and position as well for reporting properly syntax erros
 class ErrorReporting
 {
 public:

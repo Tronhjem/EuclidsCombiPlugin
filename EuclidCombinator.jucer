@@ -11,6 +11,7 @@
         <FILE id="vkabua" name="ScopedTimer.h" compile="0" resource="0" file="Source/ScopedTimer.h"/>
       </GROUP>
       <GROUP id="{35B764F8-FA3B-1DCC-C112-5E416009EE3B}" name="Compiling">
+        <FILE id="JzUIHJ" name="Instruction.h" compile="0" resource="0" file="Source/Instruction.h"/>
         <FILE id="SNG1tN" name="Compiler.h" compile="0" resource="0" file="Source/Compiler.h"/>
         <FILE id="w67Yy5" name="Compiler.cpp" compile="1" resource="0" file="Source/Compiler.cpp"/>
         <FILE id="IDCXRG" name="CustomMemory.h" compile="0" resource="0" file="Source/CustomMemory.h"/>
@@ -28,8 +29,6 @@
         <FILE id="I0GPcG" name="Token.cpp" compile="1" resource="0" file="Source/Token.cpp"/>
       </GROUP>
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
-        <FILE id="N9qchT" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
-        <FILE id="ZFFL3u" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
         <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
           <FILE id="UBDucC" name="DataSequence.h" compile="0" resource="0" file="Source/DataSequence.h"/>
           <FILE id="q27wf3" name="DataSequence.cpp" compile="1" resource="0"
