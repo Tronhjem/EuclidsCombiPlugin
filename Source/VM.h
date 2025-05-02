@@ -53,7 +53,7 @@ public:
         assert(stackPointer > 0);
         return mStack[--stackPointer];
     }
-    void Push(double i)
+    void Push(uChar i)
     {
         assert(stackPointer + 1 <= 64);
         mStack[stackPointer++] = i;
@@ -70,7 +70,7 @@ class VM
 public:
     VM();
     bool Prepare(const char* filePath);
-    void ProcessOpCodes();
+    bool ProcessOpCodes();
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
 
 private:

@@ -17,6 +17,7 @@ public:
     
 private:
     double mBpmDivide = 1.0;
+    bool mIsVMInit = false;
     MidiScheduler mMidiScheduler;
     std::vector<Track> mTracks;
     std::unique_ptr<VM> mVM;

@@ -21,14 +21,14 @@ bool VM::Prepare(const char* filePath)
     return success;
 }
 
-void VM::ProcessOpCodes()
+bool VM::ProcessOpCodes()
 {
-    ScopedTimer timer("VM Run");
+    ScopedTimer timer("VM Process OpCodes");
 
     int currentIndex = 0;
     auto consume = [&]() -> Instruction &
     {
-        return mCompiler->GetInstructions()[currentIndex++];
+        return mCompiler->GetSetupInstructions()[currentIndex++];
     };
 
     for(;;)
@@ -40,6 +40,7 @@ void VM::ProcessOpCodes()
             case (OpCode::CONSTANT):
             {
                 mStack.Push(instruction.mDataValue);
+                
                 break;
             }
             
@@ -48,6 +49,7 @@ void VM::ProcessOpCodes()
                 uChar value = mStack.Pop();
                 std::vector<uChar> vectorData {value};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
+                
                 break;
             }
 
@@ -62,10 +64,11 @@ void VM::ProcessOpCodes()
 
                 std::vector<uChar> vectorData {data, data + arrayLength};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
+                
                 break;
             }
 
-            case(OpCode::GET_IDENTIFIER):
+            case(OpCode::GET_IDENTIFIER_VALUE):
             {
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
@@ -76,8 +79,9 @@ void VM::ProcessOpCodes()
                 {
                     std::string error = std::string("VM: Variable not defined");
                     mErrorReporting->LogError(error);
-                    return;
+                    return false;
                 }
+                
                 break;
             }
 
@@ -93,14 +97,16 @@ void VM::ProcessOpCodes()
                 {
                     std::string error = std::string("VM: Variable not defined");
                     mErrorReporting->LogError(error);
-                    return;
+                    return false;
                 }
+                
                 break;
             }
 
             case(OpCode::ADD):
             {
                 mStack.Push(mStack.Pop() + mStack.Pop());
+                
                 break;
             }
 
@@ -108,13 +114,15 @@ void VM::ProcessOpCodes()
             {
                 uChar b = mStack.Pop();
                 uChar a = mStack.Pop();
-                mStack.Push(a - b); 
+                mStack.Push(a - b);
+                
                 break;
             }
 
             case(OpCode::MULTIPLY):
             {
-                mStack.Push(mStack.Pop() * mStack.Pop()); 
+                mStack.Push(mStack.Pop() * mStack.Pop());
+                
                 break;
             }
 
@@ -122,7 +130,8 @@ void VM::ProcessOpCodes()
             {
                 uChar b = mStack.Pop();
                 uChar a = mStack.Pop();
-                mStack.Push(a / b); 
+                mStack.Push(a / b);
+                
                 break;
             }
 
@@ -130,21 +139,121 @@ void VM::ProcessOpCodes()
             {
                 uChar value = mStack.Pop();
                 std::cout << "PRINT: " << (int)value << std::endl;
+                
                 break;
             }
-
+                
             case(OpCode::END):
-                return;
+                
+                return true;
 
             default:
                 std::string err {"Unexpected Operation code"};
                 mErrorReporting->LogError(err);
-                break;
+                
+                return false;
         }
     }
 }
 
 void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
 {
+//    ScopedTimer timer("VM Runtime");
+    std::vector<Instruction>& runtimeInstructions = mCompiler->GetRuntimeInstructions();
+    
+    int currentIndex = 0;
+    auto consume = [&]() -> Instruction&
+    {
+        return runtimeInstructions[currentIndex++];
+    };
 
+    for(;;)
+    {
+        const Instruction& instruction = consume();
+
+        switch(instruction.opCode)
+        {
+            case (OpCode::CONSTANT):
+            {
+                mStack.Push(instruction.mDataValue);
+                
+                break;
+            }
+                
+            case (OpCode::GET_IDENTIFIER_VALUE):
+            {
+                if (mVariables.find(instruction.mNameValue) != mVariables.end())
+                {
+                    uChar value = mVariables[instruction.mNameValue].GetValue(globalCount);
+                    mStack.Push(value);
+                }
+                else
+                {
+                    std::string error = std::string("VM: Variable not defined");
+                    mErrorReporting->LogError(error);
+                    return;
+                }
+                
+                break;
+            }
+                
+            case (OpCode::AND):
+            {
+                uChar a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar result = a & b;
+                mStack.Push(result);
+                
+                break;
+            }
+                
+            case (OpCode::OR):
+            {
+                uChar a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar result = a | b;
+                mStack.Push(result);
+                
+                break;
+            }
+                
+            case (OpCode::XOR):
+            {
+                uChar a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar result = a ^ b;
+                mStack.Push(result);
+                
+                break;
+            }
+                
+            case (OpCode::TRACK):
+            {
+                int channel = (int) mStack.Pop();
+                int vel = (int) mStack.Pop();
+                int note = (int) mStack.Pop();
+                int shouldTrigger = (int) mStack.Pop();
+                
+                if (shouldTrigger > 0)
+                {
+                    midiScheduler.PostMidiNote(channel, note, vel, 11050, nextTickTime);
+                }
+                
+                break;
+            }
+                
+            case(OpCode::END):
+                return;
+                
+            default:
+                return;
+        }
+    }
+//case(OpCode::TRACK):
+//            {
+                
+//                int lengthVelocities = (int)mStack.Pop();
+//                int lengthVelocities = (int)mStack.Pop();
+//                break;
+//            }
 }

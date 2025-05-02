@@ -1,12 +1,12 @@
 #pragma once
 
 #include "MidiScheduler.h"
-#include "LogicSequenceCombiner.h"
+#include "DataSequence.h"
 
 class Track
 {
 public:
-    Track(LogicSequence sequence, int output, int note);
+//    Track(LogicSequence sequence, int output, int note);
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
     
 private:
@@ -15,5 +15,10 @@ private:
     int mMidiOut;
     int mInternalCount;
     int mNote;
-    LogicSequenceCombiner mCombinedSequences;
+    std::vector<DataSequence*> mDataSequences;
+//
+//    NAME, GET_CONTANT_AT_INDEX - stack: 'a',
+//    NAME, GET_CONTANT_AT_INDEX
+//    OPERATION
+    
 };

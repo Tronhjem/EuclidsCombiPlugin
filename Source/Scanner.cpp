@@ -69,12 +69,6 @@ bool Scanner::ScanFile(char* data)
     {
         Token t = ScanToken();
 
-        // if(t.mTokenType != TokenType::EOL)
-        // {
-        //     std::string mes = std::string(t.mStart, t.mLength);
-        //     mErrorReporting.LogMessage(mes);
-        // }
-
         if(t.GetType() == TokenType::ERROR)
         {
             std::string errorString = std::string(t.mStart, t.mLength);
@@ -113,24 +107,33 @@ Token Scanner::ScanToken()
         {
             mCurrentLine++;
             return MakeToken(TokenType::EOL);
-        } 
-
+        }
+            
+        //LOGIC
+        case '&':
+            return MakeToken(TokenType::AND);
+        case '|':
+            return MakeToken(TokenType::OR);
+        case '^':
+            return MakeToken(TokenType::XOR);
+            
+        //Syntax
         case '(':
             return MakeToken(TokenType::LEFT_PAREN);
         case ')':
             return MakeToken(TokenType::RIGHT_PAREN);
-        case '{':
-            return MakeToken(TokenType::LEFT_BRACE);
-        case '}':
-            return MakeToken(TokenType::RIGHT_BRACE);
         case '[':
             return MakeToken(TokenType::LEFT_BRACKET);
         case ']':
             return MakeToken(TokenType::RIGHT_BRACKET);
-        case ',':
-            return MakeToken(TokenType::COMMA);
         case '.':
             return MakeToken(TokenType::DOT);
+        case ',':
+            return MakeToken(TokenType::COMMA);
+        case '=':
+            return MakeToken(Match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
+            
+        //MATH
         case '-':
             return MakeToken(TokenType::MINUS);
         case '+':
@@ -141,19 +144,23 @@ Token Scanner::ScanToken()
             return MakeToken(TokenType::STAR);
         case '/':
             return MakeToken(TokenType::SLASH);
-        case '!':
-            return MakeToken(Match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
-        case '=':
-            return MakeToken(Match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
-        case '<':
-            return MakeToken(Match('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
-        case '>':
-            return MakeToken(Match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
-        case '"':
-            return BuildString();
-
+            
         default:
             return MakeErrorToken(ERROR_UNEXPECTED_CHAR, c);
+            
+        // UNUSED
+//        case '{':
+//            return MakeToken(TokenType::LEFT_BRACE);
+//        case '}':
+//            return MakeToken(TokenType::RIGHT_BRACE);
+//        case '!':
+//            return MakeToken(Match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
+//        case '<':
+//            return MakeToken(Match('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
+//        case '>':
+//            return MakeToken(Match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
+//        case '"':
+//            return BuildString();
     }
 }
 
@@ -214,7 +221,7 @@ bool Scanner::Match(char expected)
 TokenType Scanner::IdentifierToken()
 {
     auto checkKeyword = [&](int start, int length,
-                               const char* rest, TokenType type)
+                            const char* rest, TokenType type)
     {
         if (mCurrent - mStart == start + length &&
             memcmp(mStart + start, rest, length) == 0)
@@ -228,31 +235,34 @@ TokenType Scanner::IdentifierToken()
     // Checking if any of these are reserved words.
     switch (mStart[0])
     {
-    case 'a':
-        return checkKeyword(1, 2, "nd", TokenType::AND);
-    case 'c':
-        return checkKeyword(1, 4, "lass", TokenType::CLASS);
-    case 'e':
-        return checkKeyword(1, 3, "lse", TokenType::ELSE);
-    case 'i':
-        return checkKeyword(1, 1, "f", TokenType::IF);
-    case 'n':
-        return checkKeyword(1, 2, "il", TokenType::NIL);
-    case 'o':
-        return checkKeyword(1, 1, "r", TokenType::OR);
     case 'p':
         return checkKeyword(1, 4, "rint", TokenType::PRINT);
-    case 'r':
-        return checkKeyword(1, 5, "eturn", TokenType::RETURN);
-    case 's':
-        return checkKeyword(1, 4, "uper", TokenType::SUPER);
-    case 'v':
-        return checkKeyword(1, 2, "ar", TokenType::VAR);
-    case 'w':
-        return checkKeyword(1, 4, "hile", TokenType::WHILE);
+    case 'T':
+        return checkKeyword(1, 4, "rack", TokenType::TRACK);
+    default:
+        return TokenType::IDENTIFIER;
+            
+//    case 'a':
+//        return checkKeyword(1, 2, "nd", TokenType::AND);
+//    case 'c':
+//        return checkKeyword(1, 4, "lass", TokenType::CLASS);
+//    case 'e':
+//        return checkKeyword(1, 3, "lse", TokenType::ELSE);
+//    case 'i':
+//        return checkKeyword(1, 1, "f", TokenType::IF);
+//    case 'n':
+//        return checkKeyword(1, 2, "il", TokenType::NIL);
+//    case 'o':
+//        return checkKeyword(1, 1, "r", TokenType::OR);
+//    case 'r':
+//        return checkKeyword(1, 5, "eturn", TokenType::RETURN);
+//    case 's':
+//        return checkKeyword(1, 4, "uper", TokenType::SUPER);
+//    case 'v':
+//        return checkKeyword(1, 2, "ar", TokenType::VAR);
+//    case 'w':
+//        return checkKeyword(1, 4, "hile", TokenType::WHILE);
     }
-
-    return TokenType::IDENTIFIER;
 }
 
 Token Scanner::BuildIdentifier()

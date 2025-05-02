@@ -34,8 +34,12 @@ enum class TokenType
     STRING,
     NUMBER,
 
-    // Keywords.
+    // Logic
     AND,
+    OR,
+    XOR,
+    
+    // Keywords.
     CLASS,
     ELSE,
     FALSE,
@@ -43,7 +47,6 @@ enum class TokenType
     FOR,
     IF,
     NIL,
-    OR,
     PRINT,
     RETURN,
     SUPER,
@@ -52,6 +55,9 @@ enum class TokenType
     VAR,
     WHILE,
     ERROR,
+    
+    // Midi Specific
+    TRACK,
 
     EOL,
     END,

@@ -11,8 +11,8 @@ class Scanner
 public:
     Scanner(ErrorReporting& logger);
     ~Scanner();
+    
     bool ScanFile(char *data);
-
     std::vector<Token>& GetTokens() { return mTokens; }
 
 private:
@@ -24,17 +24,18 @@ private:
     Token BuildIdentifier();
     TokenType IdentifierToken();
     void SkipWhiteSpace();
-    bool IsAtEnd();
-    bool Match(char expected);
-    char PeekCurrent();
-    char PeekNext();
-    char AdvanceCurrent();
-    bool IsAlpha(char c);
-    bool IsDigit(char c);
+    
+    //Helpers
+    inline bool IsAtEnd();
+    inline bool Match(char expected);
+    inline char PeekCurrent();
+    inline char PeekNext();
+    inline char AdvanceCurrent();
+    inline bool IsAlpha(char c);
+    inline bool IsDigit(char c);
 
 private:
     ErrorReporting& mErrorReporting;
-    // const char* mData;
     std::vector<Token> mTokens;
 
     char* mStart;

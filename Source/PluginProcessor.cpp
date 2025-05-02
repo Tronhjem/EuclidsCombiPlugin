@@ -98,15 +98,11 @@ void EuclidCombinatorAudioProcessor::changeProgramName (int index, const juce::S
 //==============================================================================
 void EuclidCombinatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
     mSampleRate = sampleRate;
 }
 
 void EuclidCombinatorAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -135,7 +131,7 @@ bool EuclidCombinatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 }
 #endif
 
-void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void EuclidCombinatorAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     // ===============================================================
     // AUDIO STUFF
@@ -148,12 +144,14 @@ void EuclidCombinatorAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, bufferLength);
     
-    FillPositionData(mTransportData);
-//    mTransportData.isPlaying = true; // Set the playing to true automatically when standalone
+    
+//    FillPositionData(mTransportData);
+    
+    mTransportData.isPlaying = true; // Set the playing to true automatically when standalone
     
     euclidEngine->Tick(mTransportData, bufferLength, midiMessages);
     
-//    mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
+    mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
