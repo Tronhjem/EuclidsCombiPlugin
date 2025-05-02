@@ -3,7 +3,6 @@
 #include <JuceHeader.h>
 #include <memory>
 
-#include "Track.h"
 #include "TransportData.h"
 #include "MidiScheduler.h"
 #include "VM.h"
@@ -19,6 +18,5 @@ private:
     double mBpmDivide = 1.0;
     bool mIsVMInit = false;
     MidiScheduler mMidiScheduler;
-    std::vector<Track> mTracks;
     std::unique_ptr<VM> mVM;
 };

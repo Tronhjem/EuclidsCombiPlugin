@@ -249,11 +249,4 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 return;
         }
     }
-//case(OpCode::TRACK):
-//            {
-                
-//                int lengthVelocities = (int)mStack.Pop();
-//                int lengthVelocities = (int)mStack.Pop();
-//                break;
-//            }
 }

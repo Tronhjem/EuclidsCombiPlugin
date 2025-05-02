@@ -59,7 +59,7 @@ private:
     inline void MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions);
     inline void MakeConstant(Token& token, std::vector<Instruction>& instructions);
 
-    bool CompileExpression(uChar& outInstructionLength, std::vector<Instruction>& instructions);
+    bool CompileExpression(std::vector<Instruction>& instructions);
     bool CompileArray(uChar& outLength);
     bool CompileTrack();
 

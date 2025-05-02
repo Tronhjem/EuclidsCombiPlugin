@@ -78,8 +78,7 @@ bool Compiler::CompileArray(uChar& outLength)
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
             {
-                uChar instructionLength = 0;
-                CompileExpression(instructionLength, mSetupInstructions);
+                CompileExpression(mSetupInstructions);
                 ++valueCounter;
                 break;
             }
@@ -97,7 +96,7 @@ bool Compiler::CompileArray(uChar& outLength)
     return true;
 }
 
-bool Compiler::CompileExpression(uChar& outInstructionLength, std::vector<Instruction>& instructions)
+bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
     auto binaryExpression = [&](OpCode code) -> bool
     {
@@ -105,12 +104,10 @@ bool Compiler::CompileExpression(uChar& outInstructionLength, std::vector<Instru
         if(toDoBinary.mTokenType == TokenType::IDENTIFIER)
         {
             MakeIdentifierGetter(toDoBinary, instructions);
-            ++outInstructionLength;
         }
         else if (toDoBinary.mTokenType == TokenType::NUMBER)
         {
             MakeConstant(toDoBinary, instructions);
-            ++outInstructionLength;
         }
         else
         {
@@ -135,14 +132,12 @@ bool Compiler::CompileExpression(uChar& outInstructionLength, std::vector<Instru
             case TokenType::IDENTIFIER:
             {
                 MakeIdentifierGetter(currentToken, instructions);
-                ++outInstructionLength;
                 break;
             }
 
             case TokenType::NUMBER:
             {
                 MakeConstant(currentToken, instructions);
-                ++outInstructionLength;
                 break;
             }
 
@@ -211,7 +206,6 @@ bool Compiler::CompileTrack()
         return false;
     }
         
-    uChar instructionLength = 0;
     while (Peek().mTokenType != TokenType::RIGHT_PAREN)
     {
         Token& currentToken = Peek();
@@ -220,15 +214,13 @@ bool Compiler::CompileTrack()
             case TokenType::COMMA:
             {
                 Consume();
-//                mRuntimeInstructions.emplace_back(Instruction{OpCode::CONSTANT, (uChar)instructionLength});
-//                instructionLength = 0;
                 break;
             }
 
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
             {
-                CompileExpression(instructionLength, mRuntimeInstructions);
+                CompileExpression(mRuntimeInstructions);
                 break;
             }
 
@@ -239,7 +231,6 @@ bool Compiler::CompileTrack()
                 return false;
         }
     }
-    mSetupInstructions.emplace_back(Instruction{OpCode::CONSTANT, (uChar)instructionLength});
     
     Consume(); // Consuming right bracket.
     return true;
@@ -279,8 +270,7 @@ bool Compiler::Compile()
                     }
                     else if (tokenType == TokenType::NUMBER || tokenType == TokenType::IDENTIFIER)
                     {
-                        uChar instructionLength = 0;
-                        if(CompileExpression(instructionLength, mSetupInstructions))
+                        if(CompileExpression(mSetupInstructions))
                         {
                             mSetupInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
                         }
@@ -303,8 +293,7 @@ bool Compiler::Compile()
             {
                 if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
                 {
-                    uChar instructionLength = 0;
-                    CompileExpression(instructionLength, mSetupInstructions);
+                    CompileExpression(mSetupInstructions);
                     mSetupInstructions.emplace_back(Instruction{OpCode::PRINT});
                 }
                 else

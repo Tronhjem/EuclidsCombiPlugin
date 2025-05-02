@@ -5,15 +5,9 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine() :
     mBpmDivide(1.0),
     mIsVMInit(false)
 {
-//    std::array<uChar, 8> logic2 = {1,1,1,1,0,0,0,0};
-//    std::array<uChar, 8> logic =  {1,0,0,1,0,1,1,1};
-//    LogicSequence seq1 {&logic[0], 8};
-//    mTracks.emplace_back(Track{seq1, 1, 64});
-//
-//    LogicSequence seq2 {&logic2[0], 8};
-//    mTracks.emplace_back(Track{seq2, 1, 64 + 12});
     
     mVM = std::make_unique<VM>();
+    
     if(mVM->Prepare("/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"))
     {
         mIsVMInit = mVM->ProcessOpCodes();
@@ -28,8 +22,10 @@ void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
                                    const int bufferLength,
                                    juce::MidiBuffer& midiMessages)
 {
+    
 //    if (transportData.isPlaying)
 //    {
+    
         const double gridResolution = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * mBpmDivide));
         const int stepCount = static_cast<int>(ceil(static_cast<double>(transportData.timeInSamples) / gridResolution));
         const int nextTickTime = static_cast<int>(gridResolution * stepCount);

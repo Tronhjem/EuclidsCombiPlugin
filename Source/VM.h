@@ -10,7 +10,6 @@
 #include "Scanner.h"
 #include "Compiler.h"
 #include "FileLoader.h"
-#include "Track.h"
 #include "Types.h"
 #include "MidiScheduler.h"
 #include "DataSequence.h"
@@ -80,6 +79,5 @@ private:
     std::unique_ptr<Compiler> mCompiler;
     std::unique_ptr<FileLoader> mFileLoader;
 
-    std::vector<Track> tracks;
     Stack mStack;
 };
