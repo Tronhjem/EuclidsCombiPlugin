@@ -75,8 +75,8 @@ void EuclidCombinatorAudioProcessorEditor::buttonClicked(juce::Button* button)
     
     if(button == &saveFile)
     {
-        audioProcessor.IsRunning = !audioProcessor.IsRunning;
-        togglePlay.setButtonText(audioProcessor.IsRunning ? "Stop" : "Play");
+        audioProcessor.IsRunning = false;
+        togglePlay.setButtonText("Play");
         
         juce::String text = codeEditor.getText();
         std::string utf8Text = text.toRawUTF8(); // or toStdString() if you want std::string

@@ -27,7 +27,9 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     void textEditorTextChanged(juce::TextEditor& editor) override;
-    void buttonClicked(juce::Button* button) override;
+    void extracted();
+    
+void buttonClicked(juce::Button* button) override;
     
 private:
     // This reference is provided as a quick way for your editor to

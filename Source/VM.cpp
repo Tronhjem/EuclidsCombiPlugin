@@ -8,12 +8,13 @@ VM::VM()
 
 bool VM::Prepare(char* data)
 {
-    mScanner = std::make_unique<Scanner>(*mErrorReporting);
-    mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mErrorReporting);
+    Scanner scanner {*mErrorReporting};
+    Compiler compiler {scanner.GetTokens(), *mErrorReporting};
     
     bool success = true;
-    if (success &= mScanner->ScanFile(data))
-        success &= mCompiler->Compile(mRuntimeInstructions);
+    if (success &= scanner.ScanFile(data))
+        if(success &= compiler.Compile(mRuntimeInstructions))
+            success &= ProcessOpCodes(compiler.GetSetupInstructions());
         
     return success;
 }
@@ -24,14 +25,14 @@ void VM::Reset()
     mRuntimeInstructions.clear();
 }
 
-bool VM::ProcessOpCodes()
+bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 {
     ScopedTimer timer("VM Process OpCodes");
 
     int currentIndex = 0;
     auto consume = [&]() -> Instruction &
     {
-        return mCompiler->GetSetupInstructions()[currentIndex++];
+        return setupInstructions[currentIndex++];
     };
 
     for(;;)

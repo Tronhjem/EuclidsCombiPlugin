@@ -11,14 +11,10 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine() :
     mFileLoader = std::make_unique<FileLoader>();
     
     std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"};
-    bool fileLoaded = mFileLoader->LoadFile(filePath);
     
+    bool fileLoaded = mFileLoader->LoadFile(filePath);
     if(fileLoaded)
-    {
-        bool success = mVM->Prepare(mFileLoader->GetFileStart());
-        if (success)
-            mIsVMInit = mVM->ProcessOpCodes();
-    }
+        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
 }
 
 EuclidsCombinatorEngine::~EuclidsCombinatorEngine()
@@ -29,12 +25,9 @@ void EuclidsCombinatorEngine::SaveFile(std::string& data)
 {
     mVM->Reset();
     bool fileSaved = mFileLoader->SaveFile(data);
+    
     if(fileSaved)
-    {
-        bool success = mVM->Prepare(mFileLoader->GetFileStart());
-        if (success)
-            mIsVMInit = mVM->ProcessOpCodes();
-    }
+        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
 }
 
 char* EuclidsCombinatorEngine::LoadFile(std::string& filePath)

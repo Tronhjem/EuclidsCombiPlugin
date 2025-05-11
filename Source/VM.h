@@ -68,17 +68,15 @@ class VM
 public:
     VM();
     bool Prepare(char* data);
-    bool ProcessOpCodes();
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
     void Reset();
 
 private:
+    bool ProcessOpCodes(std::vector<Instruction>& setupInstructions);
+    std::unique_ptr<ErrorReporting> mErrorReporting;
+    
     std::unordered_map<std::string, DataSequence> mVariables;
     std::vector<Instruction> mRuntimeInstructions;
-    
-    std::unique_ptr<ErrorReporting> mErrorReporting;
-    std::unique_ptr<Scanner> mScanner;
-    std::unique_ptr<Compiler> mCompiler;
 
     Stack mStack;
 };
