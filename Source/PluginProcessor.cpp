@@ -22,7 +22,7 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
                        )
 #endif
 {
-    euclidEngine = std::make_unique<EuclidsCombinatorEngine>();
+    mEuclidEngine = std::make_unique<EuclidsCombinatorEngine>();
     
     mTransportData.timeInSamples = 0;
     mTransportData.bpm = 120.0;
@@ -31,6 +31,21 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
 
 EuclidCombinatorAudioProcessor::~EuclidCombinatorAudioProcessor()
 {
+}
+
+char* EuclidCombinatorAudioProcessor::GetFileText()
+{
+    return mEuclidEngine->GetLoadedFileData();
+}
+
+char* EuclidCombinatorAudioProcessor::LoadFile(std::string& filePath)
+{
+    return mEuclidEngine->LoadFile(filePath);
+}
+
+void EuclidCombinatorAudioProcessor::SaveFile(std::string& data)
+{
+    mEuclidEngine->SaveFile(data);
 }
 
 //==============================================================================
@@ -145,13 +160,17 @@ void EuclidCombinatorAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
         buffer.clear (i, 0, bufferLength);
     
     
-//    FillPositionData(mTransportData);
+    if(IsRunning)
+        mTransportData.isPlaying = IsRunning; // Set the playing to true automatically when standalone
+    else
+        FillPositionData(mTransportData);
     
-    mTransportData.isPlaying = true; // Set the playing to true automatically when standalone
+    mEuclidEngine->Tick(mTransportData, bufferLength, midiMessages);
     
-    euclidEngine->Tick(mTransportData, bufferLength, midiMessages);
-    
-    mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
+    if (IsRunning)
+        mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
+    else if(!IsRunning && !mTransportData.isPlaying)
+        mTransportData.timeInSamples = 0;
 }
 
 void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)

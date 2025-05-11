@@ -196,7 +196,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     return true;
 }
 
-bool Compiler::CompileTrack()
+bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
 {
     Consume(); // For the Left Brace
     
@@ -220,7 +220,7 @@ bool Compiler::CompileTrack()
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
             {
-                CompileExpression(mRuntimeInstructions);
+                CompileExpression(runtimeInstructions);
                 break;
             }
 
@@ -236,7 +236,7 @@ bool Compiler::CompileTrack()
     return true;
 }
 
-bool Compiler::Compile()
+bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
 {
     ScopedTimer timer("Compile");
 
@@ -308,9 +308,9 @@ bool Compiler::Compile()
             {
                 if(Peek().mTokenType == TokenType::LEFT_PAREN)
                 {
-                    if(CompileTrack())
+                    if(CompileTrack(runtimeInstructions))
                     {
-                        mRuntimeInstructions.emplace_back(Instruction{OpCode::TRACK});
+                        runtimeInstructions.emplace_back(Instruction{OpCode::TRACK});
                     }
                     else
                     {
@@ -327,7 +327,7 @@ bool Compiler::Compile()
 
             case TokenType::END:
                 mSetupInstructions.emplace_back(Instruction{OpCode::END});
-                mRuntimeInstructions.emplace_back(Instruction{OpCode::END});
+                runtimeInstructions.emplace_back(Instruction{OpCode::END});
                 return true;
 
             case TokenType::EOL:

@@ -4,21 +4,24 @@
 VM::VM() 
 {
     mErrorReporting = std::make_unique<ErrorReporting>();
-    mFileLoader = std::make_unique<FileLoader>();
-    mScanner = std::make_unique<Scanner>(*mErrorReporting);
-    mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mErrorReporting);
 }
 
-bool VM::Prepare(const char* filePath)
+bool VM::Prepare(char* data)
 {
+    mScanner = std::make_unique<Scanner>(*mErrorReporting);
+    mCompiler = std::make_unique<Compiler>(mScanner->GetTokens(), *mErrorReporting);
+    
     bool success = true;
-    if(success &= mFileLoader->LoadFile(filePath))
-    {
-        if (success &= mScanner->ScanFile(mFileLoader->GetFileStart()))
-            success &= mCompiler->Compile();
-    }
-
+    if (success &= mScanner->ScanFile(data))
+        success &= mCompiler->Compile(mRuntimeInstructions);
+        
     return success;
+}
+
+void VM::Reset()
+{
+    mVariables.clear();
+    mRuntimeInstructions.clear();
 }
 
 bool VM::ProcessOpCodes()
@@ -159,12 +162,11 @@ bool VM::ProcessOpCodes()
 void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
 {
 //    ScopedTimer timer("VM Runtime");
-    std::vector<Instruction>& runtimeInstructions = mCompiler->GetRuntimeInstructions();
     
     int currentIndex = 0;
     auto consume = [&]() -> Instruction&
     {
-        return runtimeInstructions[currentIndex++];
+        return mRuntimeInstructions[currentIndex++];
     };
 
     for(;;)

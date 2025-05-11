@@ -9,7 +9,6 @@
 #include "ErrorReporting.h"
 #include "Scanner.h"
 #include "Compiler.h"
-#include "FileLoader.h"
 #include "Types.h"
 #include "MidiScheduler.h"
 #include "DataSequence.h"
@@ -68,16 +67,18 @@ class VM
 {
 public:
     VM();
-    bool Prepare(const char* filePath);
+    bool Prepare(char* data);
     bool ProcessOpCodes();
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
+    void Reset();
 
 private:
     std::unordered_map<std::string, DataSequence> mVariables;
+    std::vector<Instruction> mRuntimeInstructions;
+    
     std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unique_ptr<Scanner> mScanner;
     std::unique_ptr<Compiler> mCompiler;
-    std::unique_ptr<FileLoader> mFileLoader;
 
     Stack mStack;
 };

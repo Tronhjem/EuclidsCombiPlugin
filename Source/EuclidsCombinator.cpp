@@ -8,10 +8,16 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine() :
 {
     
     mVM = std::make_unique<VM>();
+    mFileLoader = std::make_unique<FileLoader>();
     
-    if(mVM->Prepare("/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"))
+    std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"};
+    bool fileLoaded = mFileLoader->LoadFile(filePath);
+    
+    if(fileLoaded)
     {
-        mIsVMInit = mVM->ProcessOpCodes();
+        bool success = mVM->Prepare(mFileLoader->GetFileStart());
+        if (success)
+            mIsVMInit = mVM->ProcessOpCodes();
     }
 }
 
@@ -19,14 +25,35 @@ EuclidsCombinatorEngine::~EuclidsCombinatorEngine()
 {
 }
 
+void EuclidsCombinatorEngine::SaveFile(std::string& data)
+{
+    mVM->Reset();
+    bool fileSaved = mFileLoader->SaveFile(data);
+    if(fileSaved)
+    {
+        bool success = mVM->Prepare(mFileLoader->GetFileStart());
+        if (success)
+            mIsVMInit = mVM->ProcessOpCodes();
+    }
+}
+
+char* EuclidsCombinatorEngine::LoadFile(std::string& filePath)
+{
+    mFileLoader->LoadFile(filePath);
+    return mFileLoader->GetFileStart();
+}
+
+char* EuclidsCombinatorEngine::GetLoadedFileData()
+{
+    return mFileLoader->GetFileStart();
+}
+
 void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
                                    const int bufferLength,
                                    juce::MidiBuffer& midiMessages)
 {
-    
-//    if (transportData.isPlaying)
-//    {
-    
+    if (transportData.isPlaying)
+    {
         const double gridResolution = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * mBpmDivide));
         const int stepCount = static_cast<int>(ceil(static_cast<double>(transportData.timeInSamples) / gridResolution));
         const int nextTickTime = static_cast<int>(gridResolution * stepCount);
@@ -34,7 +61,7 @@ void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
         
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.
-        if (endOfBufferPosition >= nextTickTime)
+        if (mIsVMInit && endOfBufferPosition >= nextTickTime)
         {
             mVM->Tick(mMidiScheduler, nextTickTime, stepCount);
         }
@@ -42,9 +69,9 @@ void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
         // Process all Midi.
         mMidiScheduler.ProcessMidiPosts(midiMessages, bufferLength, endOfBufferPosition);
     
-//    }
-//    else
-//    {
-//        mMidiScheduler.ClearAllData(midiMessages);
-//    }
+    }
+    else
+    {
+        mMidiScheduler.ClearAllData(midiMessages);
+    }
 }

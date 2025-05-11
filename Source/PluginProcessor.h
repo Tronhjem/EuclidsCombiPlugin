@@ -58,12 +58,16 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     const TransportData& GetPositionData() { return mTransportData; };
     double mSampleRate = 44100.0;
-
+    char* GetFileText();
+    char* LoadFile(std::string& filePath);
+    void SaveFile(std::string& data);
+    bool IsRunning = false;
+    
 private:
     //==============================================================================
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
-    std::unique_ptr<EuclidsCombinatorEngine> euclidEngine;
+    std::unique_ptr<EuclidsCombinatorEngine> mEuclidEngine;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessor)
 };

@@ -6,6 +6,7 @@
 #include "TransportData.h"
 #include "MidiScheduler.h"
 #include "VM.h"
+#include "FileLoader.h"
 
 class EuclidsCombinatorEngine
 {
@@ -13,10 +14,14 @@ public:
     EuclidsCombinatorEngine();
     ~EuclidsCombinatorEngine();
     void Tick(const TransportData& transportData, const int bufferLength, juce::MidiBuffer& midiMessages);
+    char* GetLoadedFileData();
+    char* LoadFile(std::string& filePath);
+    void SaveFile(std::string& data);
     
 private:
     double mBpmDivide = 1.0;
     bool mIsVMInit = false;
     MidiScheduler mMidiScheduler;
     std::unique_ptr<VM> mVM;
+    std::unique_ptr<FileLoader> mFileLoader;
 };

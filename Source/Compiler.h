@@ -12,9 +12,8 @@ class Compiler
 {
 public:
     Compiler(std::vector<Token>& tokens, ErrorReporting& log) : mTokens(tokens), mErrorReporting(log) { }
-    bool Compile();
+    bool Compile(std::vector<Instruction>& runtimeInstructions);
     std::vector<Instruction>& GetSetupInstructions() { return mSetupInstructions; }
-    std::vector<Instruction>& GetRuntimeInstructions() { return mRuntimeInstructions; }
 
 private:
     Token& Consume();
@@ -26,11 +25,10 @@ private:
 
     bool CompileExpression(std::vector<Instruction>& instructions);
     bool CompileArray(uChar& outLength);
-    bool CompileTrack();
+    bool CompileTrack(std::vector<Instruction>& runtimeInstructions);
 
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;
     ErrorReporting& mErrorReporting;
     std::vector<Instruction> mSetupInstructions;
-    std::vector<Instruction> mRuntimeInstructions;
 };
