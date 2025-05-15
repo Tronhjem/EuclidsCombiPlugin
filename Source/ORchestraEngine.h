@@ -8,11 +8,11 @@
 #include "VM.h"
 #include "FileLoader.h"
 
-class EuclidsCombinatorEngine
+class ORchestraEngine
 {
 public:
-    EuclidsCombinatorEngine();
-    ~EuclidsCombinatorEngine();
+    ORchestraEngine();
+    ~ORchestraEngine();
     void Tick(const TransportData& transportData, const int bufferLength, juce::MidiBuffer& midiMessages);
     char* GetLoadedFileData();
     char* LoadFile(std::string& filePath);

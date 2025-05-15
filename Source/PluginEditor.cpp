@@ -15,7 +15,7 @@ constexpr int MARGIN = 20;
 constexpr int MARGIN_X2 = MARGIN * 2;
 
 //==============================================================================
-EuclidCombinatorAudioProcessorEditor::EuclidCombinatorAudioProcessorEditor (EuclidCombinatorAudioProcessor& p)
+ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     setSize (WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -49,15 +49,15 @@ EuclidCombinatorAudioProcessorEditor::EuclidCombinatorAudioProcessorEditor (Eucl
     addAndMakeVisible(loadFile);
 }
 
-EuclidCombinatorAudioProcessorEditor::~EuclidCombinatorAudioProcessorEditor()
+ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()
 {
 }
 
-void EuclidCombinatorAudioProcessorEditor::textEditorTextChanged(juce::TextEditor& editor)
+void ORchestraAudioProcessorEditor::textEditorTextChanged(juce::TextEditor& editor)
 {
 }
 
-void EuclidCombinatorAudioProcessorEditor::buttonClicked(juce::Button* button)
+void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
 {
 //    std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"};
     
@@ -91,7 +91,7 @@ void EuclidCombinatorAudioProcessorEditor::buttonClicked(juce::Button* button)
 }
 
 //==============================================================================
-void EuclidCombinatorAudioProcessorEditor::paint (juce::Graphics& g)
+void ORchestraAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
@@ -115,7 +115,7 @@ void EuclidCombinatorAudioProcessorEditor::paint (juce::Graphics& g)
 //    ppqLabel.setText(sampleString, juce::dontSendNotification);
 }
 
-void EuclidCombinatorAudioProcessorEditor::resized()
+void ORchestraAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..

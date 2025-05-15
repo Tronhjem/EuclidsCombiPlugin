@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
+ORchestraAudioProcessor::ORchestraAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -22,39 +22,39 @@ EuclidCombinatorAudioProcessor::EuclidCombinatorAudioProcessor()
                        )
 #endif
 {
-    mEuclidEngine = std::make_unique<EuclidsCombinatorEngine>();
+    mEuclidEngine = std::make_unique<ORchestraEngine>();
     
     mTransportData.timeInSamples = 0;
     mTransportData.bpm = 120.0;
     mTransportData.sampleRate = 44100;
 }
 
-EuclidCombinatorAudioProcessor::~EuclidCombinatorAudioProcessor()
+ORchestraAudioProcessor::~ORchestraAudioProcessor()
 {
 }
 
-char* EuclidCombinatorAudioProcessor::GetFileText()
+char* ORchestraAudioProcessor::GetFileText()
 {
     return mEuclidEngine->GetLoadedFileData();
 }
 
-char* EuclidCombinatorAudioProcessor::LoadFile(std::string& filePath)
+char* ORchestraAudioProcessor::LoadFile(std::string& filePath)
 {
     return mEuclidEngine->LoadFile(filePath);
 }
 
-void EuclidCombinatorAudioProcessor::SaveFile(std::string& data)
+void ORchestraAudioProcessor::SaveFile(std::string& data)
 {
     mEuclidEngine->SaveFile(data);
 }
 
 //==============================================================================
-const juce::String EuclidCombinatorAudioProcessor::getName() const
+const juce::String ORchestraAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool EuclidCombinatorAudioProcessor::acceptsMidi() const
+bool ORchestraAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -63,7 +63,7 @@ bool EuclidCombinatorAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool EuclidCombinatorAudioProcessor::producesMidi() const
+bool ORchestraAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -72,7 +72,7 @@ bool EuclidCombinatorAudioProcessor::producesMidi() const
    #endif
 }
 
-bool EuclidCombinatorAudioProcessor::isMidiEffect() const
+bool ORchestraAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -81,47 +81,47 @@ bool EuclidCombinatorAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double EuclidCombinatorAudioProcessor::getTailLengthSeconds() const
+double ORchestraAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int EuclidCombinatorAudioProcessor::getNumPrograms()
+int ORchestraAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int EuclidCombinatorAudioProcessor::getCurrentProgram()
+int ORchestraAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void EuclidCombinatorAudioProcessor::setCurrentProgram (int index)
+void ORchestraAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const juce::String EuclidCombinatorAudioProcessor::getProgramName (int index)
+const juce::String ORchestraAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void EuclidCombinatorAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void ORchestraAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
 //==============================================================================
-void EuclidCombinatorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void ORchestraAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     mSampleRate = sampleRate;
 }
 
-void EuclidCombinatorAudioProcessor::releaseResources()
+void ORchestraAudioProcessor::releaseResources()
 {
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool EuclidCombinatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ORchestraAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -146,7 +146,7 @@ bool EuclidCombinatorAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 }
 #endif
 
-void EuclidCombinatorAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     // ===============================================================
     // AUDIO STUFF
@@ -173,7 +173,7 @@ void EuclidCombinatorAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
         mTransportData.timeInSamples = 0;
 }
 
-void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
+void ORchestraAudioProcessor::FillPositionData(TransportData& data)
 {
     auto positionInfo = getPlayHead()->getPosition();
 
@@ -213,25 +213,25 @@ void EuclidCombinatorAudioProcessor::FillPositionData(TransportData& data)
 }
 
 //==============================================================================
-bool EuclidCombinatorAudioProcessor::hasEditor() const
+bool ORchestraAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* EuclidCombinatorAudioProcessor::createEditor()
+juce::AudioProcessorEditor* ORchestraAudioProcessor::createEditor()
 {
-    return new EuclidCombinatorAudioProcessorEditor (*this);
+    return new ORchestraAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void EuclidCombinatorAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ORchestraAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void EuclidCombinatorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ORchestraAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -241,5 +241,5 @@ void EuclidCombinatorAudioProcessor::setStateInformation (const void* data, int 
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new EuclidCombinatorAudioProcessor();
+    return new ORchestraAudioProcessor();
 }

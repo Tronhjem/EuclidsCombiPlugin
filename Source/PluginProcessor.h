@@ -11,18 +11,18 @@
 #include <JuceHeader.h>
 #include <memory>
 
-#include "EuclidsCombinator.h"
+#include "ORchestraEngine.h"
 
 
-class EuclidCombinatorAudioProcessor  : public juce::AudioProcessor
+class ORchestraAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
 {
 public:
     //==============================================================================
-    EuclidCombinatorAudioProcessor();
-    ~EuclidCombinatorAudioProcessor() override;
+    ORchestraAudioProcessor();
+    ~ORchestraAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -67,7 +67,7 @@ private:
     //==============================================================================
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
-    std::unique_ptr<EuclidsCombinatorEngine> mEuclidEngine;
+    std::unique_ptr<ORchestraEngine> mEuclidEngine;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ORchestraAudioProcessor)
 };

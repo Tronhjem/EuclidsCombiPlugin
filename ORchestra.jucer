@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="qDQdnP" name="EuclidsCombinator" projectType="audioplug"
-              useAppConfig="0" addUsingNamespaceToJuceHeader="1" displaySplashScreen="1"
-              jucerFormatVersion="1" pluginCharacteristicsValue="pluginEditorRequiresKeys,pluginProducesMidiOut"
+<JUCERPROJECT id="qDQdnP" name="ORchestra" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginEditorRequiresKeys,pluginProducesMidiOut"
               pluginManufacturer="SonoTron" pluginFormats="buildAU,buildStandalone,buildVST3">
-  <MAINGROUP id="NmvJK8" name="EuclidsCombinator">
+  <MAINGROUP id="NmvJK8" name="ORchestra">
     <GROUP id="{7E5A9ACB-D854-2D69-0120-5B9D0847594D}" name="Source">
       <GROUP id="{D2C2D092-CD57-6EE7-43FD-43F0A64B0C7F}" name="Utils">
         <FILE id="ahSwq9" name="Utility.h" compile="0" resource="0" file="Source/Utility.h"/>
@@ -60,10 +60,10 @@
             file="Source/MidiScheduler.cpp" xcodeResource="0"/>
       <FILE id="xXdmjU" name="VM.h" compile="0" resource="0" file="Source/VM.h"/>
       <FILE id="Gm9JlK" name="VM.cpp" compile="1" resource="0" file="Source/VM.cpp"/>
-      <FILE id="t94g8H" name="EuclidsCombinator.h" compile="0" resource="0"
-            file="Source/EuclidsCombinator.h"/>
-      <FILE id="JPoBML" name="EuclidsCombinator.cpp" compile="1" resource="0"
-            file="Source/EuclidsCombinator.cpp"/>
+      <FILE id="t94g8H" name="ORchestraEngine.h" compile="0" resource="0"
+            file="Source/ORchestraEngine.h"/>
+      <FILE id="JPoBML" name="ORchestraEngine.cpp" compile="1" resource="0"
+            file="Source/ORchestraEngine.cpp"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

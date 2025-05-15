@@ -15,13 +15,13 @@
 //==============================================================================
 /**
 */
-class EuclidCombinatorAudioProcessorEditor  : public juce::AudioProcessorEditor,
+class ORchestraAudioProcessorEditor  : public juce::AudioProcessorEditor,
                                               public juce::TextEditor::Listener,
                                               public juce::Button::Listener
 {
 public:
-    EuclidCombinatorAudioProcessorEditor (EuclidCombinatorAudioProcessor&);
-    ~EuclidCombinatorAudioProcessorEditor() override;
+    ORchestraAudioProcessorEditor (ORchestraAudioProcessor&);
+    ~ORchestraAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -34,7 +34,7 @@ void buttonClicked(juce::Button* button) override;
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    EuclidCombinatorAudioProcessor& audioProcessor;
+    ORchestraAudioProcessor& audioProcessor;
     juce::Label isPlayingLabel;
     juce::Label barCountLabel;
     juce::Label beatCountLabel;
@@ -52,5 +52,5 @@ private:
 //       juce::CodeTokeniser tokeniser; // You can subclass this or use CppTokeniser, LuaTokeniser, etc.
 //       std::unique_ptr<juce::CodeEditorComponent> codeEditor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ORchestraAudioProcessorEditor)
 };

@@ -1,8 +1,8 @@
 #include <cmath>
 
-#include "EuclidsCombinator.h"
+#include "ORchestraEngine.h"
 
-EuclidsCombinatorEngine::EuclidsCombinatorEngine() :
+ORchestraEngine::ORchestraEngine() :
     mBpmDivide(1.0),
     mIsVMInit(false)
 {
@@ -17,11 +17,11 @@ EuclidsCombinatorEngine::EuclidsCombinatorEngine() :
 //        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
 }
 
-EuclidsCombinatorEngine::~EuclidsCombinatorEngine()
+ORchestraEngine::~ORchestraEngine()
 {
 }
 
-void EuclidsCombinatorEngine::SaveFile(std::string& data)
+void ORchestraEngine::SaveFile(std::string& data)
 {
     mVM->Reset();
     bool fileSaved = mFileLoader->SaveFile(data);
@@ -30,7 +30,7 @@ void EuclidsCombinatorEngine::SaveFile(std::string& data)
         mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
 }
 
-char* EuclidsCombinatorEngine::LoadFile(std::string& filePath)
+char* ORchestraEngine::LoadFile(std::string& filePath)
 {
     bool loaded = mFileLoader->LoadFile(filePath);
     if (loaded)
@@ -42,12 +42,12 @@ char* EuclidsCombinatorEngine::LoadFile(std::string& filePath)
     return nullptr;
 }
 
-char* EuclidsCombinatorEngine::GetLoadedFileData()
+char* ORchestraEngine::GetLoadedFileData()
 {
     return mFileLoader->GetFileStart();
 }
 
-void EuclidsCombinatorEngine::Tick(const TransportData& transportData,
+void ORchestraEngine::Tick(const TransportData& transportData,
                                    const int bufferLength,
                                    juce::MidiBuffer& midiMessages)
 {
