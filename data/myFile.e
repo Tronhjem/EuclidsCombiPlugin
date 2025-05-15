@@ -7,4 +7,3 @@ note2 = [71, 88, 77]
 vel = [100]
 
 Track(a, note, vel, 1)
-Track(b | c, note2, vel, 1)

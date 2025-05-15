@@ -9,41 +9,36 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+constexpr int WINDOW_WIDTH = 800;
+constexpr int WINDOW_HEIGHT = 600;
+constexpr int MARGIN = 20;
+constexpr int MARGIN_X2 = MARGIN * 2;
+
 //==============================================================================
 EuclidCombinatorAudioProcessorEditor::EuclidCombinatorAudioProcessorEditor (EuclidCombinatorAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    setSize (800, 600);
+    setSize (WINDOW_WIDTH, WINDOW_HEIGHT);
     
-    const int height = 20;
-    const int space = 5;
-    const int start = 10;
-    
-//    isPlayingLabel.setBounds(10, start + (height * 0) + space, 200, height);
-//    addAndMakeVisible(&isPlayingLabel);
-//
-//    barCountLabel.setBounds(10, start + (height * 1) + space, 200, height);
-//    addAndMakeVisible(&barCountLabel);
-//
-//    beatCountLabel.setBounds(10, start + (height * 2) + space , 200, height);
-//    addAndMakeVisible(&beatCountLabel);
-//
-//    ppqLabel.setBounds(10, start + (height * 3) + space, 200, height);
-//    addAndMakeVisible(&ppqLabel);
-    
-    codeEditor.setMultiLine(true);
-    codeEditor.setReturnKeyStartsNewLine(true);
-    codeEditor.setScrollbarsShown(true);
-    codeEditor.setCaretVisible(true);
-    codeEditor.setPopupMenuEnabled(true);
-    codeEditor.setBounds(20, 60, 300, 200);
-    codeEditor.addListener(this);
-    addAndMakeVisible(codeEditor);
-    
+//    codeEditor.reset(new juce::CodeEditorComponent(codeDocument, &tokeniser));
+//    codeEditor->setTabSize(4, true);
+//    codeEditor->setLineNumbersShown(true);
+//    codeEditor->loadContent("print(\"Hello, world!\")");
     
     togglePlay.setBounds(20, 20, 50, 20);
     togglePlay.addListener(this);
     addAndMakeVisible(togglePlay);
+    
+    codeEditor.setMultiLine(true);
+    
+    codeEditor.setReturnKeyStartsNewLine(true);
+    codeEditor.setScrollbarsShown(true);
+    codeEditor.setCaretVisible(true);
+//    codeEditor.setPopupMenuEnabled(true);
+    codeEditor.setBounds(20, 60, 300, 200);
+    codeEditor.addListener(this);
+    addAndMakeVisible(codeEditor);
+    
     
     saveFile.setBounds(20, 220+60, 50, 20);
     saveFile.addListener(this);
@@ -52,7 +47,6 @@ EuclidCombinatorAudioProcessorEditor::EuclidCombinatorAudioProcessorEditor (Eucl
     loadFile.setBounds(70+20, 220+60, 50, 20);
     loadFile.addListener(this);
     addAndMakeVisible(loadFile);
-    buttonClicked(&loadFile);
 }
 
 EuclidCombinatorAudioProcessorEditor::~EuclidCombinatorAudioProcessorEditor()
@@ -65,7 +59,7 @@ void EuclidCombinatorAudioProcessorEditor::textEditorTextChanged(juce::TextEdito
 
 void EuclidCombinatorAudioProcessorEditor::buttonClicked(juce::Button* button)
 {
-    std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"};
+//    std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"};
     
     if(button == &togglePlay)
     {
@@ -85,9 +79,14 @@ void EuclidCombinatorAudioProcessorEditor::buttonClicked(juce::Button* button)
     
     if(button == &loadFile)
     {
-        char* data = audioProcessor.LoadFile(filePath);
-        juce::String dataAsString {data};
-        codeEditor.setText(dataAsString);
+        chooser.launchAsync(folderChooserFlags, [this] (const juce::FileChooser& fc)
+        {
+            juce::File file = chooser.getResult();
+            std::string filePath {file.getFullPathName().toRawUTF8()};
+            char* data = audioProcessor.LoadFile(filePath);
+            juce::String dataAsString {data};
+            codeEditor.setText(dataAsString);
+        });
     }
 }
 

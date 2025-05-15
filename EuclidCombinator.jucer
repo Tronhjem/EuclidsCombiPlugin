@@ -29,6 +29,14 @@
         <FILE id="I0GPcG" name="Token.cpp" compile="1" resource="0" file="Source/Token.cpp"/>
       </GROUP>
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
+        <FILE id="ICxPN7" name="EuclideanGenerator.h" compile="0" resource="0"
+              file="Source/EuclideanGenerator.h"/>
+        <FILE id="BVV8SP" name="EuclideanGenerator.cpp" compile="1" resource="0"
+              file="Source/EuclideanGenerator.cpp"/>
+        <FILE id="iHwIpO" name="LogicSequenceCombiner.h" compile="0" resource="0"
+              file="Source/LogicSequenceCombiner.h"/>
+        <FILE id="Mm5aP7" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
+              file="Source/LogicSequenceCombiner.cpp"/>
         <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
           <FILE id="UBDucC" name="DataSequence.h" compile="0" resource="0" file="Source/DataSequence.h"/>
           <FILE id="q27wf3" name="DataSequence.cpp" compile="1" resource="0"
@@ -36,10 +44,6 @@
           <FILE id="QNveVN" name="LogicSequence.h" compile="0" resource="0" file="Source/LogicSequence.h"/>
           <FILE id="l82RpR" name="LogicSequence.cpp" compile="1" resource="0"
                 file="Source/LogicSequence.cpp"/>
-          <FILE id="iHwIpO" name="LogicSequenceCombiner.h" compile="0" resource="0"
-                file="Source/LogicSequenceCombiner.h"/>
-          <FILE id="Mm5aP7" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
-                file="Source/LogicSequenceCombiner.cpp"/>
         </GROUP>
       </GROUP>
       <GROUP id="{F1896013-22DD-58BE-C991-2EA418BBF7AB}" name="Juce">

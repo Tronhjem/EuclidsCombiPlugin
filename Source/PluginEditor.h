@@ -41,10 +41,16 @@ private:
     juce::Label ppqLabel;
     juce::TextButton togglePlay {"Play"};
     
+    juce::FileChooser chooser {"Select a file to load...", juce::File{}, "*.txt"};
+    int folderChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
     juce::TextButton loadFile {"Load"};
     juce::TextButton saveFile {"Save"};
     
     juce::TextEditor codeEditor;
+    
+//    juce::CodeDocument codeDocument;
+//       juce::CodeTokeniser tokeniser; // You can subclass this or use CppTokeniser, LuaTokeniser, etc.
+//       std::unique_ptr<juce::CodeEditorComponent> codeEditor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EuclidCombinatorAudioProcessorEditor)
 };
