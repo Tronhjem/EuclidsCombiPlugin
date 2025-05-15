@@ -59,7 +59,9 @@ enum class TokenType
     ERROR,
     
     // Specific
-    TRACK,
+    //TRACK,
+    NOTE,
+    CC,
 
     // ENDS
     EOL, // End Of Line

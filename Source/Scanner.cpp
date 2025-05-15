@@ -238,8 +238,10 @@ TokenType Scanner::IdentifierToken()
     {
     case 'p':
         return checkKeyword(1, 4, "rint", TokenType::PRINT);
-    case 'T':
-        return checkKeyword(1, 4, "rack", TokenType::TRACK);
+    case 'n':
+        return checkKeyword(1, 3, "ote", TokenType::NOTE);
+    case 'c':
+        return checkKeyword(1, 1, "c", TokenType::CC);
     default:
         return TokenType::IDENTIFIER;
             

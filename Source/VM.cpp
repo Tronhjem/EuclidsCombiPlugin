@@ -1,5 +1,6 @@
 #include "VM.h"
 #include "ScopedTimer.h"
+#include "EuclideanGenerator.h"
 
 VM::VM() 
 {
@@ -70,6 +71,17 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
                 
                 break;
+            }
+                
+            case (OpCode::GENERATE_EUCLID_SEQUENCE):
+            {
+                const int length = (int) mStack.Pop();
+                const int hits = (int) mStack.Pop();
+                uChar data[length];
+                GenerateEuclideanSequence(&data[0], hits, length);
+                
+                std::vector<uChar> vectorData {data, data + length};
+                mVariables[instruction.mNameValue] = DataSequence{vectorData};
             }
 
             case(OpCode::GET_IDENTIFIER_VALUE):
@@ -230,16 +242,31 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 break;
             }
                 
-            case (OpCode::TRACK):
+            case (OpCode::NOTE):
             {
-                int channel = (int) mStack.Pop();
-                int vel = (int) mStack.Pop();
-                int note = (int) mStack.Pop();
-                int shouldTrigger = (int) mStack.Pop();
+                const int channel = (int) mStack.Pop();
+                const int vel = (int) mStack.Pop();
+                const int note = (int) mStack.Pop();
+                const int shouldTrigger = (int) mStack.Pop();
                 
                 if (shouldTrigger > 0)
                 {
                     midiScheduler.PostMidiNote(channel, note, vel, 11050, nextTickTime);
+                }
+                
+                break;
+            }
+                
+            case (OpCode::CC):
+            {
+                const int channel = (int) mStack.Pop();
+                const int ccValue = (int) mStack.Pop();
+                const int ccNumber = (int) mStack.Pop();
+                const int shouldTrigger = (int) mStack.Pop();
+                
+                if (shouldTrigger > 0)
+                {
+                    midiScheduler.PostMidiCC(channel, ccNumber, ccValue, nextTickTime);
                 }
                 
                 break;

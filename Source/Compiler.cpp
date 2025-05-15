@@ -91,9 +91,47 @@ bool Compiler::CompileArray(uChar& outLength)
                 return false;
         }
     }
-    Consume(); // Consuming right bracket. 
+    
+    if(Consume().mTokenType != TokenType::RIGHT_BRACKET)
+    {
+        std::string missingToken {"]"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
     
     outLength = (uChar) valueCounter;
+    return true;
+}
+
+bool Compiler::CompileEulclidSequence()
+{
+    Consume(); // for Left Paren
+    
+    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+    
+    // expression for hits
+    CompileExpression(mSetupInstructions);
+    
+    if(Consume().mTokenType != TokenType::COMMA)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+    
+    // expression for Length
+    CompileExpression(mSetupInstructions);
+    
+    if(Consume().mTokenType != TokenType::RIGHT_PAREN)
+    {
+        std::string missingToken{")"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+    
     return true;
 }
 
@@ -227,12 +265,19 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
             case TokenType::EOL:
             case TokenType::END:
             default:
-                ThrowUnexpectedTokenError(currentToken);
+                std::string missingToken{")"};
+                ThrowMissingExpectedToken(missingToken);
                 return false;
         }
     }
     
-    Consume(); // Consuming right bracket.
+    if(Consume().mTokenType != TokenType::RIGHT_PAREN)
+    {
+        std::string missingToken{")"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+        
     return true;
 }
 
@@ -255,6 +300,7 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                     Consume(); // consumes the equal sign
 
                     TokenType tokenType = Peek().mTokenType;
+                    // Data Array
                     if(tokenType == TokenType::LEFT_BRACKET)
                     {
                         uChar arrayLength = 0;
@@ -262,6 +308,18 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                         {
                             mSetupInstructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
                             mSetupInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    // Euclid Sequence
+                    else if (tokenType == TokenType::LEFT_PAREN)
+                    {
+                        if(CompileEulclidSequence())
+                        {
+                            mSetupInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE, name});
                         }
                         else
                         {
@@ -281,7 +339,7 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                     }
                     else
                     {
-                        ThrowUnexpectedTokenError(token);
+                        ThrowUnexpectedTokenError(Peek());
                         return false;
                     }
                 }
@@ -304,13 +362,34 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                 break;
             }
                 
-            case TokenType::TRACK:
+            case TokenType::NOTE:
             {
                 if(Peek().mTokenType == TokenType::LEFT_PAREN)
                 {
                     if(CompileTrack(runtimeInstructions))
                     {
-                        runtimeInstructions.emplace_back(Instruction{OpCode::TRACK});
+                        runtimeInstructions.emplace_back(Instruction{OpCode::NOTE});
+                    }
+                    else
+                    {
+                        ThrowUnexpectedTokenError(Peek());
+                        return false;
+                    }
+                }
+                else
+                {
+                    ThrowUnexpectedTokenError(Peek());
+                }
+                break;
+            }
+                
+            case TokenType::CC:
+            {
+                if(Peek().mTokenType == TokenType::LEFT_PAREN)
+                {
+                    if(CompileTrack(runtimeInstructions))
+                    {
+                        runtimeInstructions.emplace_back(Instruction{OpCode::CC});
                     }
                     else
                     {
@@ -343,6 +422,12 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
 void Compiler::ThrowUnexpectedTokenError(Token& tokenForError)
 {
     std::string token = std::string(tokenForError.mStart, tokenForError.mLength);
-    std::string message = std::string("Compiler: Unexpected Token ") + token;
+    std::string message = std::string("Compiler: Unexpected Character ") + token;
+    mErrorReporting.LogError(Peek().mLine, message);
+}
+
+void Compiler::ThrowMissingExpectedToken(std::string& missingToken)
+{
+    std::string message = std::string("Compiler: Missing a ") + missingToken;
     mErrorReporting.LogError(Peek().mLine, message);
 }

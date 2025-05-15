@@ -7,6 +7,9 @@ enum class OpCode : uChar
     GET_IDENTIFIER_WITH_INDEX,
     SET_IDENTIFIER_VALUE,
     SET_IDENTIFIER_ARRAY,
+    
+    GENERATE_EUCLID_SEQUENCE,
+    
 
     // Math
     ADD,
@@ -20,7 +23,9 @@ enum class OpCode : uChar
     XOR,
 
     // Specific
-    TRACK,
+    // TRACK,
+    NOTE,
+    CC,
     
     // Built in Functions
     PRINT,

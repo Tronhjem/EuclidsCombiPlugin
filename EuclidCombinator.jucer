@@ -31,8 +31,6 @@
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
         <FILE id="ICxPN7" name="EuclideanGenerator.h" compile="0" resource="0"
               file="Source/EuclideanGenerator.h"/>
-        <FILE id="BVV8SP" name="EuclideanGenerator.cpp" compile="1" resource="0"
-              file="Source/EuclideanGenerator.cpp"/>
         <FILE id="iHwIpO" name="LogicSequenceCombiner.h" compile="0" resource="0"
               file="Source/LogicSequenceCombiner.h"/>
         <FILE id="Mm5aP7" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
