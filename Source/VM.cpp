@@ -60,8 +60,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
-                int arrayLength = (int) mStack.Pop();
-                uChar data[arrayLength];
+                const int arrayLength = (int) mStack.Pop();
+                uChar data[20];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
                     data[i] = mStack.Pop();
@@ -77,7 +77,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
             {
                 const int length = (int) mStack.Pop();
                 const int hits = (int) mStack.Pop();
-                uChar data[length];
+                uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
                 
                 std::vector<uChar> vectorData {data, data + length};

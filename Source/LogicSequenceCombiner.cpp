@@ -1,3 +1,4 @@
+#include <cassert>
 #include "LogicSequenceCombiner.h"
 
 LogicSequenceCombiner::LogicSequenceCombiner(LogicSequence logicSeq)

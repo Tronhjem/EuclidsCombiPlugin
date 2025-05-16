@@ -1,4 +1,5 @@
 #include <string>
+#include <cassert>
 
 #include "Compiler.h"
 #include "ErrorReporting.h"
