@@ -7,8 +7,8 @@ enum class TokenType
     // Single-character tokens.
     LEFT_PAREN = 0,
     RIGHT_PAREN,
-//    LEFT_BRACE,
-//    RIGHT_BRACE,
+    LEFT_BRACE,
+    RIGHT_BRACE,
     LEFT_BRACKET,
     RIGHT_BRACKET,
     COMMA,

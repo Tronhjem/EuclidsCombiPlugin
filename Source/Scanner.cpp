@@ -123,6 +123,10 @@ Token Scanner::ScanToken()
             return MakeToken(TokenType::LEFT_PAREN);
         case ')':
             return MakeToken(TokenType::RIGHT_PAREN);
+        case '{':
+            return MakeToken(TokenType::LEFT_BRACE);
+        case '}':
+            return MakeToken(TokenType::RIGHT_BRACE);
         case '[':
             return MakeToken(TokenType::LEFT_BRACKET);
         case ']':
@@ -150,10 +154,6 @@ Token Scanner::ScanToken()
         // UNUSED
 //        case ';':
 //            return MakeToken(TokenType::SEMICOLON);
-//        case '{':
-//            return MakeToken(TokenType::LEFT_BRACE);
-//        case '}':
-//            return MakeToken(TokenType::RIGHT_BRACE);
 //        case '!':
 //            return MakeToken(Match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
 //        case '<':

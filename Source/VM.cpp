@@ -15,7 +15,7 @@ bool VM::Prepare(char* data)
     bool success = true;
     if (success &= scanner.ScanFile(data))
         if(success &= compiler.Compile(mRuntimeInstructions))
-            success &= ProcessOpCodes(compiler.GetSetupInstructions());
+            success &= ProcessOpCodes(mRuntimeInstructions);
         
     return success;
 }
@@ -45,16 +45,15 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
             case (OpCode::CONSTANT):
             {
                 mStack.Push(instruction.mDataValue);
-                
                 break;
             }
-            
+
             case (OpCode::SET_IDENTIFIER_VALUE):
             {
                 uChar value = mStack.Pop();
                 std::vector<uChar> vectorData {value};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
-                
+
                 break;
             }
 
@@ -69,17 +68,17 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
                 std::vector<uChar> vectorData {data, data + arrayLength};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
-                
+
                 break;
             }
-                
+
             case (OpCode::GENERATE_EUCLID_SEQUENCE):
             {
                 const int length = (int) mStack.Pop();
                 const int hits = (int) mStack.Pop();
                 uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
-                
+
                 std::vector<uChar> vectorData {data, data + length};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
             }
@@ -97,7 +96,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                     mErrorReporting->LogError(error);
                     return false;
                 }
-                
+
                 break;
             }
 
@@ -115,14 +114,14 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                     mErrorReporting->LogError(error);
                     return false;
                 }
-                
+
                 break;
             }
 
             case(OpCode::ADD):
             {
                 mStack.Push(mStack.Pop() + mStack.Pop());
-                
+
                 break;
             }
 
@@ -131,14 +130,14 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 uChar b = mStack.Pop();
                 uChar a = mStack.Pop();
                 mStack.Push(a - b);
-                
+
                 break;
             }
 
             case(OpCode::MULTIPLY):
             {
                 mStack.Push(mStack.Pop() * mStack.Pop());
-                
+
                 break;
             }
 
@@ -147,7 +146,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 uChar b = mStack.Pop();
                 uChar a = mStack.Pop();
                 mStack.Push(a / b);
-                
+
                 break;
             }
 
@@ -155,48 +154,51 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
             {
                 uChar value = mStack.Pop();
                 std::cout << "PRINT: " << (int)value << std::endl;
-                
+
                 break;
             }
-            
+
             case (OpCode::AND):
             {
                 uChar a = (uChar) (mStack.Pop() > 0);
                 uChar b = (uChar) (mStack.Pop() > 0);
                 uChar result = a & b;
                 mStack.Push(result);
-                
+
                 break;
             }
-                
+
             case (OpCode::OR):
             {
                 uChar a = mStack.Pop();
                 uChar b = mStack.Pop();
                 uChar result = a | b;
                 mStack.Push(result);
-                
+
                 break;
             }
-                
+
             case (OpCode::XOR):
             {
                 uChar a = mStack.Pop();
                 uChar b = mStack.Pop();
                 uChar result = a ^ b;
                 mStack.Push(result);
-                
+
                 break;
             }
                 
+            case (OpCode::NOTE):
+            case (OpCode::CC):
+                break;
+
             case(OpCode::END):
-                
                 return true;
 
             default:
                 std::string err {"Unexpected Operation code"};
                 mErrorReporting->LogError(err);
-                
+
                 return false;
         }
     }
@@ -224,12 +226,61 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 
                 break;
             }
+            
+            case (OpCode::SET_IDENTIFIER_VALUE):
+            {
+                uChar value = mStack.Pop();
+                mVariables[instruction.mNameValue].SetValue(0, value);
+                
+                break;
+            }
+
+            case (OpCode::SET_IDENTIFIER_ARRAY):
+            {
+                const int arrayLength = (int) mStack.Pop();
+                uChar data[arrayLength];
+                for (int i = arrayLength - 1; i >=0; --i)
+                {
+                    mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
+                }
+                
+                break;
+            }
+                
+            case (OpCode::GENERATE_EUCLID_SEQUENCE):
+            {
+                const int length = (int) mStack.Pop();
+                const int hits = (int) mStack.Pop();
+                uChar data[length];
+                GenerateEuclideanSequence(&data[0], hits, length);
+                
+                std::vector<uChar> vectorData {data, data + length};
+                mVariables[instruction.mNameValue] = DataSequence{vectorData};
+            }
                 
             case (OpCode::GET_IDENTIFIER_VALUE):
             {
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
                     uChar value = mVariables[instruction.mNameValue].GetValue(globalCount);
+                    mStack.Push(value);
+                }
+                else
+                {
+                    std::string error = std::string("VM: Variable not defined");
+                    mErrorReporting->LogError(error);
+                    return;
+                }
+                
+                break;
+            }
+                
+            case (OpCode::GET_IDENTIFIER_WITH_INDEX):
+            {
+                int index = (int) mStack.Pop();
+                if (mVariables.find(instruction.mNameValue) != mVariables.end())
+                {
+                    uChar value = mVariables[instruction.mNameValue].GetValue(index);
                     mStack.Push(value);
                 }
                 else
