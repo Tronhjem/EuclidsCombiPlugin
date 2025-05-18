@@ -318,6 +318,7 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
         return false;
     }
         
+    int paramCounter = 0;
     while (Peek().mTokenType != TokenType::RIGHT_PAREN &&
            Peek().mTokenType != TokenType::EOL &&
            Peek().mTokenType != TokenType::END)
@@ -336,6 +337,7 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
             case TokenType::LEFT_PAREN:
             {
                 CompileExpression(runtimeInstructions);
+                ++paramCounter;
                 break;
             }
 
@@ -356,6 +358,12 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
                 return false;
             }
         }
+    }
+    
+    if(paramCounter < 4 || paramCounter > 4)
+    {
+        ThrowMissingParamCount(4, paramCounter);
+        return false;
     }
     
     if(Previous().mTokenType != TokenType::RIGHT_PAREN)
@@ -492,7 +500,6 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
             }
 
             case TokenType::END:
-//                mSetupInstructions.emplace_back(Instruction{OpCode::END});
                 instructions.emplace_back(Instruction{OpCode::END});
                 return true;
 
@@ -516,5 +523,15 @@ void Compiler::ThrowUnexpectedTokenError(Token& tokenForError)
 void Compiler::ThrowMissingExpectedToken(std::string& missingToken)
 {
     std::string message = std::string("Compiler: Missing a ") + missingToken;
+    mErrorReporting.LogError(Peek().mLine, message);
+}
+
+void Compiler::ThrowMissingParamCount(int expected, int received)
+{
+    std::string message =   std::string("Expected ") +
+                            std::to_string(expected) +
+                            std::string(" but received ") +
+                            std::to_string(received);
+    
     mErrorReporting.LogError(Peek().mLine, message);
 }
