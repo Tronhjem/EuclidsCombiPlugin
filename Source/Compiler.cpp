@@ -194,17 +194,17 @@ bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
     // expression for Length
     CompileExpression(instructions);
 
-    if(Previous().mTokenType != TokenType::RIGHT_BRACE)
+    if(Peek().mTokenType != TokenType::RIGHT_BRACE)
     {
         std::string missingToken{"}"};
         ThrowMissingExpectedToken(missingToken);
         return false;
     }
     
+    Consume(); // For Right Brace
+    
     return true;
 }
-
-
 
 bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
@@ -239,7 +239,8 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     while (Peek().mTokenType != TokenType::EOL &&
            Peek().mTokenType != TokenType::END &&
            Peek().mTokenType != TokenType::COMMA &&
-           Peek().mTokenType != TokenType::RIGHT_BRACKET)
+           Peek().mTokenType != TokenType::RIGHT_BRACKET &&
+           Peek().mTokenType != TokenType::RIGHT_BRACE)
     {
         Token& currentToken = Consume();
         TokenType tType = currentToken.mTokenType;

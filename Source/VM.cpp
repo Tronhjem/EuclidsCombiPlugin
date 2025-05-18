@@ -17,6 +17,7 @@ bool VM::Prepare(char* data)
         if(success &= compiler.Compile(mRuntimeInstructions))
             success &= ProcessOpCodes(mRuntimeInstructions);
         
+    mStack.Clear();
     return success;
 }
 
@@ -81,6 +82,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
                 std::vector<uChar> vectorData {data, data + length};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
+                
+                break;
             }
 
             case(OpCode::GET_IDENTIFIER_VALUE):
@@ -283,7 +286,6 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
                 const int arrayLength = (int) mStack.Pop();
-                uChar data[arrayLength];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
                     mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
@@ -301,6 +303,8 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 
                 std::vector<uChar> vectorData {data, data + length};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
+                
+                break;
             }
                 
             case (OpCode::GET_IDENTIFIER_VALUE):

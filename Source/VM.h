@@ -57,6 +57,10 @@ public:
         assert(stackPointer + 1 <= 64);
         mStack[stackPointer++] = i;
     }
+    void Clear()
+    {
+        stackPointer = 0;
+    }
 
 private:
     std::array<uChar, 64> mStack;
