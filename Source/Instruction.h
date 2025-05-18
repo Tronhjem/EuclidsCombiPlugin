@@ -21,6 +21,12 @@ enum class OpCode : uChar
     AND,
     OR,
     XOR,
+    
+    GREATER,
+    GREATER_EQUAL,
+    LESS,
+    LESS_EQUAL,
+    EQUAL,
 
     // Specific
     // TRACK,

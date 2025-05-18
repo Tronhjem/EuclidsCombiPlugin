@@ -135,8 +135,13 @@ Token Scanner::ScanToken()
             return MakeToken(TokenType::DOT);
         case ',':
             return MakeToken(TokenType::COMMA);
+            
         case '=':
             return MakeToken(Match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
+        case '<':
+            return MakeToken(Match('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
+        case '>':
+            return MakeToken(Match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
             
         //MATH
         case '-':
@@ -156,10 +161,6 @@ Token Scanner::ScanToken()
 //            return MakeToken(TokenType::SEMICOLON);
 //        case '!':
 //            return MakeToken(Match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
-//        case '<':
-//            return MakeToken(Match('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
-//        case '>':
-//            return MakeToken(Match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
 //        case '"':
 //            return BuildString();
     }

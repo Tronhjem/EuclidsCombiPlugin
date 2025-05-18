@@ -26,6 +26,7 @@ private:
     
     inline void MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions);
     inline void MakeConstant(Token& token, std::vector<Instruction>& instructions);
+    inline void MakeOperation(TokenType tokenType, std::vector<Instruction>& instructions);
 
     bool CompileExpression(std::vector<Instruction>& instructions);
     bool CompileArray(std::vector<Instruction>& instructions, uChar& outLength);

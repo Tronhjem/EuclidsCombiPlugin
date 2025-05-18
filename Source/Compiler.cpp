@@ -75,6 +75,53 @@ void Compiler::MakeConstant(Token& token, std::vector<Instruction>& instructions
     instructions.emplace_back(Instruction{OpCode::CONSTANT, (uChar)value});
 }
 
+void Compiler::MakeOperation(TokenType tokenType, std::vector<Instruction> &instructions)
+{
+    OpCode code = OpCode::END;
+    switch (tokenType)
+    {
+        case TokenType::PLUS:
+            code = OpCode::ADD;
+            break;
+        case TokenType::MINUS:
+            code = OpCode::SUBTRACT;
+            break;
+        case TokenType::STAR:
+            code = OpCode::MULTIPLY;
+            break;
+        case TokenType::SLASH:
+            code = OpCode::DIVIDE;
+            break;
+        case TokenType::AND:
+            code = OpCode::AND;
+            break;
+        case TokenType::OR:
+            code = OpCode::OR;
+            break;
+        case TokenType::XOR:
+            code = OpCode::XOR;
+            break;
+        case TokenType::GREATER:
+            code = OpCode::GREATER;
+            break;
+        case TokenType::GREATER_EQUAL:
+            code = OpCode::GREATER_EQUAL;
+            break;
+        case TokenType::LESS:
+            code = OpCode::LESS;
+            break;
+        case TokenType::LESS_EQUAL:
+            code = OpCode::LESS_EQUAL;
+            break;
+        case TokenType::EQUAL_EQUAL:
+            code = OpCode::EQUAL;
+        default:
+            break;
+    }
+        
+    instructions.emplace_back(Instruction{code});
+}
+
 bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLength)
 {
     Consume(); // For the Left Bracket
@@ -157,42 +204,11 @@ bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
     return true;
 }
 
+
+
 bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
     // LAMDAS
-    auto makeOperation = [&](TokenType t)
-    {
-        OpCode code = OpCode::END;
-        switch (t)
-        {
-            case TokenType::PLUS:
-                code = OpCode::ADD;
-                break;
-            case TokenType::MINUS:
-                code = OpCode::SUBTRACT;
-                break;
-            case TokenType::STAR:
-                code = OpCode::MULTIPLY;
-                break;
-            case TokenType::SLASH:
-                code = OpCode::DIVIDE;
-                break;
-            case TokenType::AND:
-                code = OpCode::AND;
-                break;
-            case TokenType::OR:
-                code = OpCode::OR;
-                break;
-            case TokenType::XOR:
-                code = OpCode::XOR;
-                break;
-            default:
-                break;
-        }
-        
-        instructions.emplace_back(Instruction{code});
-    };
-    
     auto isOperator = [&](TokenType t) -> bool
     {
         return  t == TokenType::PLUS  ||
@@ -245,7 +261,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
                 if ((precedence(top) > precedence(tType)) ||
                     (precedence(top) == precedence(tType)))
                 {
-                    makeOperation(top);
+                    MakeOperation(top, instructions);
                     ops.pop();
                 }
                 else
@@ -266,7 +282,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         {
             while (!ops.empty() && ops.top() != TokenType::LEFT_PAREN)
             {
-                makeOperation(ops.top());
+                MakeOperation(ops.top(), instructions);
                 ops.pop();
             }
             if (!ops.empty() && ops.top() == TokenType::LEFT_PAREN)
@@ -283,7 +299,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     
     while (!ops.empty())
     {
-        makeOperation(ops.top());
+        MakeOperation(ops.top(), instructions);
         ops.pop();
     }
     
