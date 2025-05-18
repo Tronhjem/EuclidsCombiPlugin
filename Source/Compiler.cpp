@@ -26,12 +26,25 @@ Token& Compiler::Previous()
 void Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions)
 {
     std::string name = std::string(token.mStart, token.mLength);
+    
     if (Peek().mTokenType == TokenType::LEFT_BRACKET)
     {
         Consume(); // for consuming left bracket
         
         Token& indexToken = Consume();
-        MakeConstant(indexToken, instructions);
+        if(indexToken.mTokenType == TokenType::NUMBER)
+        {
+            MakeConstant(indexToken, instructions);
+        }
+        else if (indexToken.mTokenType == TokenType::IDENTIFIER)
+        {
+            MakeIdentifierGetter(indexToken, instructions);
+        }
+        else
+        {
+            ThrowUnexpectedTokenError(indexToken);
+            return;
+        }
         
         Consume(); // for consuming right bracket
 
