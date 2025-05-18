@@ -19,6 +19,8 @@ private:
     Token& Consume();
     Token& Peek();
     Token& PeekNext();
+    Token& Previous();
+    
     inline void ThrowUnexpectedTokenError(Token& tokenForError);
     inline void ThrowMissingExpectedToken(std::string& missingToken);
     

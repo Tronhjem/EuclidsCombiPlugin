@@ -1,5 +1,6 @@
 #include <string>
 #include <cassert>
+#include <stack>
 
 #include "Compiler.h"
 #include "ErrorReporting.h"
@@ -14,6 +15,12 @@ Token& Compiler::Peek()
 {
     assert(mCurrentIndex < mTokens.size());
     return mTokens[mCurrentIndex];
+}
+
+Token& Compiler::Previous()
+{
+    assert(mCurrentIndex < mTokens.size());
+    return mTokens[mCurrentIndex - 1];
 }
 
 void Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions)
@@ -79,6 +86,7 @@ bool Compiler::CompileArray(uChar& outLength)
 
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
+            case TokenType::LEFT_PAREN:
             {
                 CompileExpression(mSetupInstructions);
                 ++valueCounter;
@@ -138,98 +146,132 @@ bool Compiler::CompileEulclidSequence()
 
 bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
-    auto binaryExpression = [&](OpCode code) -> bool
+    // LAMDAS
+    auto makeOperation = [&](TokenType t)
     {
-        Token& toDoBinary = Consume();
-        if(toDoBinary.mTokenType == TokenType::IDENTIFIER)
+        OpCode code = OpCode::END;
+        switch (t)
         {
-            MakeIdentifierGetter(toDoBinary, instructions);
+            case TokenType::PLUS:
+                code = OpCode::ADD;
+                break;
+            case TokenType::MINUS:
+                code = OpCode::SUBTRACT;
+                break;
+            case TokenType::STAR:
+                code = OpCode::MULTIPLY;
+                break;
+            case TokenType::SLASH:
+                code = OpCode::DIVIDE;
+                break;
+            case TokenType::AND:
+                code = OpCode::AND;
+                break;
+            case TokenType::OR:
+                code = OpCode::OR;
+                break;
+            case TokenType::XOR:
+                code = OpCode::XOR;
+                break;
+            default:
+                break;
         }
-        else if (toDoBinary.mTokenType == TokenType::NUMBER)
-        {
-            MakeConstant(toDoBinary, instructions);
-        }
-        else
-        {
-            // ERROR
-            ThrowUnexpectedTokenError(toDoBinary);
-            return false;
-        }
-
+        
         instructions.emplace_back(Instruction{code});
-        return true;
     };
+    
+    auto isOperator = [&](TokenType t) -> bool
+    {
+        return  t == TokenType::PLUS  ||
+                t == TokenType::MINUS ||
+                t == TokenType::STAR  ||
+                t == TokenType::SLASH ||
+                t == TokenType::AND   ||
+                t == TokenType::OR    ||
+                t == TokenType::XOR;
+    };
+    
+    auto precedence = [&](TokenType t) -> int
+    {
+        if(t == TokenType::PLUS || t == TokenType::MINUS)
+            return 1;
+        if(t == TokenType::STAR || t == TokenType::SLASH)
+            return 2;
+        
+        return 0;
+    };
+    
+    //LAMDAS END
+    
+    std::stack<TokenType> ops;
     
     while (Peek().mTokenType != TokenType::EOL &&
            Peek().mTokenType != TokenType::END &&
            Peek().mTokenType != TokenType::COMMA &&
-           Peek().mTokenType != TokenType::RIGHT_BRACKET &&
-           Peek().mTokenType != TokenType::RIGHT_PAREN)
+           Peek().mTokenType != TokenType::RIGHT_BRACKET)
     {
         Token& currentToken = Consume();
-        switch (currentToken.mTokenType)
+        TokenType tType = currentToken.mTokenType;
+        
+        if(tType == TokenType::IDENTIFIER)
         {
-            case TokenType::IDENTIFIER:
+            MakeIdentifierGetter(currentToken, instructions);
+        }
+        
+        else if(tType == TokenType::NUMBER)
+        {
+            MakeConstant(currentToken, instructions);
+        }
+        
+        else if(isOperator(tType))
+        {
+            while (!ops.empty() && isOperator(ops.top()))
             {
-                MakeIdentifierGetter(currentToken, instructions);
-                break;
-            }
-
-            case TokenType::NUMBER:
-            {
-                MakeConstant(currentToken, instructions);
-                break;
-            }
-
-            // Operations
-            case TokenType::PLUS:
-            {
-                binaryExpression(OpCode::ADD);
-                break;
-            }
-
-            case TokenType::MINUS:
-            {
-                binaryExpression(OpCode::SUBTRACT);
-                break;
-            }
-
-            case TokenType::STAR:
-            {
-                binaryExpression(OpCode::MULTIPLY);
-                break;
-            }
+                TokenType top = ops.top();
                 
-            case TokenType::SLASH:
-            {
-                binaryExpression(OpCode::DIVIDE);
-                break;
+                if ((precedence(top) > precedence(tType)) ||
+                    (precedence(top) == precedence(tType)))
+                {
+                    makeOperation(top);
+                    ops.pop();
+                }
+                else
+                {
+                    break;
+                }
             }
-                
-            case TokenType::AND:
+            
+            ops.push(tType);
+        }
+        
+        else if(tType == TokenType::LEFT_PAREN)
+        {
+            ops.push(tType);
+        }
+        
+        else if(tType == TokenType::RIGHT_PAREN)
+        {
+            while (!ops.empty() && ops.top() != TokenType::LEFT_PAREN)
             {
-                binaryExpression(OpCode::AND);
-                break;
+                makeOperation(ops.top());
+                ops.pop();
             }
-                
-            case TokenType::OR:
+            if (!ops.empty() && ops.top() == TokenType::LEFT_PAREN)
             {
-                binaryExpression(OpCode::OR);
-                break;
-            }
-                
-            case TokenType::XOR:
-            {
-                binaryExpression(OpCode::XOR);
-                break;
-            }
-                
-            default:
-            {
-                ThrowUnexpectedTokenError(currentToken);
-                return false;
+                ops.pop(); // discard left paren
             }
         }
+        else
+        {
+            ThrowUnexpectedTokenError(currentToken);
+            return false;
+        }
+    }
+    
+    while (!ops.empty())
+    {
+        makeOperation(ops.top());
+        ops.pop();
     }
     
     return true;
@@ -245,7 +287,9 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
         return false;
     }
         
-    while (Peek().mTokenType != TokenType::RIGHT_PAREN)
+    while (Peek().mTokenType != TokenType::RIGHT_PAREN &&
+           Peek().mTokenType != TokenType::EOL &&
+           Peek().mTokenType != TokenType::END)
     {
         Token& currentToken = Peek();
         switch(currentToken.mTokenType)
@@ -258,21 +302,32 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
 
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
+            case TokenType::LEFT_PAREN:
             {
                 CompileExpression(runtimeInstructions);
                 break;
             }
 
-            case TokenType::EOL:
             case TokenType::END:
+            {
+                if(Previous().mTokenType != TokenType::RIGHT_PAREN)
+                {
+                    std::string missingToken{")"};
+                    ThrowMissingExpectedToken(missingToken);
+                    return false;
+                }
+                break;
+            }
+                
             default:
-                std::string missingToken{")"};
-                ThrowMissingExpectedToken(missingToken);
+            {
+                ThrowUnexpectedTokenError(Peek());
                 return false;
+            }
         }
     }
     
-    if(Consume().mTokenType != TokenType::RIGHT_PAREN)
+    if(Previous().mTokenType != TokenType::RIGHT_PAREN)
     {
         std::string missingToken{")"};
         ThrowMissingExpectedToken(missingToken);

@@ -158,6 +158,36 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 
                 break;
             }
+            
+            case (OpCode::AND):
+            {
+                uChar a = (uChar) (mStack.Pop() > 0);
+                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar result = a & b;
+                mStack.Push(result);
+                
+                break;
+            }
+                
+            case (OpCode::OR):
+            {
+                uChar a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar result = a | b;
+                mStack.Push(result);
+                
+                break;
+            }
+                
+            case (OpCode::XOR):
+            {
+                uChar a = mStack.Pop();
+                uChar b = mStack.Pop();
+                uChar result = a ^ b;
+                mStack.Push(result);
+                
+                break;
+            }
                 
             case(OpCode::END):
                 
@@ -238,6 +268,38 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 uChar b = mStack.Pop();
                 uChar result = a ^ b;
                 mStack.Push(result);
+                
+                break;
+            }
+                
+            case(OpCode::ADD):
+            {
+                mStack.Push(mStack.Pop() + mStack.Pop());
+                
+                break;
+            }
+
+            case(OpCode::SUBTRACT):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a - b);
+                
+                break;
+            }
+
+            case(OpCode::MULTIPLY):
+            {
+                mStack.Push(mStack.Pop() * mStack.Pop());
+                
+                break;
+            }
+
+            case(OpCode::DIVIDE):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a / b);
                 
                 break;
             }
