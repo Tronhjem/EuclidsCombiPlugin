@@ -149,6 +149,51 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
                 break;
             }
+                
+            case(OpCode::LESS):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a < b);
+
+                break;
+            }
+                
+            case(OpCode::LESS_EQUAL):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a <= b);
+
+                break;
+            }
+                
+            case(OpCode::GREATER):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a > b);
+
+                break;
+            }
+                
+            case(OpCode::GREATER_EQUAL):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a > b);
+
+                break;
+            }
+                
+            case(OpCode::EQUAL):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a == b);
+
+                break;
+            }
 
             case(OpCode::PRINT):
             {
@@ -352,6 +397,51 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 uChar a = mStack.Pop();
                 mStack.Push(a / b);
                 
+                break;
+            }
+                
+            case(OpCode::LESS):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a < b);
+
+                break;
+            }
+                
+            case(OpCode::LESS_EQUAL):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a <= b);
+
+                break;
+            }
+                
+            case(OpCode::GREATER):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a > b);
+
+                break;
+            }
+                
+            case(OpCode::GREATER_EQUAL):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a >= b);
+
+                break;
+            }
+                
+            case(OpCode::EQUAL):
+            {
+                uChar b = mStack.Pop();
+                uChar a = mStack.Pop();
+                mStack.Push(a == b);
+
                 break;
             }
                 

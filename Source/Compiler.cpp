@@ -208,16 +208,20 @@ bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
 
 bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
-    // LAMDAS
     auto isOperator = [&](TokenType t) -> bool
     {
-        return  t == TokenType::PLUS  ||
-                t == TokenType::MINUS ||
-                t == TokenType::STAR  ||
-                t == TokenType::SLASH ||
-                t == TokenType::AND   ||
-                t == TokenType::OR    ||
-                t == TokenType::XOR;
+        return  t == TokenType::PLUS ||
+            t == TokenType::MINUS ||
+            t == TokenType::STAR  ||
+            t == TokenType::SLASH ||
+            t == TokenType::AND   ||
+            t == TokenType::OR    ||
+            t == TokenType::XOR   ||
+            t == TokenType::GREATER ||
+            t == TokenType::GREATER_EQUAL ||
+            t == TokenType::LESS ||
+            t == TokenType::LESS_EQUAL ||
+            t == TokenType::EQUAL_EQUAL;
     };
     
     auto precedence = [&](TokenType t) -> int
@@ -229,8 +233,6 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         
         return 0;
     };
-    
-    //LAMDAS END
     
     std::stack<TokenType> ops;
     
