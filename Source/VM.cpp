@@ -14,8 +14,8 @@ bool VM::Prepare(char* data)
     
     bool success = true;
     if (success &= scanner.ScanFile(data))
-        success &= compiler.Compile(mRuntimeInstructions);
-//            success &= ProcessOpCodes(compiler.GetSetupInstructions());
+        if(success &= compiler.Compile(mRuntimeInstructions))
+            success &= ProcessOpCodes(mRuntimeInstructions);
         
     return success;
 }
@@ -187,9 +187,12 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
                 break;
             }
+                
+            case (OpCode::NOTE):
+            case (OpCode::CC):
+                break;
 
             case(OpCode::END):
-
                 return true;
 
             default:
@@ -227,8 +230,7 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
             case (OpCode::SET_IDENTIFIER_VALUE):
             {
                 uChar value = mStack.Pop();
-                std::vector<uChar> vectorData {value};
-                mVariables[instruction.mNameValue] = DataSequence{vectorData};
+                mVariables[instruction.mNameValue].SetValue(0, value);
                 
                 break;
             }
@@ -236,14 +238,11 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
                 const int arrayLength = (int) mStack.Pop();
-                uChar data[20];
+                uChar data[arrayLength];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
-                    data[i] = mStack.Pop();
+                    mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
                 }
-
-                std::vector<uChar> vectorData {data, data + arrayLength};
-                mVariables[instruction.mNameValue] = DataSequence{vectorData};
                 
                 break;
             }
@@ -252,7 +251,7 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
             {
                 const int length = (int) mStack.Pop();
                 const int hits = (int) mStack.Pop();
-                uChar data[20];
+                uChar data[length];
                 GenerateEuclideanSequence(&data[0], hits, length);
                 
                 std::vector<uChar> vectorData {data, data + length};

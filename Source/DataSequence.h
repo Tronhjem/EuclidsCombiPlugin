@@ -18,6 +18,7 @@ public:
     DataSequence() {}
     DataSequence(const std::vector<uChar>& data);
     uChar GetValue(int index);
+    void SetValue(int index, uChar value);
     
 private:
     std::vector<uChar> mData;

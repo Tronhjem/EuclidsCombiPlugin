@@ -29,7 +29,7 @@ private:
 
     bool CompileExpression(std::vector<Instruction>& instructions);
     bool CompileArray(std::vector<Instruction>& instructions, uChar& outLength);
-    bool CompileEulclidSequence();
+    bool CompileEulclidSequence(std::vector<Instruction>& instructions);
     bool CompileTrack(std::vector<Instruction>& instructions);
 
     int mCurrentIndex = 0;

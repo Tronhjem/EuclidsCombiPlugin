@@ -112,35 +112,35 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
     return true;
 }
 
-bool Compiler::CompileEulclidSequence()
+bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
 {
-//    Consume(); // for Left Paren
-//
-//    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
-//    {
-//        ThrowUnexpectedTokenError(Peek());
-//        return false;
-//    }
-//
-//    // expression for hits
-//    CompileExpression(mSetupInstructions);
-//
-//    if(Consume().mTokenType != TokenType::COMMA)
-//    {
-//        ThrowUnexpectedTokenError(Peek());
-//        return false;
-//    }
-//
-//    // expression for Length
-//    CompileExpression(mSetupInstructions);
-//
-//    if(Consume().mTokenType != TokenType::RIGHT_PAREN)
-//    {
-//        std::string missingToken{")"};
-//        ThrowMissingExpectedToken(missingToken);
-//        return false;
-//    }
-//    
+    Consume(); // for Left brace
+
+    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+
+    // expression for hits
+    CompileExpression(instructions);
+
+    if(Consume().mTokenType != TokenType::COMMA)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+
+    // expression for Length
+    CompileExpression(instructions);
+
+    if(Previous().mTokenType != TokenType::RIGHT_BRACE)
+    {
+        std::string missingToken{"}"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+    
     return true;
 }
 
@@ -371,9 +371,9 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                         }
                     }
                     // Euclid Sequence
-                    else if (tokenType == TokenType::LEFT_PAREN)
+                    else if (tokenType == TokenType::LEFT_BRACE)
                     {
-                        if(CompileEulclidSequence())
+                        if(CompileEulclidSequence(instructions))
                         {
                             instructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE, name});
                         }
