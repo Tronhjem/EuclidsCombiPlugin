@@ -10,11 +10,11 @@ ORchestraEngine::ORchestraEngine() :
     mVM = std::make_unique<VM>();
     mFileLoader = std::make_unique<FileLoader>();
     
-//    std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.e"};
-//
-//    bool fileLoaded = mFileLoader->LoadFile(filePath);
-//    if(fileLoaded)
-//        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
+    std::string filePath {"/Users/christiantronhjem/dev/EuclidsCombiPlugin/data/myFile.txt"};
+
+    bool fileLoaded = mFileLoader->LoadFile(filePath);
+    if(fileLoaded)
+        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
 }
 
 ORchestraEngine::~ORchestraEngine()
