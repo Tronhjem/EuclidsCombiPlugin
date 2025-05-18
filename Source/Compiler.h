@@ -13,7 +13,7 @@ class Compiler
 public:
     Compiler(std::vector<Token>& tokens, ErrorReporting& log) : mTokens(tokens), mErrorReporting(log) { }
     bool Compile(std::vector<Instruction>& runtimeInstructions);
-    std::vector<Instruction>& GetSetupInstructions() { return mSetupInstructions; }
+//    std::vector<Instruction>& GetSetupInstructions() { return mSetupInstructions; }
 
 private:
     Token& Consume();
@@ -28,12 +28,12 @@ private:
     inline void MakeConstant(Token& token, std::vector<Instruction>& instructions);
 
     bool CompileExpression(std::vector<Instruction>& instructions);
-    bool CompileArray(uChar& outLength);
+    bool CompileArray(std::vector<Instruction>& instructions, uChar& outLength);
     bool CompileEulclidSequence();
-    bool CompileTrack(std::vector<Instruction>& runtimeInstructions);
+    bool CompileTrack(std::vector<Instruction>& instructions);
 
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;
     ErrorReporting& mErrorReporting;
-    std::vector<Instruction> mSetupInstructions;
+//    std::vector<Instruction> mSetupInstructions;
 };

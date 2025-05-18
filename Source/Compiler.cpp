@@ -62,7 +62,7 @@ void Compiler::MakeConstant(Token& token, std::vector<Instruction>& instructions
     instructions.emplace_back(Instruction{OpCode::CONSTANT, (uChar)value});
 }
 
-bool Compiler::CompileArray(uChar& outLength)
+bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLength)
 {
     Consume(); // For the Left Bracket
 
@@ -88,7 +88,7 @@ bool Compiler::CompileArray(uChar& outLength)
             case TokenType::IDENTIFIER:
             case TokenType::LEFT_PAREN:
             {
-                CompileExpression(mSetupInstructions);
+                CompileExpression(instructions);
                 ++valueCounter;
                 break;
             }
@@ -114,33 +114,33 @@ bool Compiler::CompileArray(uChar& outLength)
 
 bool Compiler::CompileEulclidSequence()
 {
-    Consume(); // for Left Paren
-    
-    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-    
-    // expression for hits
-    CompileExpression(mSetupInstructions);
-    
-    if(Consume().mTokenType != TokenType::COMMA)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-    
-    // expression for Length
-    CompileExpression(mSetupInstructions);
-    
-    if(Consume().mTokenType != TokenType::RIGHT_PAREN)
-    {
-        std::string missingToken{")"};
-        ThrowMissingExpectedToken(missingToken);
-        return false;
-    }
-    
+//    Consume(); // for Left Paren
+//
+//    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
+//    {
+//        ThrowUnexpectedTokenError(Peek());
+//        return false;
+//    }
+//
+//    // expression for hits
+//    CompileExpression(mSetupInstructions);
+//
+//    if(Consume().mTokenType != TokenType::COMMA)
+//    {
+//        ThrowUnexpectedTokenError(Peek());
+//        return false;
+//    }
+//
+//    // expression for Length
+//    CompileExpression(mSetupInstructions);
+//
+//    if(Consume().mTokenType != TokenType::RIGHT_PAREN)
+//    {
+//        std::string missingToken{")"};
+//        ThrowMissingExpectedToken(missingToken);
+//        return false;
+//    }
+//    
     return true;
 }
 
@@ -337,7 +337,7 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
     return true;
 }
 
-bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
+bool Compiler::Compile(std::vector<Instruction>& instructions)
 {
     ScopedTimer timer("Compile");
 
@@ -360,10 +360,10 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                     if(tokenType == TokenType::LEFT_BRACKET)
                     {
                         uChar arrayLength = 0;
-                        if(CompileArray(arrayLength))
+                        if(CompileArray(instructions, arrayLength))
                         {
-                            mSetupInstructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
-                            mSetupInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
+                            instructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
+                            instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
                         }
                         else
                         {
@@ -375,7 +375,7 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                     {
                         if(CompileEulclidSequence())
                         {
-                            mSetupInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE, name});
+                            instructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE, name});
                         }
                         else
                         {
@@ -384,9 +384,9 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
                     }
                     else if (tokenType == TokenType::NUMBER || tokenType == TokenType::IDENTIFIER)
                     {
-                        if(CompileExpression(mSetupInstructions))
+                        if(CompileExpression(instructions))
                         {
-                            mSetupInstructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
+                            instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
                         }
                         else
                         {
@@ -407,8 +407,8 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
             {
                 if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
                 {
-                    CompileExpression(mSetupInstructions);
-                    mSetupInstructions.emplace_back(Instruction{OpCode::PRINT});
+                    CompileExpression(instructions);
+                    instructions.emplace_back(Instruction{OpCode::PRINT});
                 }
                 else
                 {
@@ -422,9 +422,9 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
             {
                 if(Peek().mTokenType == TokenType::LEFT_PAREN)
                 {
-                    if(CompileTrack(runtimeInstructions))
+                    if(CompileTrack(instructions))
                     {
-                        runtimeInstructions.emplace_back(Instruction{OpCode::NOTE});
+                        instructions.emplace_back(Instruction{OpCode::NOTE});
                     }
                     else
                     {
@@ -443,9 +443,9 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
             {
                 if(Peek().mTokenType == TokenType::LEFT_PAREN)
                 {
-                    if(CompileTrack(runtimeInstructions))
+                    if(CompileTrack(instructions))
                     {
-                        runtimeInstructions.emplace_back(Instruction{OpCode::CC});
+                        instructions.emplace_back(Instruction{OpCode::CC});
                     }
                     else
                     {
@@ -461,8 +461,8 @@ bool Compiler::Compile(std::vector<Instruction>& runtimeInstructions)
             }
 
             case TokenType::END:
-                mSetupInstructions.emplace_back(Instruction{OpCode::END});
-                runtimeInstructions.emplace_back(Instruction{OpCode::END});
+//                mSetupInstructions.emplace_back(Instruction{OpCode::END});
+                instructions.emplace_back(Instruction{OpCode::END});
                 return true;
 
             case TokenType::EOL:
