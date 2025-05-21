@@ -33,6 +33,7 @@ private:
     bool CompileArray(std::vector<Instruction>& instructions, uChar& outLength);
     bool CompileEulclidSequence(std::vector<Instruction>& instructions);
     bool CompileTrack(std::vector<Instruction>& instructions);
+    bool CompileRandom(std::vector<Instruction>& instructions);
 
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;

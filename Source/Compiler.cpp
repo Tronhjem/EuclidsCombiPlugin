@@ -31,20 +31,22 @@ void Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& inst
     {
         Consume(); // for consuming left bracket
         
-        Token& indexToken = Consume();
-        if(indexToken.mTokenType == TokenType::NUMBER)
-        {
-            MakeConstant(indexToken, instructions);
-        }
-        else if (indexToken.mTokenType == TokenType::IDENTIFIER)
-        {
-            MakeIdentifierGetter(indexToken, instructions);
-        }
-        else
-        {
-            ThrowUnexpectedTokenError(indexToken);
-            return;
-        }
+        CompileExpression(instructions);
+        
+//        Token& indexToken = Consume();
+//        if(indexToken.mTokenType == TokenType::NUMBER)
+//        {
+//            MakeConstant(indexToken, instructions);
+//        }
+//        else if (indexToken.mTokenType == TokenType::IDENTIFIER)
+//        {
+//            MakeIdentifierGetter(indexToken, instructions);
+//        }
+//        else
+//        {
+//            ThrowUnexpectedTokenError(indexToken);
+//            return;
+//        }
         
         Consume(); // for consuming right bracket
 
@@ -126,7 +128,9 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
 {
     Consume(); // For the Left Bracket
 
-    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
+    if(Peek().mTokenType != TokenType::NUMBER &&
+       Peek().mTokenType != TokenType::IDENTIFIER &&
+       Peek().mTokenType != TokenType::RANDOM)
     {
         ThrowUnexpectedTokenError(Peek());
         return false;
@@ -149,6 +153,13 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
             case TokenType::LEFT_PAREN:
             {
                 CompileExpression(instructions);
+                ++valueCounter;
+                break;
+            }
+                
+            case TokenType::RANDOM:
+            {
+                CompileRandom(instructions);
                 ++valueCounter;
                 break;
             }
@@ -206,6 +217,42 @@ bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
     return true;
 }
 
+bool Compiler::CompileRandom(std::vector<Instruction>& instructions)
+{
+    Consume(); // for Left brace
+
+    if(Peek().mTokenType != TokenType::NUMBER &&
+       Peek().mTokenType != TokenType::IDENTIFIER)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+
+    // expression for hits
+    CompileExpression(instructions);
+
+    if(Consume().mTokenType != TokenType::COMMA)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+
+    // expression for Length
+    CompileExpression(instructions);
+
+    if(Peek().mTokenType != TokenType::RIGHT_BRACE)
+    {
+        std::string missingToken{"}"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+    
+    Consume(); // For Right Brace
+    
+    instructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE});
+    return true;
+}
+
 bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
     auto isOperator = [&](TokenType t) -> bool
@@ -253,6 +300,11 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         else if(tType == TokenType::NUMBER)
         {
             MakeConstant(currentToken, instructions);
+        }
+        
+        else if(tType == TokenType::RANDOM)
+        {
+            CompileRandom(instructions);
         }
         
         else if(isOperator(tType))
@@ -422,7 +474,20 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                             return false;
                         }
                     }
-                    else if (tokenType == TokenType::NUMBER || tokenType == TokenType::IDENTIFIER)
+                    else if (tokenType == TokenType::RANDOM)
+                    {
+                        Consume();
+                        if(CompileRandom(instructions))
+                        {
+                            instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (tokenType == TokenType::NUMBER ||
+                             tokenType == TokenType::IDENTIFIER)
                     {
                         if(CompileExpression(instructions))
                         {

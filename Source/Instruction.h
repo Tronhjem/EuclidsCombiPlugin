@@ -35,6 +35,7 @@ enum class OpCode : uChar
     
     // Built in Functions
     PRINT,
+    GET_RANDOM_IN_RANGE,
     END
 };
 

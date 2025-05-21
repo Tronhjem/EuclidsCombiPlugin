@@ -47,26 +47,32 @@ class Stack
 {
 public:
     Stack() {};
-    double Pop() 
+    uChar Pop()
     {
         assert(stackPointer > 0);
         return mStack[--stackPointer];
     }
+    
     void Push(uChar i)
     {
         assert(stackPointer + 1 <= 64);
         mStack[stackPointer++] = i;
     }
+    
     void Clear()
     {
         stackPointer = 0;
+    }
+    
+    uChar Top()
+    {
+        return mStack[stackPointer];
     }
 
 private:
     std::array<uChar, 64> mStack;
     int stackPointer = 0;
 };
-
 
 class VM
 {
@@ -75,6 +81,7 @@ public:
     bool Prepare(char* data);
     void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
     void Reset();
+    uChar GetTopStackValue() { return mStack.Top(); }
 
 private:
     bool ProcessOpCodes(std::vector<Instruction>& setupInstructions);
@@ -82,6 +89,7 @@ private:
     
     std::unordered_map<std::string, DataSequence> mVariables;
     std::vector<Instruction> mRuntimeInstructions;
+    uChar RandomValue(uChar low, uChar high);
 
     Stack mStack;
 };

@@ -5,25 +5,40 @@
               jucerFormatVersion="1">
   <MAINGROUP id="KXJX3f" name="ORchestraUnitTests">
     <GROUP id="{99D7554C-0247-92F8-F092-B98D5967FFD8}" name="FileRefs">
-      <FILE id="W0SZuF" name="EuclidsCombinator.cpp" compile="1" resource="0"
-            file="../Source/EuclidsCombinator.cpp"/>
-      <FILE id="EhhZ8L" name="EuclidsCombinator.hpp" compile="0" resource="0"
-            file="../Source/EuclidsCombinator.hpp"/>
-      <FILE id="J6MAef" name="LogicSequence.cpp" compile="1" resource="0"
-            file="../Source/LogicSequence.cpp"/>
-      <FILE id="or4EK5" name="LogicSequence.h" compile="0" resource="0" file="../Source/LogicSequence.h"/>
-      <FILE id="leGEND" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
-            file="../Source/LogicSequenceCombiner.cpp"/>
-      <FILE id="NCCUDO" name="LogicSequenceCombiner.h" compile="0" resource="0"
-            file="../Source/LogicSequenceCombiner.h"/>
+      <FILE id="OZor33" name="Compiler.cpp" compile="1" resource="0" file="../Source/Compiler.cpp"/>
+      <FILE id="xzbIFj" name="Compiler.h" compile="0" resource="0" file="../Source/Compiler.h"/>
+      <FILE id="mrkTam" name="CustomMemory.cpp" compile="1" resource="0"
+            file="../Source/CustomMemory.cpp"/>
+      <FILE id="jJQJyk" name="CustomMemory.h" compile="0" resource="0" file="../Source/CustomMemory.h"/>
+      <FILE id="fvz1fK" name="DataSequence.cpp" compile="1" resource="0"
+            file="../Source/DataSequence.cpp"/>
+      <FILE id="JmBZNS" name="DataSequence.h" compile="0" resource="0" file="../Source/DataSequence.h"/>
+      <FILE id="U304zC" name="ErrorReporting.cpp" compile="1" resource="0"
+            file="../Source/ErrorReporting.cpp"/>
+      <FILE id="IMzVZ1" name="ErrorReporting.h" compile="0" resource="0"
+            file="../Source/ErrorReporting.h"/>
+      <FILE id="ppJpwb" name="EuclideanGenerator.h" compile="0" resource="0"
+            file="../Source/EuclideanGenerator.h"/>
+      <FILE id="wIV0zH" name="FileLoader.cpp" compile="1" resource="0" file="../Source/FileLoader.cpp"/>
+      <FILE id="wwUpdJ" name="FileLoader.h" compile="0" resource="0" file="../Source/FileLoader.h"/>
+      <FILE id="NG3Nan" name="Instruction.h" compile="0" resource="0" file="../Source/Instruction.h"/>
       <FILE id="du5cLx" name="MidiScheduler.cpp" compile="1" resource="0"
             file="../Source/MidiScheduler.cpp"/>
       <FILE id="oQjIWD" name="MidiScheduler.h" compile="0" resource="0" file="../Source/MidiScheduler.h"/>
-      <FILE id="ngcAHL" name="Track.cpp" compile="1" resource="0" file="../Source/Track.cpp"/>
-      <FILE id="AupM6n" name="Track.hpp" compile="0" resource="0" file="../Source/Track.hpp"/>
+      <FILE id="WFioVn" name="ORchestraEngine.cpp" compile="1" resource="0"
+            file="../Source/ORchestraEngine.cpp"/>
+      <FILE id="Y52dKJ" name="ORchestraEngine.h" compile="0" resource="0"
+            file="../Source/ORchestraEngine.h"/>
+      <FILE id="s0FSxi" name="Scanner.cpp" compile="1" resource="0" file="../Source/Scanner.cpp"/>
+      <FILE id="JCecub" name="Scanner.h" compile="0" resource="0" file="../Source/Scanner.h"/>
+      <FILE id="OJ9QIb" name="ScopedTimer.h" compile="0" resource="0" file="../Source/ScopedTimer.h"/>
+      <FILE id="oaeykv" name="Token.cpp" compile="1" resource="0" file="../Source/Token.cpp"/>
+      <FILE id="mtmJrp" name="Token.h" compile="0" resource="0" file="../Source/Token.h"/>
       <FILE id="SH0k54" name="TransportData.h" compile="0" resource="0" file="../Source/TransportData.h"/>
       <FILE id="rptxnx" name="Types.h" compile="0" resource="0" file="../Source/Types.h"/>
       <FILE id="qVl54z" name="Utility.h" compile="0" resource="0" file="../Source/Utility.h"/>
+      <FILE id="usKXju" name="VM.cpp" compile="1" resource="0" file="../Source/VM.cpp"/>
+      <FILE id="tdscN0" name="VM.h" compile="0" resource="0" file="../Source/VM.h"/>
     </GROUP>
     <GROUP id="{A8C95B41-B00B-6994-8AA7-9BDE10B1B3F2}" name="Source">
       <FILE id="ahmOTJ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>

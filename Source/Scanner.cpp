@@ -239,6 +239,8 @@ TokenType Scanner::IdentifierToken()
     {
     case 'p':
         return checkKeyword(1, 4, "rint", TokenType::PRINT);
+    case 'r':
+        return checkKeyword(1, 2, "an", TokenType::RANDOM);
     case 'n':
         return checkKeyword(1, 3, "ote", TokenType::NOTE);
     case 'c':

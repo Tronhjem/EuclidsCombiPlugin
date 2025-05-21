@@ -236,6 +236,14 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 break;
             }
                 
+            case(OpCode::GET_RANDOM_IN_RANGE):
+            {
+                uChar high = mStack.Pop();
+                uChar low = mStack.Pop();
+                mStack.Push(RandomValue(low, high));
+                break;
+            }
+                
             case (OpCode::NOTE):
             case (OpCode::CC):
                 break;
@@ -449,6 +457,14 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 break;
             }
                 
+            case(OpCode::GET_RANDOM_IN_RANGE):
+            {
+                uChar high = mStack.Pop();
+                uChar low = mStack.Pop();
+                mStack.Push(RandomValue(low, high));
+                break;
+            }
+                
             case (OpCode::NOTE):
             {
                 const int channel = (int) mStack.Pop();
@@ -486,4 +502,12 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 return;
         }
     }
+}
+
+uChar VM::RandomValue(uChar low, uChar high)
+{
+    assert(high > low);
+    uChar calculatedHighValue = high + 1 - low;
+    int value = rand() % calculatedHighValue;
+    return (uChar) value + low;
 }
