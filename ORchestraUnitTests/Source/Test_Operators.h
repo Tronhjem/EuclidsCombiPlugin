@@ -1,7 +1,6 @@
 #pragma once
 
 using namespace juce;
-#include "../../Source/ORchestraEngine.h"
 #include "../../Source/VM.h"
 
 class Test_Operators  : public UnitTest
