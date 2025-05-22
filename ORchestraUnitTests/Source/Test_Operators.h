@@ -4,10 +4,10 @@ using namespace juce;
 #include "../../Source/ORchestraEngine.h"
 #include "../../Source/VM.h"
 
-class Test_OpCodeResults  : public UnitTest
+class Test_Operators  : public UnitTest
 {
 public:
-    Test_OpCodeResults()  : UnitTest ("Test_OpCodeResults") {}
+    Test_Operators()  : UnitTest ("Test_OpCodeResults") {}
     
     void runTest() override
     {

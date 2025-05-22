@@ -42,8 +42,8 @@
     </GROUP>
     <GROUP id="{A8C95B41-B00B-6994-8AA7-9BDE10B1B3F2}" name="Source">
       <FILE id="ahmOTJ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="Jl7UFf" name="OpCodeResultTests.h" compile="0" resource="0"
-            file="Source/OpCodeResultTests.h"/>
+      <FILE id="Jl7UFf" name="Test_Operators.h" compile="0" resource="0"
+            file="Source/Test_Operators.h"/>
       <FILE id="F3X6HT" name="test_LogicSequence.h" compile="0" resource="0"
             file="Source/test_LogicSequence.h"/>
       <FILE id="o7wNbT" name="test_LogicSequenceCombiner.h" compile="0" resource="0"
