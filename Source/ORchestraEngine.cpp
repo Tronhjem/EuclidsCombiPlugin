@@ -67,7 +67,6 @@ void ORchestraEngine::Tick(const TransportData& transportData,
     
         // Process all Midi.
         mMidiScheduler.ProcessMidiPosts(midiMessages, bufferLength, endOfBufferPosition);
-    
     }
     else
     {
