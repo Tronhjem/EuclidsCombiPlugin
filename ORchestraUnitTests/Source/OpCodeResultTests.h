@@ -122,5 +122,195 @@ public:
             uChar result = vm.GetTopStackValue();
             expect (result == 64);
         }
+        
+        {
+            beginTest ("Test Logical AND operator with true");
+            
+            // Global index when not running is 0
+            std::string file {"a = 64 & 64 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test Logical AND operator with zero");
+            
+            // Global index when not running is 0
+            std::string file {"a = 64 & 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
+        {
+            beginTest ("Test Logical OR operator with true");
+            
+            // Global index when not running is 0
+            std::string file {"a = 64 | 64 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test Logical OR operator with zero");
+            
+            // Global index when not running is 0
+            std::string file {"a = 64 | 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test Logical XOR operator with 64 and 64");
+            
+            // Global index when not running is 0
+            std::string file {"a = 64 ^ 64 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
+        {
+            beginTest ("Test Logical XOR operator with 1 and 0");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 ^ 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test Logical XOR operator with 0 and 0");
+            
+            // Global index when not running is 0
+            std::string file {"a = 0 ^ 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
+        {
+            beginTest ("Test > operator with 1 and 0");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 > 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test > operator with 1 and 5");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 > 5 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
+        {
+            beginTest ("Test >= operator with 1 and 1");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 >= 1 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test >= operator with 1 and 1");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 >= 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test >= operator with 1 and 5");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 >= 5 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
+        
+        // Operator <
+        {
+            beginTest ("Test < operator with 1 and 0");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 < 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
+        {
+            beginTest ("Test M operator with 1 and 5");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 < 5 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test <= operator with 1 and 1");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 <= 1 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test <= operator with 1 and 5");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 <= 5 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 1);
+        }
+        {
+            beginTest ("Test <= operator with 1 and 0");
+            
+            // Global index when not running is 0
+            std::string file {"a = 1 <= 0 \n test b"};
+            VM vm;
+            vm.Prepare(&file[0]);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 0);
+        }
     }
 };

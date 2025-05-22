@@ -184,7 +184,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
             {
                 uChar b = mStack.Pop();
                 uChar a = mStack.Pop();
-                mStack.Push(a > b);
+                mStack.Push(a >= b);
 
                 break;
             }
@@ -218,8 +218,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::OR):
             {
-                uChar a = mStack.Pop();
-                uChar b = mStack.Pop();
+                uChar a = (uChar) (mStack.Pop() > 0);
+                uChar b = (uChar) (mStack.Pop() > 0);
                 uChar result = a | b;
                 mStack.Push(result);
 
@@ -228,8 +228,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::XOR):
             {
-                uChar a = mStack.Pop();
-                uChar b = mStack.Pop();
+                uChar a = (uChar) (mStack.Pop() > 0);
+                uChar b = (uChar) (mStack.Pop() > 0);
                 uChar result = a ^ b;
                 mStack.Push(result);
 
@@ -352,8 +352,8 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 
             case (OpCode::AND):
             {
-                uChar a = mStack.Pop();
-                uChar b = mStack.Pop();
+                uChar a = (uChar) (mStack.Pop() > 0);
+                uChar b = (uChar) (mStack.Pop() > 0);
                 uChar result = a & b;
                 mStack.Push(result);
                 
@@ -362,8 +362,8 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 
             case (OpCode::OR):
             {
-                uChar a = mStack.Pop();
-                uChar b = mStack.Pop();
+                uChar a = (uChar) (mStack.Pop() > 0);
+                uChar b = (uChar) (mStack.Pop() > 0);
                 uChar result = a | b;
                 mStack.Push(result);
                 
@@ -372,8 +372,8 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 
             case (OpCode::XOR):
             {
-                uChar a = mStack.Pop();
-                uChar b = mStack.Pop();
+                uChar a = (uChar) (mStack.Pop() > 0);
+                uChar b = (uChar) (mStack.Pop() > 0);
                 uChar result = a ^ b;
                 mStack.Push(result);
                 
