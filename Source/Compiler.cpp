@@ -504,6 +504,11 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                         return false;
                     }
                 }
+                else
+                {
+                    ThrowUnexpectedTokenError(Peek());
+                    return false;
+                }
 
                 break;
             }
@@ -514,6 +519,20 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 {
                     CompileExpression(instructions);
                     instructions.emplace_back(Instruction{OpCode::PRINT});
+                }
+                else
+                {
+                    ThrowUnexpectedTokenError(Peek());
+                    return false;
+                }
+                break;
+            }
+                
+            case TokenType::TEST:
+            {
+                if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
+                {
+                    CompileExpression(instructions);
                 }
                 else
                 {

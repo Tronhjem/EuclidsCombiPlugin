@@ -1,6 +1,2 @@
-x = [64,63,67,200,16]
-y = x[ran{0,5}]
-print y
-z = ran{20,29}
-print z
-
+a = 2
+test a

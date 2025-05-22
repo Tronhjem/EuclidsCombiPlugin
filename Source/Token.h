@@ -43,6 +43,7 @@ enum class TokenType
     
     // Keywords.
     PRINT,
+    TEST,
     RANDOM,
 //    CLASS,
 //    ELSE,

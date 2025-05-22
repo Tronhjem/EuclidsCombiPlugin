@@ -245,6 +245,9 @@ TokenType Scanner::IdentifierToken()
         return checkKeyword(1, 3, "ote", TokenType::NOTE);
     case 'c':
         return checkKeyword(1, 1, "c", TokenType::CC);
+    case 't':
+        return checkKeyword(1, 3, "est", TokenType::TEST);
+            
     default:
         return TokenType::IDENTIFIER;
             
