@@ -25,8 +25,8 @@ void ORchestraEngine::WorkerThreadLoop()
 {
     while (!shouldExit.load())
     {
-      PreProcessSteps();
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        PreProcessSteps();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
@@ -44,9 +44,9 @@ void ORchestraEngine::SaveFile(std::string& data)
 
 char* ORchestraEngine::LoadFile(std::string& filePath)
 {
-    mVM->Reset();
     mIsVMInit.store(false);
     mReadySteps.store(0, std::memory_order_release);
+    mVM->Reset();
     
     bool loaded = mFileLoader->LoadFile(filePath);
     if (loaded)
@@ -71,7 +71,7 @@ void ORchestraEngine::PreProcessSteps()
     
     for(int i = 0; i < stepsToProcess; ++i)
     {
-        int step = mCurrentGlobalStep - 1 - i; // always start behind the Global Step.
+        int step = mCurrentGlobalStep - i - 1; // always start behind the Global Step.
         if (step < 0)
             step += STEP_BUFFER_SIZE;
         

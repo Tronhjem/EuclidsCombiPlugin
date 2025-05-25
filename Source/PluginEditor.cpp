@@ -12,7 +12,6 @@
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 constexpr int MARGIN = 20;
-//constexpr int MARGIN_X2 = MARGIN * 2;
 
 //==============================================================================
 ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProcessor& p)

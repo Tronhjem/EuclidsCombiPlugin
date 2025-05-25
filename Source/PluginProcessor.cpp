@@ -148,9 +148,6 @@ bool ORchestraAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 
 void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    // ===============================================================
-    // AUDIO STUFF
-    // ===============================================================
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -159,9 +156,8 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, bufferLength);
     
-    
     if(IsRunning)
-        mTransportData.isPlaying = IsRunning; // Set the playing to true automatically when standalone
+        mTransportData.isPlaying = IsRunning; // Set the playing to true when standalone
     else
         FillPositionData(mTransportData);
     
