@@ -4,6 +4,10 @@
 #include "StepData.h"
 #include "ORchestraEngine.h"
 
+constexpr float trackHeight = 50.f;
+constexpr float dotSize = trackHeight - 10.f;
+constexpr float stepWidth = dotSize + 3.f;
+
 class Timeline : public juce::Component, public juce::Timer
 {
 public:
@@ -37,16 +41,9 @@ public:
 
    void paint(juce::Graphics& g) override
    {
-       
        if(mAudioProcessor == nullptr)
            return;
-//       g.fillAll(juce::Colours::black);
-       const int globalStep = mAudioProcessor->GetGlobalStepCount();
-
-       const float trackHeight = 40.f;
-       const float stepWidth = 23.f;
-       const float dotSize = trackHeight * 0.5f;
-
+       
        // Paint the Trigger Step
        int triggerStepSize = static_cast<int>(mTriggerSteps.size());
        
@@ -68,13 +65,19 @@ public:
            float x = stepWidth / 2.0f - dotSize / 2.0f;
 
            g.fillEllipse(x, y, dotSize, dotSize);
+           std::string first {std::to_string((int)stepData.mFirstData)};
+           std::string second {std::to_string((int)stepData.mSecondData)};
+           g.setColour(juce::Colours::black);
+           g.drawText(first, x, y + 4.f, dotSize, 15.f, juce::Justification::centred);
+           g.drawText(second, x, y + 19.f, dotSize, 15.f, juce::Justification::centred);
        }
        
        mTriggerSteps.clear();
        
-       for (int step = 0; step < STEP_BUFFER_SIZE; ++step)
+       const int numberOfDrawnSteps = 16;
+       for (int step = 0; step < numberOfDrawnSteps; ++step)
        {
-           int stepWrapped = (globalStep + step) % STEP_BUFFER_SIZE;
+           int stepWrapped = (mLastGlobalStep + step) % STEP_BUFFER_SIZE;
            if(stepWrapped < 0)
                stepWrapped = 0;
            
@@ -97,6 +100,11 @@ public:
                float x = (step + 1) * stepWidth + stepWidth / 2.0f - dotSize / 2.0f;
 
                g.fillEllipse(x, y, dotSize, dotSize);
+               std::string first {std::to_string((int)stepData.mFirstData)};
+               std::string second {std::to_string((int)stepData.mSecondData)};
+               g.setColour(juce::Colours::black);
+               g.drawText(first, x, y + 4.f, dotSize, 15.f, juce::Justification::centred);
+               g.drawText(second, x, y + 19.f, dotSize, 15.f, juce::Justification::centred);
            }
        }
    }

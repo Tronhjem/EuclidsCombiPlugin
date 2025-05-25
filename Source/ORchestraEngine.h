@@ -10,6 +10,7 @@
 #include "StepData.h"
 
 constexpr int STEP_BUFFER_SIZE = 32;
+constexpr int HALF_STEP_BUFFER_SIZE = STEP_BUFFER_SIZE / 2;
 
 class ORchestraEngine
 {
@@ -22,14 +23,17 @@ public:
     void SaveFile(std::string& data);
     std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mStepRingBuffer; }
     int GetGlobalStepCount() { return mCurrentGlobalStep.load(); }
+    void WorkerThreadLoop();
     
 private:
     void PreProcessSteps();
-    double mBpmDivide = 1.0;
-    bool mIsVMInit = false;
+    double mBpmDivide;
     std::atomic<int> mReadySteps;
     std::atomic<int> mCurrentGlobalStep;
+    std::atomic<bool> mIsVMInit { false };
+    std::atomic<bool> shouldExit { false };
     
+    std::thread workerThread;
     std::unique_ptr<VM> mVM;
     std::unique_ptr<FileLoader> mFileLoader;
     std::array<std::vector<StepData>,STEP_BUFFER_SIZE> mStepRingBuffer;

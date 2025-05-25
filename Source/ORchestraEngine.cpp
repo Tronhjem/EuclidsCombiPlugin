@@ -4,63 +4,54 @@
 #include "ScopedTimer.h"
 
 ORchestraEngine::ORchestraEngine() :
-    mBpmDivide(1.0),
+    mBpmDivide(2.0),
     mIsVMInit(false)
 {
-//    for(int i = 0; i < STEP_BUFFER_SIZE; ++i)
-//    {
-////        mStepRingBuffer[i] = std::vector<StepData>();
-//        mStepRingBuffer[i].clear();
-//        auto s = mStepRingBuffer[i].size();
-//    }
-    std::cout << &mStepRingBuffer << std::endl;
-    
     mCurrentGlobalStep.store(0, std::memory_order_release);
     mVM = std::make_unique<VM>();
     mFileLoader = std::make_unique<FileLoader>();
     
-//    std::string filePath {"/Users/christiantronhjem/dev/ORchestra/data/myFile.txt"};
-//
-//    bool fileLoaded = mFileLoader->LoadFile(filePath);
-//    if(fileLoaded)
-//        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
+    workerThread = std::thread([this]() { WorkerThreadLoop(); });
 }
 
 ORchestraEngine::~ORchestraEngine()
 {
+    shouldExit.store(true);
+    if (workerThread.joinable())
+        workerThread.join();
+}
+
+void ORchestraEngine::WorkerThreadLoop()
+{
+    while (!shouldExit.load())
+    {
+      PreProcessSteps();
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
 
 void ORchestraEngine::SaveFile(std::string& data)
 {
-    mVM->Reset();
     mReadySteps.store(0, std::memory_order_release);
+    mIsVMInit.store(false, std::memory_order_release);
+    mVM->Reset();
     
     bool fileSaved = mFileLoader->SaveFile(data);
     
     if(fileSaved)
-        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
-    
-    if(mIsVMInit)
-    {
-        PreProcessSteps();
-    }
+        mIsVMInit.store(mVM->Prepare(mFileLoader->GetFileStart()));
 }
 
 char* ORchestraEngine::LoadFile(std::string& filePath)
 {
     mVM->Reset();
+    mIsVMInit.store(false);
     mReadySteps.store(0, std::memory_order_release);
     
     bool loaded = mFileLoader->LoadFile(filePath);
     if (loaded)
     {
-        mIsVMInit = mVM->Prepare(mFileLoader->GetFileStart());
-        
-        if(mIsVMInit)
-        {
-            PreProcessSteps();
-        }
-        
+        mIsVMInit.store(mVM->Prepare(mFileLoader->GetFileStart()));
         return mFileLoader->GetFileStart();
     }
     
@@ -69,12 +60,14 @@ char* ORchestraEngine::LoadFile(std::string& filePath)
 
 void ORchestraEngine::PreProcessSteps()
 {
-    if (!mIsVMInit)
+    if (!mIsVMInit.load())
+        return;
+    
+    const int stepsToProcess = STEP_BUFFER_SIZE - mReadySteps.load();
+    if(stepsToProcess < HALF_STEP_BUFFER_SIZE)
         return;
     
     ScopedTimer timer {"Preprocess steps"};
-    
-    const int stepsToProcess = STEP_BUFFER_SIZE - mReadySteps;
     
     for(int i = 0; i < stepsToProcess; ++i)
     {
@@ -120,10 +113,6 @@ void ORchestraEngine::Tick(const TransportData& transportData,
         
         const int nextTickTime = static_cast<int>(gridResolution * currentStep);
         const int endOfBufferPosition = static_cast<int>(transportData.timeInSamples + bufferLength);
-        
-        //TODO: Move to other thread.
-        if(mReadySteps < STEP_BUFFER_SIZE)
-            PreProcessSteps();
         
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.

@@ -264,7 +264,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
 void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
 {
-    ScopedTimer timer("VM Runtime");
+//    ScopedTimer timer("VM Runtime");
     
     int currentIndex = 0;
     auto consume = [&]() -> Instruction&
