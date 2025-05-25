@@ -47,6 +47,15 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     loadFile.setBounds(70+20, 220+60, 50, 20);
     loadFile.addListener(this);
     addAndMakeVisible(loadFile);
+    
+    timeline.setTriggers({
+        { true, false, true, true, true },
+        { true, true, true, false, true }
+//        { false, false, false, true, true }
+    });
+
+    timeline.setBounds(20, 320, 760, 260);
+    addAndMakeVisible(timeline);
 }
 
 ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()

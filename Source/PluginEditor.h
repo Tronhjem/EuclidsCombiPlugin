@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 
 #include "PluginProcessor.h"
+#include "Timeline.h"
 
 //==============================================================================
 /**
@@ -46,8 +47,9 @@ private:
     juce::TextButton loadFile {"Load"};
     juce::TextButton saveFile {"Save"};
     
-    juce::TextEditor codeEditor;
+    Timeline timeline;
     
+    juce::TextEditor codeEditor;
 //    juce::CodeDocument codeDocument;
 //       juce::CodeTokeniser tokeniser; // You can subclass this or use CppTokeniser, LuaTokeniser, etc.
 //       std::unique_ptr<juce::CodeEditorComponent> codeEditor;
