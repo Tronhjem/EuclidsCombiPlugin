@@ -71,9 +71,6 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
     
     if(button == &saveFile)
     {
-        audioProcessor.IsRunning = false;
-        togglePlay.setButtonText("Play");
-        
         juce::String text = codeEditor.getText();
         std::string utf8Text = text.toRawUTF8(); // or toStdString() if you want std::string
         audioProcessor.SaveFile(utf8Text);
@@ -95,17 +92,15 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
 //==============================================================================
 void ORchestraAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
+    g.fillAll (juce::Colours::black);
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
     
 //    const TransportData& data = audioProcessor.GetPositionData();
     
-#if (JucePlugin_Build_Standalone == 0)
-    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
-#endif
+//#if (JucePlugin_Build_Standalone == 0)
+//    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
+//#endif
     
 //    int nextstep = audioProcessor.mStepCount * audioProcessor.mGridResolution;
 //    auto stepCountString = juce::String(audioProcessor.mStepCount);
