@@ -22,7 +22,7 @@ ORchestraAudioProcessor::ORchestraAudioProcessor()
                        )
 #endif
 {
-    mEuclidEngine = std::make_unique<ORchestraEngine>();
+    mORchestraEngine = std::make_unique<ORchestraEngine>();
     
     mTransportData.timeInSamples = 0;
     mTransportData.bpm = 120.0;
@@ -35,17 +35,17 @@ ORchestraAudioProcessor::~ORchestraAudioProcessor()
 
 char* ORchestraAudioProcessor::GetFileText()
 {
-    return mEuclidEngine->GetLoadedFileData();
+    return mORchestraEngine->GetLoadedFileData();
 }
 
 char* ORchestraAudioProcessor::LoadFile(std::string& filePath)
 {
-    return mEuclidEngine->LoadFile(filePath);
+    return mORchestraEngine->LoadFile(filePath);
 }
 
 void ORchestraAudioProcessor::SaveFile(std::string& data)
 {
-    mEuclidEngine->SaveFile(data);
+    mORchestraEngine->SaveFile(data);
 }
 
 //==============================================================================
@@ -165,7 +165,7 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     else
         FillPositionData(mTransportData);
     
-    mEuclidEngine->Tick(mTransportData, bufferLength, midiMessages);
+    mORchestraEngine->Tick(mTransportData, bufferLength, midiMessages);
     
     if (IsRunning)
         mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.

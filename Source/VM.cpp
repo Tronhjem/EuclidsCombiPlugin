@@ -2,6 +2,8 @@
 #include "ScopedTimer.h"
 #include "EuclideanGenerator.h"
 
+constexpr int DEFAULT_NOTE_DURATION = 11050;
+
 VM::VM() 
 {
     mErrorReporting = std::make_unique<ErrorReporting>();
@@ -260,7 +262,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
     }
 }
 
-void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
+void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
 {
     ScopedTimer timer("VM Runtime");
     
@@ -467,30 +469,24 @@ void VM::Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount)
                 
             case (OpCode::NOTE):
             {
-                const int channel = (int) mStack.Pop();
-                const int vel = (int) mStack.Pop();
-                const int note = (int) mStack.Pop();
-                const int shouldTrigger = (int) mStack.Pop();
+                const uChar channel = mStack.Pop();
+                const uChar vel = mStack.Pop();
+                const uChar note = mStack.Pop();
+                const uChar shouldTrigger = mStack.Pop();
                 
-                if (shouldTrigger > 0)
-                {
-                    midiScheduler.PostMidiNote(channel, note, vel, 11050, nextTickTime);
-                }
-                
+                stepQueue.emplace_back(StepData{StepType::NOTE, shouldTrigger, note, vel, channel, DEFAULT_NOTE_DURATION});
+            
                 break;
             }
                 
             case (OpCode::CC):
             {
-                const int channel = (int) mStack.Pop();
-                const int ccValue = (int) mStack.Pop();
-                const int ccNumber = (int) mStack.Pop();
-                const int shouldTrigger = (int) mStack.Pop();
+                const uChar channel = mStack.Pop();
+                const uChar ccValue = mStack.Pop();
+                const uChar ccNumber = mStack.Pop();
+                const uChar shouldTrigger = mStack.Pop();
                 
-                if (shouldTrigger > 0)
-                {
-                    midiScheduler.PostMidiCC(channel, ccNumber, ccValue, nextTickTime);
-                }
+                stepQueue.emplace_back(StepData{StepType::CC, shouldTrigger, ccNumber, ccValue, channel, DEFAULT_NOTE_DURATION});
                 
                 break;
             }

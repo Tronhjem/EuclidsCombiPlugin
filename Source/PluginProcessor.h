@@ -12,6 +12,7 @@
 #include <memory>
 
 #include "ORchestraEngine.h"
+#include "StepData.h"
 
 
 class ORchestraAudioProcessor  : public juce::AudioProcessor
@@ -59,6 +60,8 @@ public:
     const TransportData& GetPositionData() { return mTransportData; };
     double mSampleRate = 44100.0;
     char* GetFileText();
+    std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mORchestraEngine->GetStepData(); }
+    int GetGlobalStepCount() { return mORchestraEngine->GetGlobalStepCount(); }
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
     bool IsRunning = false;
@@ -67,7 +70,7 @@ private:
     //==============================================================================
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
-    std::unique_ptr<ORchestraEngine> mEuclidEngine;
+    std::unique_ptr<ORchestraEngine> mORchestraEngine;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ORchestraAudioProcessor)
 };

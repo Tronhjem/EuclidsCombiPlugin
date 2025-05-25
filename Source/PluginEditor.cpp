@@ -39,7 +39,6 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     codeEditor.addListener(this);
     addAndMakeVisible(codeEditor);
     
-    
     saveFile.setBounds(20, 220+60, 50, 20);
     saveFile.addListener(this);
     addAndMakeVisible(saveFile);
@@ -48,14 +47,9 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     loadFile.addListener(this);
     addAndMakeVisible(loadFile);
     
-    timeline.setTriggers({
-        { true, false, true, true, true },
-        { true, true, true, false, true }
-//        { false, false, false, true, true }
-    });
-
     timeline.setBounds(20, 320, 760, 260);
     addAndMakeVisible(timeline);
+    timeline.SetProcessor(&audioProcessor);
 }
 
 ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()

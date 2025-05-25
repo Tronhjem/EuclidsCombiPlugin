@@ -1,67 +1,108 @@
 #pragma once
 
 #include <JuceHeader.h>
-using namespace ::juce::gl;
+#include "StepData.h"
+#include "ORchestraEngine.h"
 
-class Timeline : public juce::Component
+class Timeline : public juce::Component, public juce::Timer
 {
 public:
-    Timeline()
+    Timeline() : mAudioProcessor(nullptr)
     {
+        startTimerHz(40);
     }
     
     ~Timeline() override
     {
+        stopTimer();
     }
     
-    void setTriggers(const std::vector<std::vector<bool>>& newTriggers)
+    void SetProcessor(ORchestraAudioProcessor* audioProcessor)
     {
-        triggers = newTriggers;
-        repaint();
+        mAudioProcessor = audioProcessor;
+    }
+    
+    void timerCallback() override
+    {
+       if(mAudioProcessor == nullptr)
+           return;
+        
+       const int globalStep = mAudioProcessor->GetGlobalStepCount();
+       if(globalStep == mLastGlobalStep)
+           return;
+       
+       mLastGlobalStep = globalStep;
+       repaint();
     }
 
    void paint(juce::Graphics& g) override
    {
-       g.fillAll(juce::Colours::black);
-
-       const int trackCount = (int) triggers.size();
-       if (trackCount == 0)
+       
+       if(mAudioProcessor == nullptr)
            return;
+//       g.fillAll(juce::Colours::black);
+       const int globalStep = mAudioProcessor->GetGlobalStepCount();
 
-       const int stepCount = (int) triggers[0].size();
        const float trackHeight = 40.f;
-       const float stepWidth = 20.f;
+       const float stepWidth = 23.f;
        const float dotSize = trackHeight * 0.5f;
 
-       for (int track = 0; track < trackCount; ++track)
+       // Paint the Trigger Step
+       int triggerStepSize = static_cast<int>(mTriggerSteps.size());
+       
+       g.setColour(juce::Colours::black);
+       g.fillRect(0.f, 0.f, stepWidth, triggerStepSize * trackHeight);
+       
+       for (int i = 0; i < triggerStepSize; ++i)
        {
-           float y = track * trackHeight + (trackHeight - dotSize) / 2.0f;
-
-           for (int step = 0; step < stepCount; ++step)
+           const StepData& stepData = mTriggerSteps[i];
+           float y = i * trackHeight + (trackHeight - dotSize) / 2.0f;
+           
+           if (stepData.mShouldTrigger > 0)
            {
-               if (triggers[track][step])
+               g.setColour(juce::Colours::white);
+           }
+           else
+               g.setColour(juce::Colours::grey);
+               
+           float x = stepWidth / 2.0f - dotSize / 2.0f;
+
+           g.fillEllipse(x, y, dotSize, dotSize);
+       }
+       
+       mTriggerSteps.clear();
+       
+       for (int step = 0; step < STEP_BUFFER_SIZE; ++step)
+       {
+           int stepWrapped = (globalStep + step) % STEP_BUFFER_SIZE;
+           if(stepWrapped < 0)
+               stepWrapped = 0;
+           
+           std::vector<StepData>& stepDatas = mAudioProcessor->GetStepData()[stepWrapped];
+
+           const int size = static_cast<int>(stepDatas.size());
+           for (int i = 0; i < size; ++i)
+           {
+               const StepData& stepData = stepDatas[i];
+               float y = i * trackHeight + (trackHeight - dotSize) / 2.0f;
+               
+               if(step == 0)
+                   mTriggerSteps.emplace_back(stepData);
+               
+               if (stepData.mShouldTrigger > 0)
                    g.setColour(juce::Colours::orange);
                else
                    g.setColour(juce::Colours::grey);
                    
-
-               float x = step * stepWidth + stepWidth / 2.0f - dotSize / 2.0f;
+               float x = (step + 1) * stepWidth + stepWidth / 2.0f - dotSize / 2.0f;
 
                g.fillEllipse(x, y, dotSize, dotSize);
            }
        }
-
-//       // Optionally: draw grid
-//       g.setColour(juce::Colours::darkgrey);
-//       for (int step = 0; step < stepCount; ++step)
-//       {
-//           float x = step * stepWidth + stepWidth / 2.0f;
-//           g.drawLine(x, 0.0f, x, (float)getHeight(), 0.5f);
-//       }
    }
-
     
 private:
-    std::vector<std::vector<bool>> triggers;
-    
+    std::vector<StepData> mTriggerSteps;
+    ORchestraAudioProcessor* mAudioProcessor;
+    int mLastGlobalStep = -1;
 };

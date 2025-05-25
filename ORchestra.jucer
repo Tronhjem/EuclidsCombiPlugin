@@ -29,7 +29,6 @@
         <FILE id="I0GPcG" name="Token.cpp" compile="1" resource="0" file="Source/Token.cpp"/>
       </GROUP>
       <GROUP id="{CAC2B9B6-A9D8-5FC7-64B7-0C4011CEE6CD}" name="Elements">
-        <FILE id="Ol0wP1" name="StepData.cpp" compile="1" resource="0" file="Source/StepData.cpp"/>
         <FILE id="HtT4jU" name="StepData.h" compile="0" resource="0" file="Source/StepData.h"/>
         <FILE id="ICxPN7" name="EuclideanGenerator.h" compile="0" resource="0"
               file="Source/EuclideanGenerator.h"/>

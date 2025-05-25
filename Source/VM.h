@@ -13,6 +13,7 @@
 #include "Types.h"
 #include "MidiScheduler.h"
 #include "DataSequence.h"
+#include "StepData.h"
 
 class Instruction;
 
@@ -79,7 +80,7 @@ class VM
 public:
     VM();
     bool Prepare(char* data);
-    void Tick(MidiScheduler& midiScheduler, int nextTickTime, int globalCount);
+    void Tick(std::vector<StepData>& stepQueue, const int globalCount);
     void Reset();
     uChar GetTopStackValue() { return mStack.Top(); }
 
