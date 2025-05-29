@@ -164,9 +164,13 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     mORchestraEngine->Tick(mTransportData, bufferLength, midiMessages);
     
     if (IsRunning)
+    {
         mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
+    }
     else if(!IsRunning && !mTransportData.isPlaying)
+    {
         mTransportData.timeInSamples = 0;
+    }
 }
 
 void ORchestraAudioProcessor::FillPositionData(TransportData& data)

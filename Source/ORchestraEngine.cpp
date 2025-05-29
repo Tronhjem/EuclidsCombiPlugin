@@ -92,13 +92,13 @@ char* ORchestraEngine::GetLoadedFileData()
 }
 
 void ORchestraEngine::Tick(const TransportData& transportData,
-                                   const int bufferLength,
-                                   juce::MidiBuffer& midiMessages)
+                           const int bufferLength,
+                           juce::MidiBuffer& midiMessages)
 {
     if (transportData.isPlaying)
     {
-        const double gridResolution = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * mBpmDivide));
-        const int currentStep = static_cast<int>(ceil(static_cast<double>(transportData.timeInSamples) / gridResolution));
+        const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * mBpmDivide));
+        const int currentStep = static_cast<int>(ceil(static_cast<double>(transportData.timeInSamples) / samplesPerStep));
         
         // Check if we skipped count, to regenerate everything.
         const int stepDifference = currentStep - mCurrentGlobalStep.load();
@@ -111,26 +111,26 @@ void ORchestraEngine::Tick(const TransportData& transportData,
             // Do we want to move it entirely down to 0 or still keep the current step we might trigger?
         }
         
-        const int nextTickTime = static_cast<int>(gridResolution * currentStep);
-        const int endOfBufferPosition = static_cast<int>(transportData.timeInSamples + bufferLength);
+        const int nextStepInSamples = static_cast<int>(samplesPerStep * currentStep);
+        const int endOfBufferInSamples = static_cast<int>(transportData.timeInSamples + bufferLength);
         
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.
-        if (mIsVMInit && endOfBufferPosition >= nextTickTime)
+        if (mIsVMInit && endOfBufferInSamples >= nextStepInSamples)
         {
             const int wrappedGlobalStep = currentStep % STEP_BUFFER_SIZE;
             const std::vector<StepData>& currentData = mStepRingBuffer[wrappedGlobalStep];
             
             for(const StepData& step : currentData)
             {
-                mMidiScheduler.PostStepData(step, nextTickTime);
+                mMidiScheduler.PostStepData(step, nextStepInSamples);
             }
             
             mReadySteps.fetch_sub(1, std::memory_order_acq_rel);
         }
     
         // Process all Midi.
-        mMidiScheduler.ProcessMidiPosts(midiMessages, bufferLength, endOfBufferPosition);
+        mMidiScheduler.ProcessMidiPosts(midiMessages, bufferLength, endOfBufferInSamples);
     }
     else
     {
