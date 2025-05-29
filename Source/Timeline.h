@@ -3,21 +3,26 @@
 #include <JuceHeader.h>
 #include "StepData.h"
 #include "ORchestraEngine.h"
-#include <chrono>
+#include "PluginProcessor.h"
 
 constexpr float trackHeight = 50.f;
 constexpr float dotSize = trackHeight - 10.f;
 constexpr float stepWidth = dotSize + 3.f;
+constexpr float stepY = trackHeight + (trackHeight - dotSize) / 2.0f;
+constexpr float stepX = stepWidth + stepWidth / 2.0f - dotSize / 2.0f;
+constexpr int numberOfDrawnSteps = 17;
+constexpr int numberOfDrawnStepRows = 5;
 
 class Timeline : public juce::Component, public juce::Timer
 {
 public:
-    float dotXpos = 0;
-    std::chrono::high_resolution_clock::time_point start;
-    
-    Timeline() : mAudioProcessor(nullptr)
+    Timeline() :
+        mAudioProcessor(nullptr),
+        mLastGlobalStep(-1),
+        mPixelsPerBeat(0.f),
+        mLastTimeInSamples(0)
     {
-        startTimerHz(60);
+        startTimerHz(25);
     }
     
     ~Timeline() override
@@ -25,70 +30,14 @@ public:
         stopTimer();
     }
     
-    void SetProcessor(ORchestraAudioProcessor* audioProcessor)
-    {
-        mAudioProcessor = audioProcessor;
-    }
-    
-    void timerCallback() override
-    {
-#if _DEBUG
-        assert(mAudioProcessor != nullptr);
-#endif
-       const int globalStep = mAudioProcessor->GetGlobalStepCount();
-       if(globalStep == mLastGlobalStep)
-           return;
-       
-       mLastGlobalStep = globalStep;
-       repaint();
-    }
-    
-   void paint(juce::Graphics& g) override
-   {
-#if _DEBUG
-       assert(mAudioProcessor != nullptr);
-#endif
-       const int numberOfDrawnSteps = 17;
-       for (int step = 0; step < numberOfDrawnSteps; ++step)
-       {
-           // We start behind the global step, as it's always one ahead and we
-           // want to paint the current step being triggered.
-           int stepWrapped = (mLastGlobalStep - 1 + step) % STEP_BUFFER_SIZE;
-           if(stepWrapped < 0)
-               stepWrapped += STEP_BUFFER_SIZE;
-
-           std::vector<StepData>& stepDatas = mAudioProcessor->GetStepData()[stepWrapped];
-
-           const int size = static_cast<int>(stepDatas.size());
-           for (int i = 0; i < size; ++i)
-           {
-               const StepData& stepData = stepDatas[i];
-               const float y = i * trackHeight + (trackHeight - dotSize) / 2.0f;
-
-               if (stepData.mShouldTrigger > 0)
-               {
-                   if (step == 0)
-                       g.setColour(juce::Colours::white);
-                   else
-                       g.setColour(juce::Colours::orange);
-               }
-               else
-                   g.setColour(juce::Colours::grey);
-
-               const float x = step * stepWidth + stepWidth / 2.0f - dotSize / 2.0f;
-
-               g.fillEllipse(x, y, dotSize, dotSize);
-               std::string first {std::to_string((int)stepData.mFirstData)};
-               std::string second {std::to_string((int)stepData.mSecondData)};
-               g.setColour(juce::Colours::black);
-               g.drawText(first, x, y + 4.f, dotSize, 15.f, juce::Justification::centred);
-               g.drawText(second, x, y + 19.f, dotSize, 15.f, juce::Justification::centred);
-           }
-       }
-   }
+    void SetProcessor(ORchestraAudioProcessor* audioProcessor) { mAudioProcessor = audioProcessor; }
+    void timerCallback() override;
+    void paint(juce::Graphics& g) override;
     
 private:
-    std::vector<StepData> mTriggerSteps;
     ORchestraAudioProcessor* mAudioProcessor;
-    int mLastGlobalStep = -1;
+    int mLastGlobalStep;
+    float mPixelsPerBeat;
+    int64_t mLastTimeInSamples;
+    std::array<std::array<int, numberOfDrawnStepRows>, numberOfDrawnSteps> mStepXPositions;
 };

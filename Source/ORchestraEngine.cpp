@@ -114,10 +114,18 @@ void ORchestraEngine::Tick(const TransportData& transportData,
         const int nextStepInSamples = static_cast<int>(samplesPerStep * currentStep);
         const int endOfBufferInSamples = static_cast<int>(transportData.timeInSamples + bufferLength);
         
+        int64_t dif = transportData.timeInSamples - samplesSinceLastStep;
+        
+        if(dif >= samplesPerStep + bufferLength)
+        {
+            DBG("@");
+        }
+        
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.
         if (mIsVMInit && endOfBufferInSamples >= nextStepInSamples)
         {
+            samplesSinceLastStep = transportData.timeInSamples;
             const int wrappedGlobalStep = currentStep % STEP_BUFFER_SIZE;
             const std::vector<StepData>& currentData = mStepRingBuffer[wrappedGlobalStep];
             

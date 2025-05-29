@@ -9,5 +9,5 @@ vel = [y + 27, y, y, y]
 note(x, a, vel, 1)
 note(x, 64, vel, 1)
 note(ran{0,100} > 50, 72, vel, 1)
-//note(1, a + 7, vel - 30, 1)
+note(1, a + 7, vel - 30, 1)
 //note(1, a +24, vel, 1)

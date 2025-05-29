@@ -51,7 +51,7 @@ public:
 
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    const TransportData& GetPositionData() { return mTransportData; };
+    const TransportData& GetTransportData() { return mTransportData; };
     double mSampleRate = 44100.0;
     char* GetFileText();
     std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mORchestraEngine->GetStepData(); }
