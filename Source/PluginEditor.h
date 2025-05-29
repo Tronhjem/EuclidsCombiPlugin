@@ -29,12 +29,9 @@ public:
     void resized() override;
     void textEditorTextChanged(juce::TextEditor& editor) override;
     void extracted();
-    
-void buttonClicked(juce::Button* button) override;
+    void buttonClicked(juce::Button* button) override;
     
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     ORchestraAudioProcessor& audioProcessor;
     juce::Label isPlayingLabel;
     juce::Label barCountLabel;

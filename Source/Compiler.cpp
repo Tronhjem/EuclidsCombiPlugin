@@ -365,7 +365,9 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
 {
     Consume(); // For the Left Brace
     
-    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
+    if(Peek().mTokenType != TokenType::NUMBER &&
+       Peek().mTokenType != TokenType::IDENTIFIER &&
+       Peek().mTokenType != TokenType::RANDOM)
     {
         ThrowUnexpectedTokenError(Peek());
         return false;
@@ -388,6 +390,7 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
             case TokenType::LEFT_PAREN:
+            case TokenType::RANDOM:
             {
                 CompileExpression(runtimeInstructions);
                 ++paramCounter;

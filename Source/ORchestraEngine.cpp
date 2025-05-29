@@ -63,19 +63,19 @@ void ORchestraEngine::PreProcessSteps()
     if (!mIsVMInit.load())
         return;
     
-    const int stepsToProcess = STEP_BUFFER_SIZE - mReadySteps.load();
+    const int readySteps = mReadySteps.load();
+    const int stepsToProcess = STEP_BUFFER_SIZE - 1 - readySteps; // leave the last step unprocessed.
+    
     if(stepsToProcess < HALF_STEP_BUFFER_SIZE)
         return;
     
-    ScopedTimer timer {"Preprocess steps"};
+    ScopedTimer timer {"PreProcess"};
     
     for(int i = 0; i < stepsToProcess; ++i)
     {
-        int step = mCurrentGlobalStep - i - 1; // always start behind the Global Step.
-        if (step < 0)
-            step += STEP_BUFFER_SIZE;
-        
+        const int step = mCurrentGlobalStep + readySteps + i;
         const int stepWrapped = step % STEP_BUFFER_SIZE;
+        // tick needs global step and StepData needs it wrapped for ring buffer.
         
         std::vector<StepData>& currentData = mStepRingBuffer[stepWrapped];
         currentData.clear();

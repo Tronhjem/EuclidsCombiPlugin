@@ -68,15 +68,13 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
         audioProcessor.IsRunning = !audioProcessor.IsRunning;
         togglePlay.setButtonText(audioProcessor.IsRunning ? "Stop" : "Play");
     }
-    
-    if(button == &saveFile)
+    else if(button == &saveFile)
     {
         juce::String text = codeEditor.getText();
         std::string utf8Text = text.toRawUTF8(); // or toStdString() if you want std::string
         audioProcessor.SaveFile(utf8Text);
     }
-    
-    if(button == &loadFile)
+    else if(button == &loadFile)
     {
         chooser.launchAsync(folderChooserFlags, [this] (const juce::FileChooser& fc)
         {
