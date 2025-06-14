@@ -13,6 +13,10 @@
 #include "PluginProcessor.h"
 #include "Timeline.h"
 
+#include "GeneralLookAndFeel.h"
+#include "ButtonsLookAndFeel.h"
+#include "TextEditorLookAndFeel.h"
+
 //==============================================================================
 /**
 */
@@ -50,6 +54,10 @@ private:
 //    juce::CodeDocument codeDocument;
 //       juce::CodeTokeniser tokeniser; // You can subclass this or use CppTokeniser, LuaTokeniser, etc.
 //       std::unique_ptr<juce::CodeEditorComponent> codeEditor;
-
+    
+    std::unique_ptr<GeneralLookAndFeel> mGeneralLookAndFeel;
+    std::unique_ptr<ButtonLookAndFeel> mButtonLookAndFeel;
+    std::unique_ptr<TextEditorLookAndFeel> mTextEditorLookAndFeel;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ORchestraAudioProcessorEditor)
 };

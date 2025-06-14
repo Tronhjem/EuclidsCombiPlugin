@@ -19,36 +19,52 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
 {
     setSize (WINDOW_WIDTH, WINDOW_HEIGHT);
     
+    mGeneralLookAndFeel = std::make_unique<GeneralLookAndFeel>();
+    mButtonLookAndFeel = std::make_unique<ButtonLookAndFeel>();
+    mTextEditorLookAndFeel = std::make_unique<TextEditorLookAndFeel>();
+    
 //    codeEditor.reset(new juce::CodeEditorComponent(codeDocument, &tokeniser));
 //    codeEditor->setTabSize(4, true);
 //    codeEditor->setLineNumbersShown(true);
 //    codeEditor->loadContent("print(\"Hello, world!\")");
     
     togglePlay.setBounds(20, 20, 50, 20);
-    togglePlay.addListener(this);
-    addAndMakeVisible(togglePlay);
+    codeEditor.setBounds(20, 60, 400, 200);
+    saveFile.setBounds(20, 220+60, 50, 20);
+    timeline.setBounds(20, 320, 760, 260);
+    loadFile.setBounds(70+20, 220+60, 50, 20);
     
-    codeEditor.setMultiLine(true);
+    saveFile.addListener(this);
+    codeEditor.addListener(this);
+    togglePlay.addListener(this);
+    loadFile.addListener(this);
+    
+    juce::LookAndFeel::setDefaultLookAndFeel(mGeneralLookAndFeel.get());
+    togglePlay.setLookAndFeel(mButtonLookAndFeel.get());
+    saveFile.setLookAndFeel(mButtonLookAndFeel.get());
+    loadFile.setLookAndFeel(mButtonLookAndFeel.get());
+    codeEditor.setLookAndFeel(mTextEditorLookAndFeel.get());
     
     codeEditor.setReturnKeyStartsNewLine(true);
+    codeEditor.setMultiLine(true);
     codeEditor.setScrollbarsShown(true);
     codeEditor.setCaretVisible(true);
+    
+    const float fontSize = 20.f;
+    FontOptions fontOptions {"Courier New", fontSize, juce::Font::plain};
+    Font font {fontOptions};
+    codeEditor.setFont(font);
+    codeEditor.setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    
+    timeline.SetProcessor(&audioProcessor);
 //    codeEditor.setPopupMenuEnabled(true);
-    codeEditor.setBounds(20, 60, 300, 200);
-    codeEditor.addListener(this);
+    
     addAndMakeVisible(codeEditor);
-    
-    saveFile.setBounds(20, 220+60, 50, 20);
-    saveFile.addListener(this);
+    addAndMakeVisible(togglePlay);
     addAndMakeVisible(saveFile);
-    
-    loadFile.setBounds(70+20, 220+60, 50, 20);
-    loadFile.addListener(this);
+    addAndMakeVisible(timeline);
     addAndMakeVisible(loadFile);
     
-    timeline.setBounds(20, 320, 760, 260);
-    addAndMakeVisible(timeline);
-    timeline.SetProcessor(&audioProcessor);
 }
 
 ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()
@@ -90,9 +106,8 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
 //==============================================================================
 void ORchestraAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::black);
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
+    g.fillAll (juce::Colours::white);
+//    g.setColour (juce::Colours::white);
     
 //    const TransportData& data = audioProcessor.GetPositionData();
     

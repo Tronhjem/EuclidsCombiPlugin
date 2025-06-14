@@ -1,19 +1,5 @@
 #include "Timeline.h"
-
-inline juce::Colour lerpColour(const juce::Colour& c1, const juce::Colour& c2, float t)
-{
-//    t = juce::jlimit(0.0f, 1.0f, t); // clamp t to [0, 1]
-    auto lerp = [t](uint8 a, uint8 b) -> uint8
-    {
-        return static_cast<uint8>(a + (b - a) * t);
-    };
-    return juce::Colour(
-        lerp(c1.getRed(),   c2.getRed()),
-        lerp(c1.getGreen(), c2.getGreen()),
-        lerp(c1.getBlue(),  c2.getBlue()),
-        lerp(c1.getAlpha(), c2.getAlpha())
-    );
-}
+#include "Utility.h"
 
 void Timeline::timerCallback()
 {
@@ -52,33 +38,41 @@ void Timeline::paint(juce::Graphics& g)
         // We start behind the global step, as it's always one ahead and we
         // want to paint the current step being triggered.
         const int stepWrapped = (globalStepOffset + step) % STEP_BUFFER_SIZE;
-
         std::vector<StepData>& stepDatas = mAudioProcessor->GetStepData()[stepWrapped];
+        
+        float alpha = 1.f;
+        if(step >= numberOfDrawnSteps - indexStartFade)
+        {
+            float alphaValue = 1.f - (static_cast<float>(step - numberOfDrawnSteps + indexStartFade) / static_cast<float>(indexStartFade));
+            alpha = alphaValue * alphaValue;
+        }
 
         const int size = static_cast<int>(stepDatas.size());
         for (int i = 0; i < size; ++i)
         {
             const StepData& stepData = stepDatas[i];
 
+            juce::Colour colorToSet;
             if (stepData.mShouldTrigger > 0)
             {
-                if (step == 0)
-                    g.setColour(juce::Colours::white);
-                else
-                {
-                    float t = static_cast<float>(stepData.mSecondData) / 127.f;
-                    juce::Colour c = lerpColour(minVelocity, maxVelocity, t);
-                    g.setColour(c);
-                }
+                float t = static_cast<float>(stepData.mSecondData) / 127.f;
+                colorToSet = lerpColour(minVelocity, maxVelocity, t);
             }
             else
-                g.setColour(juce::Colours::grey);
+                colorToSet = inactiveColor;
 
+            g.setColour(colorToSet.withAlpha(alpha));
+            
             const float y = i * stepY;
             const float x = step * stepX;
             
 //            mStepXPositions[step][i] = (mStepXPositions[step][i] - x) + deltaPixels;
             g.fillRect(x, y, drawnStepWidth, drawnStepHeight);
+            if (step == 0 && stepData.mShouldTrigger)
+            {
+                g.setColour(juce::Colours::white);
+                g.drawRect(x, y, drawnStepWidth, drawnStepHeight, 2.f);
+            }
             
             g.setColour(juce::Colours::black);
             std::string first {std::to_string((int)stepData.mFirstData)};

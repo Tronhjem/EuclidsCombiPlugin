@@ -18,10 +18,11 @@ constexpr float stepY = trackHeight + (trackHeight - stepHeight) / 2.0f;
 constexpr float stepX = stepWidth + stepWidth / 2.0f - stepWidth / 2.0f;
 constexpr int numberOfDrawnSteps = 17;
 constexpr int numberOfDrawnStepRows = 5;
+constexpr float indexStartFade = 6.f;
 
 const juce::Colour minVelocity = Colour::fromFloatRGBA(0.f, 0.f, 1.f, 1.f);
 const juce::Colour maxVelocity = Colour::fromFloatRGBA(1.f, 0.f, 0.f, 1.f);
-const juce::Colour inactiveColor = juce::Colours::grey;
+const juce::Colour inactiveColor = Colour::fromFloatRGBA(0.3f, 0.3f, 0.3f, 1.f);
 
 class Timeline : public juce::Component, public juce::Timer
 {

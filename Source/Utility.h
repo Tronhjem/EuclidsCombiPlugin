@@ -1,6 +1,33 @@
 #pragma once
 
+#include <JuceHeader.h>
 #include <iostream>
+
+inline juce::Colour lerpColour(const juce::Colour& c1, const juce::Colour& c2, float t)
+{
+    auto lerp = [t](uint8 a, uint8 b) -> uint8
+    {
+        return static_cast<uint8>(a + (b - a) * t);
+    };
+    return juce::Colour(
+        lerp(c1.getRed(),   c2.getRed()),
+        lerp(c1.getGreen(), c2.getGreen()),
+        lerp(c1.getBlue(),  c2.getBlue()),
+        lerp(c1.getAlpha(), c2.getAlpha())
+    );
+}
+
+inline float smoothstep(float edge0, float edge1, float x)
+{
+    x = (x - edge0) / (edge1 - edge0);
+    return x * x * (3 - 2 * x);
+}
+
+inline float smootherstep(float edge0, float edge1, float x)
+{
+    x = (x - edge0) / (edge1 - edge0);
+    return x * x * x * (x * (x * 6 - 15) + 10);
+}
 
 unsigned int WriteArrayToBytes(unsigned int* start, unsigned int length)
 {

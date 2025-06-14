@@ -46,6 +46,12 @@
         </GROUP>
       </GROUP>
       <GROUP id="{F1896013-22DD-58BE-C991-2EA418BBF7AB}" name="Juce">
+        <FILE id="OnxOa6" name="TextEditorLookAndFeel.h" compile="0" resource="0"
+              file="Source/TextEditorLookAndFeel.h"/>
+        <FILE id="S4MYWq" name="GeneralLookAndFeel.h" compile="0" resource="0"
+              file="Source/GeneralLookAndFeel.h"/>
+        <FILE id="AXr3rn" name="ButtonsLookAndFeel.h" compile="0" resource="0"
+              file="Source/ButtonsLookAndFeel.h"/>
         <FILE id="ozjnEg" name="Timeline.cpp" compile="1" resource="0" file="Source/Timeline.cpp"/>
         <FILE id="H2fT2Z" name="Timeline.h" compile="0" resource="0" file="Source/Timeline.h"/>
         <FILE id="EU0GQv" name="PluginProcessor.h" compile="0" resource="0"
