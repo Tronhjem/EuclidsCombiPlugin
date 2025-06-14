@@ -5,13 +5,23 @@
 #include "ORchestraEngine.h"
 #include "PluginProcessor.h"
 
-constexpr float trackHeight = 50.f;
-constexpr float dotSize = trackHeight - 10.f;
-constexpr float stepWidth = dotSize + 3.f;
-constexpr float stepY = trackHeight + (trackHeight - dotSize) / 2.0f;
-constexpr float stepX = stepWidth + stepWidth / 2.0f - dotSize / 2.0f;
+constexpr float stepMargin = 2.5f;
+constexpr float trackHeight = 32.f;
+
+constexpr float stepHeight = trackHeight;
+constexpr float quaterStepHeight = trackHeight * 0.25f;
+constexpr float stepWidth = (trackHeight * 1.5f);
+constexpr float drawnStepHeight = stepHeight - stepMargin;
+constexpr float drawnStepWidth = stepWidth - stepMargin;
+
+constexpr float stepY = trackHeight + (trackHeight - stepHeight) / 2.0f;
+constexpr float stepX = stepWidth + stepWidth / 2.0f - stepWidth / 2.0f;
 constexpr int numberOfDrawnSteps = 17;
 constexpr int numberOfDrawnStepRows = 5;
+
+const juce::Colour minVelocity = Colour::fromFloatRGBA(0.f, 0.f, 1.f, 1.f);
+const juce::Colour maxVelocity = Colour::fromFloatRGBA(1.f, 0.f, 0.f, 1.f);
+const juce::Colour inactiveColor = juce::Colours::grey;
 
 class Timeline : public juce::Component, public juce::Timer
 {

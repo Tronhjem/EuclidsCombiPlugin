@@ -1,24 +1,21 @@
 #include "Timeline.h"
 
-void Timeline::timerCallback()
+inline juce::Colour lerpColour(const juce::Colour& c1, const juce::Colour& c2, float t)
 {
-#if _DEBUG
-    assert(mAudioProcessor != nullptr);
-#endif
-    
-//    const float animationTimeInSamples = 500.f/**ms**/ * transportData.sampleRate * 0.001f;
-//    const int currentStep = static_cast<int>(ceil(static_cast<double>(transportData.timeInSamples) / samplesPerStep));
-//    const int nextStepInSamples = static_cast<int>(samplesPerStep * currentStep);
-    
-//    const int globalStep = mAudioProcessor->GetGlobalStepCount();
-//        if(globalStep == mLastGlobalStep)
-//            return;
-//    mLastGlobalStep = globalStep;
-   
-    repaint();
+//    t = juce::jlimit(0.0f, 1.0f, t); // clamp t to [0, 1]
+    auto lerp = [t](uint8 a, uint8 b) -> uint8
+    {
+        return static_cast<uint8>(a + (b - a) * t);
+    };
+    return juce::Colour(
+        lerp(c1.getRed(),   c2.getRed()),
+        lerp(c1.getGreen(), c2.getGreen()),
+        lerp(c1.getBlue(),  c2.getBlue()),
+        lerp(c1.getAlpha(), c2.getAlpha())
+    );
 }
 
-void Timeline::paint(juce::Graphics& g)
+void Timeline::timerCallback()
 {
 #if _DEBUG
     assert(mAudioProcessor != nullptr);
@@ -29,20 +26,24 @@ void Timeline::paint(juce::Graphics& g)
     
     const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * 2.0));
     const int currentStep = static_cast<int>(ceil(static_cast<double>(timeInSamples) / samplesPerStep));
-    if(currentStep != mLastGlobalStep)
-    {
-        mLastGlobalStep = currentStep;
-        mLastTimeInSamples = timeInSamples;
-    }
-    const double pixelPerSample = dotSize / samplesPerStep;
-    const int64_t samplesSinceLast = timeInSamples - mLastTimeInSamples;
-//    if (samplesSinceLast >= samplesPerStep + 512)
-//    {
-//        DBG(samplesSinceLast);
-//    }V
-    const double deltaPixels = samplesSinceLast * pixelPerSample;
     
-//    if(samplesSinceLast >= samplesPerStep)
+//    const double pixelPerSample = dotSize / samplesPerStep;
+//    const int64_t samplesSinceLast = timeInSamples - mLastTimeInSamples;
+//    const double deltaPixels = samplesSinceLast * pixelPerSample;
+    
+    if(currentStep == mLastGlobalStep)
+    {
+        return;
+    }
+    
+    mLastGlobalStep = currentStep;
+    mLastTimeInSamples = timeInSamples;
+   
+    repaint();
+}
+
+void Timeline::paint(juce::Graphics& g)
+{
     
     const int globalStepOffset = mLastGlobalStep - 1 + STEP_BUFFER_SIZE;
     
@@ -64,22 +65,24 @@ void Timeline::paint(juce::Graphics& g)
                 if (step == 0)
                     g.setColour(juce::Colours::white);
                 else
-                    g.setColour(juce::Colours::orange);
+                {
+                    float t = static_cast<float>(stepData.mSecondData) / 127.f;
+                    juce::Colour c = lerpColour(minVelocity, maxVelocity, t);
+                    g.setColour(c);
+                }
             }
             else
                 g.setColour(juce::Colours::grey);
 
             const float y = i * stepY;
-            const float x = step * stepX - deltaPixels + dotSize;
+            const float x = step * stepX;
             
 //            mStepXPositions[step][i] = (mStepXPositions[step][i] - x) + deltaPixels;
-            g.fillEllipse(x, y, dotSize, dotSize);
+            g.fillRect(x, y, drawnStepWidth, drawnStepHeight);
             
             g.setColour(juce::Colours::black);
             std::string first {std::to_string((int)stepData.mFirstData)};
-            std::string second {std::to_string((int)stepData.mSecondData)};
-            g.drawText(first, x, y + 4.f, dotSize, 15.f, juce::Justification::centred);
-            g.drawText(second, x, y + 19.f, dotSize, 15.f, juce::Justification::centred);
+            g.drawText(first, x, y + quaterStepHeight, stepWidth, 15.f, juce::Justification::centred);
         }
     }
 }
