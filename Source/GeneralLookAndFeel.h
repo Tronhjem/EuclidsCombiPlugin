@@ -8,6 +8,7 @@ public:
     {
         return juce::Typeface::createSystemTypefaceFor(mFont);
     }
+    
 private:
     const float mFontSize = 25.f;
     FontOptions mFontOptions {"Courier New", mFontSize, juce::Font::plain};

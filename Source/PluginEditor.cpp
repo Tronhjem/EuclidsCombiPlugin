@@ -69,6 +69,10 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
 
 ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()
 {
+    togglePlay.setLookAndFeel(nullptr);
+    saveFile.setLookAndFeel(nullptr);
+    loadFile.setLookAndFeel(nullptr);
+    codeEditor.setLookAndFeel(nullptr);
 }
 
 void ORchestraAudioProcessorEditor::textEditorTextChanged(juce::TextEditor& editor)
@@ -107,7 +111,7 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
 void ORchestraAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::white);
-//    g.setColour (juce::Colours::white);
+    g.setColour (juce::Colours::white);
     
 //    const TransportData& data = audioProcessor.GetPositionData();
     

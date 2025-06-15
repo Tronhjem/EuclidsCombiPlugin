@@ -9,9 +9,7 @@ public:
 
     void fillTextEditorBackground(juce::Graphics& g, int width, int height, juce::TextEditor& editor) override
     {
-//        g.setColour(background);
         g.fillAll (background);
-//        g.fillRect(0, 0, width, height);
     }
 
 private:

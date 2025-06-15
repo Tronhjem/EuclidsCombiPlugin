@@ -156,21 +156,21 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, bufferLength);
     
-    if(IsRunning)
-        mTransportData.isPlaying = IsRunning; // Set the playing to true when standalone
+//    if(IsRunning)
+//        mTransportData.isPlaying = IsRunning; // Set the playing to true when standalone
 //    else
-//        FillPositionData(mTransportData);
+        FillPositionData(mTransportData);
     
     mORchestraEngine->Tick(mTransportData, bufferLength, midiMessages);
     
-    if (IsRunning)
-    {
-        mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
-    }
-    else if(!IsRunning && !mTransportData.isPlaying)
-    {
-        mTransportData.timeInSamples = 0;
-    }
+//    if (IsRunning)
+//    {
+//        mTransportData.timeInSamples += bufferLength; // Need to increment the position in samples ourselves when standalone.
+//    }
+//    else if(!IsRunning && !mTransportData.isPlaying)
+//    {
+//        mTransportData.timeInSamples = 0;
+//    }
 }
 
 void ORchestraAudioProcessor::FillPositionData(TransportData& data)

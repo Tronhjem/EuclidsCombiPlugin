@@ -1,12 +1,10 @@
 #pragma once
 #include <juce_gui_basics/juce_gui_basics.h>
 
-constexpr float FONT_SIZE = 15.f;
-
 class ButtonLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    ButtonLookAndFeel(juce::Colour buttonColour = juce::Colours::red)
+    ButtonLookAndFeel(juce::Colour buttonColour = juce::Colours::black)
         : customButtonColour(buttonColour) {}
 
     void drawButtonBackground(juce::Graphics& g, juce::Button& button,
@@ -32,9 +30,12 @@ public:
     
     juce::Font getTextButtonFont (juce::TextButton&, int buttonHeight) override
     {
-        return juce::Font(FONT_SIZE);
+        return mFont;
     }
 
 private:
     juce::Colour customButtonColour;
+    const float mFontSize = 15.f;
+    FontOptions mFontOptions {"Courier New", mFontSize, juce::Font::plain};
+    Font mFont {mFontOptions};
 };

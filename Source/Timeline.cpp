@@ -70,7 +70,7 @@ void Timeline::paint(juce::Graphics& g)
             g.fillRect(x, y, drawnStepWidth, drawnStepHeight);
             if (step == 0 && stepData.mShouldTrigger)
             {
-                g.setColour(juce::Colours::white);
+                g.setColour(juce::Colours::black);
                 g.drawRect(x, y, drawnStepWidth, drawnStepHeight, 2.f);
             }
             
