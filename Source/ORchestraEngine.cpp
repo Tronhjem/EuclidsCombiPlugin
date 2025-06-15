@@ -44,13 +44,13 @@ void ORchestraEngine::SaveFile(std::string& data)
 
 char* ORchestraEngine::LoadFile(std::string& filePath)
 {
-    mIsVMInit.store(false);
-    mReadySteps.store(0, std::memory_order_release);
-    mVM->Reset();
-    
     bool loaded = mFileLoader->LoadFile(filePath);
     if (loaded)
     {
+        mIsVMInit.store(false);
+        mReadySteps.store(0, std::memory_order_release);
+        mVM->Reset();
+        
         mIsVMInit.store(mVM->Prepare(mFileLoader->GetFileStart()));
         return mFileLoader->GetFileStart();
     }
@@ -114,12 +114,12 @@ void ORchestraEngine::Tick(const TransportData& transportData,
         const int nextStepInSamples = static_cast<int>(samplesPerStep * currentStep);
         const int endOfBufferInSamples = static_cast<int>(transportData.timeInSamples + bufferLength);
         
-        int64_t dif = transportData.timeInSamples - samplesSinceLastStep;
-        
-        if(dif >= samplesPerStep + bufferLength)
-        {
-            DBG("@");
-        }
+//        int64_t dif = transportData.timeInSamples - samplesSinceLastStep;
+//
+//        if(dif >= samplesPerStep + bufferLength)
+//        {
+//            DBG("@");
+//        }
         
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.

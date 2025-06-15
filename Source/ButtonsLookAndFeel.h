@@ -20,15 +20,18 @@ public:
 
         // No rounded corners: cornerSize = 0
         g.setColour(fillColour);
-        g.fillRect(bounds);
+        g.fillRoundedRectangle(bounds, 6.f);
 
         // Optional: draw border
         g.setColour(fillColour.darker(0.3f));
-        g.drawRect(bounds, 1.0f);
+        g.drawRoundedRectangle(bounds, 6.0f, 2.f);
     }
     
     juce::Font getTextButtonFont (juce::TextButton&, int buttonHeight) override
     {
-        return MONOSPACE_FONT;
+        return mFont;
     }
+    
+private:
+    const Font mFont {MONOSPACE_FONT_OPTIONS};
 };

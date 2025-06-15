@@ -14,7 +14,7 @@ constexpr float drawnStepWidth = stepWidth - stepMargin;
 constexpr float stepY = trackHeight + (trackHeight - stepHeight) / 2.0f;
 constexpr float stepX = stepWidth + stepWidth / 2.0f - stepWidth / 2.0f;
 
-constexpr float indexStartFade = 6.f;
+constexpr float indexStartFade = 3.f;
 
 void Timeline::timerCallback()
 {
@@ -71,7 +71,7 @@ void Timeline::paint(juce::Graphics& g)
             if (stepData.mShouldTrigger > 0)
             {
                 float t = static_cast<float>(stepData.mSecondData) / 127.f;
-                colorToSet = lerpColour(ORchestraColours::MinVelocity,
+                colorToSet = smoothstepColour(ORchestraColours::MinVelocity,
                                         ORchestraColours::MaxVelocity,
                                         t);
             }

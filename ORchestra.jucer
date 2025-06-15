@@ -46,6 +46,8 @@
         </GROUP>
       </GROUP>
       <GROUP id="{F1896013-22DD-58BE-C991-2EA418BBF7AB}" name="Juce">
+        <FILE id="wiAuiS" name="TitleBarComponent.h" compile="0" resource="0"
+              file="Source/TitleBarComponent.h"/>
         <GROUP id="{3B2E5272-9F24-BF92-C5AC-A4AEAEC2158F}" name="LookAndFeel">
           <FILE id="kIsyyD" name="Colours.h" compile="0" resource="0" file="Source/Colours.h"/>
           <FILE id="LOEpfJ" name="LookAndFeelConstants.h" compile="0" resource="0"

@@ -8,12 +8,24 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+//#include <juce_gui_basics/windows/juce_DocumentWindow.h>
+
 #include "LookAndFeelConstants.h"
 #include "Colours.h"
+#include "TitleBarComponent.h"
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
-//constexpr int MARGIN = 20;
+constexpr int COMPONENT_MARGIN = 15;
+constexpr int OUTER_MARGIN = 20;
+const int buttonWidth = 50;
+
+constexpr int buttonHeight = 20;
+constexpr int buttonMargin = 15;
+
+constexpr int codeEditorWidth = 400;
+constexpr int codeEditorHeight = 300;
+
 
 //==============================================================================
 ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProcessor& p)
@@ -30,11 +42,21 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
 //    codeEditor->setLineNumbersShown(true);
 //    codeEditor->loadContent("print(\"Hello, world!\")");
     
-    togglePlay.setBounds(20, 20, 50, 20);
-    codeEditor.setBounds(20, 60, 400, 200);
-    saveFile.setBounds(20, 220+60, 50, 20);
-    timeline.setBounds(20, 320, 760, 260);
-    loadFile.setBounds(70+20, 220+60, 50, 20);
+    int buttonXStart = OUTER_MARGIN;
+    int nextLineY = 20;
+    togglePlay.setBounds(buttonXStart, nextLineY, buttonWidth, buttonHeight);
+    
+    buttonXStart += buttonWidth + COMPONENT_MARGIN;
+    saveFile.setBounds(buttonXStart, nextLineY, buttonWidth, buttonHeight);
+    
+    buttonXStart += buttonWidth + COMPONENT_MARGIN;
+    loadFile.setBounds(buttonXStart, nextLineY, buttonWidth, buttonHeight);
+    
+    nextLineY += buttonHeight + COMPONENT_MARGIN;
+    codeEditor.setBounds(OUTER_MARGIN, nextLineY, codeEditorWidth, codeEditorHeight);
+    
+    nextLineY += codeEditorHeight + COMPONENT_MARGIN;
+    timeline.setBounds(OUTER_MARGIN, nextLineY, 760, 260);
     
     saveFile.addListener(this);
     codeEditor.addListener(this);
@@ -106,8 +128,11 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
             juce::File file = chooser.getResult();
             std::string filePath {file.getFullPathName().toRawUTF8()};
             char* data = audioProcessor.LoadFile(filePath);
-            juce::String dataAsString {data};
-            codeEditor.setText(dataAsString);
+            if(data != nullptr)
+            {
+                juce::String dataAsString {data};
+                codeEditor.setText(dataAsString);
+            }
         });
     }
 }
@@ -115,8 +140,7 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
 //==============================================================================
 void ORchestraAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::white);
-    g.setColour (juce::Colours::white);
+    g.fillAll (ORchestraColours::Background);
 }
 
 void ORchestraAudioProcessorEditor::resized()
