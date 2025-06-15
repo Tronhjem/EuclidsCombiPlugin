@@ -1,5 +1,20 @@
 #include "Timeline.h"
 #include "Utility.h"
+#include "Colours.h"
+
+constexpr float trackHeight = 32.f;
+constexpr float stepMargin = 2.5f;
+
+constexpr float stepHeight = trackHeight;
+constexpr float quaterStepHeight = trackHeight * 0.25f;
+constexpr float stepWidth = (trackHeight * 1.5f);
+constexpr float drawnStepHeight = stepHeight - stepMargin;
+constexpr float drawnStepWidth = stepWidth - stepMargin;
+
+constexpr float stepY = trackHeight + (trackHeight - stepHeight) / 2.0f;
+constexpr float stepX = stepWidth + stepWidth / 2.0f - stepWidth / 2.0f;
+
+constexpr float indexStartFade = 6.f;
 
 void Timeline::timerCallback()
 {
@@ -13,10 +28,10 @@ void Timeline::timerCallback()
     const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * 2.0));
     const int currentStep = static_cast<int>(ceil(static_cast<double>(timeInSamples) / samplesPerStep));
     
-//    const double pixelPerSample = dotSize / samplesPerStep;
-//    const int64_t samplesSinceLast = timeInSamples - mLastTimeInSamples;
-//    const double deltaPixels = samplesSinceLast * pixelPerSample;
-    
+//  const double pixelPerSample = dotSize / samplesPerStep;
+//  const int64_t samplesSinceLast = timeInSamples - mLastTimeInSamples;
+//  const double deltaPixels = samplesSinceLast * pixelPerSample;
+//  mStepXPositions[step][i] = (mStepXPositions[step][i] - x) + deltaPixels;
     if(currentStep == mLastGlobalStep)
     {
         return;
@@ -30,20 +45,20 @@ void Timeline::timerCallback()
 
 void Timeline::paint(juce::Graphics& g)
 {
-    
     const int globalStepOffset = mLastGlobalStep - 1 + STEP_BUFFER_SIZE;
     
-    for (int step = 0; step < numberOfDrawnSteps; ++step)
+    for (int step = 0; step < TIMELINE_STEPS_DRAWN; ++step)
     {
         // We start behind the global step, as it's always one ahead and we
         // want to paint the current step being triggered.
         const int stepWrapped = (globalStepOffset + step) % STEP_BUFFER_SIZE;
         std::vector<StepData>& stepDatas = mAudioProcessor->GetStepData()[stepWrapped];
         
+        // Calculate alpha values for fadeing steps.
         float alpha = 1.f;
-        if(step >= numberOfDrawnSteps - indexStartFade)
+        if(step >= TIMELINE_STEPS_DRAWN - indexStartFade)
         {
-            float alphaValue = 1.f - (static_cast<float>(step - numberOfDrawnSteps + indexStartFade) / static_cast<float>(indexStartFade));
+            float alphaValue = 1.f - (static_cast<float>(step - TIMELINE_STEPS_DRAWN + indexStartFade) / static_cast<float>(indexStartFade));
             alpha = alphaValue * alphaValue;
         }
 
@@ -56,17 +71,18 @@ void Timeline::paint(juce::Graphics& g)
             if (stepData.mShouldTrigger > 0)
             {
                 float t = static_cast<float>(stepData.mSecondData) / 127.f;
-                colorToSet = lerpColour(minVelocity, maxVelocity, t);
+                colorToSet = lerpColour(ORchestraColours::MinVelocity,
+                                        ORchestraColours::MaxVelocity,
+                                        t);
             }
             else
-                colorToSet = inactiveColor;
+                colorToSet = ORchestraColours::InactiveStep;
 
             g.setColour(colorToSet.withAlpha(alpha));
             
             const float y = i * stepY;
             const float x = step * stepX;
             
-//            mStepXPositions[step][i] = (mStepXPositions[step][i] - x) + deltaPixels;
             g.fillRect(x, y, drawnStepWidth, drawnStepHeight);
             if (step == 0 && stepData.mShouldTrigger)
             {

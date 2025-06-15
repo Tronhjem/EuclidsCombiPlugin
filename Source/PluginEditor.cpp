@@ -8,6 +8,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "LookAndFeelConstants.h"
+#include "Colours.h"
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
@@ -50,11 +52,8 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     codeEditor.setScrollbarsShown(true);
     codeEditor.setCaretVisible(true);
     
-    const float fontSize = 20.f;
-    FontOptions fontOptions {"Courier New", fontSize, juce::Font::plain};
-    Font font {fontOptions};
-    codeEditor.setFont(font);
-    codeEditor.setColour(juce::TextEditor::textColourId, juce::Colours::black);
+    codeEditor.setFont(MONOSPACE_FONT_OPTIONS);
+    codeEditor.setColour(juce::TextEditor::textColourId, ORchestraColours::TextColor);
     
     timeline.SetProcessor(&audioProcessor);
 //    codeEditor.setPopupMenuEnabled(true);
@@ -65,6 +64,12 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     addAndMakeVisible(timeline);
     addAndMakeVisible(loadFile);
     
+    char* data = audioProcessor.GetFileText();
+    if(data != nullptr)
+    {
+        juce::String dataAsString {data};
+        codeEditor.setText(dataAsString);
+    }
 }
 
 ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()
@@ -91,7 +96,7 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
     else if(button == &saveFile)
     {
         juce::String text = codeEditor.getText();
-        std::string utf8Text = text.toRawUTF8(); // or toStdString() if you want std::string
+        std::string utf8Text = text.toRawUTF8();
         audioProcessor.SaveFile(utf8Text);
     }
     else if(button == &loadFile)
@@ -112,21 +117,6 @@ void ORchestraAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::white);
     g.setColour (juce::Colours::white);
-    
-//    const TransportData& data = audioProcessor.GetPositionData();
-    
-//#if (JucePlugin_Build_Standalone == 0)
-//    isPlayingLabel.setText(data.isPlaying ? "TRUE" : "FALSE", juce::dontSendNotification);
-//#endif
-    
-//    int nextstep = audioProcessor.mStepCount * audioProcessor.mGridResolution;
-//    auto stepCountString = juce::String(audioProcessor.mStepCount);
-//    auto nextStepString = juce::String(nextstep);
-//    auto sampleString = juce::String(data.timeInSamples);
-    
-//    barCountLabel.setText(stepCountString, juce::dontSendNotification);
-//    beatCountLabel.setText(nextStepString, juce::dontSendNotification);
-//    ppqLabel.setText(sampleString, juce::dontSendNotification);
 }
 
 void ORchestraAudioProcessorEditor::resized()
