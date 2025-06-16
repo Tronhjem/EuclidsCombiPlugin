@@ -58,7 +58,7 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     nextLineY += buttonHeight + COMPONENT_MARGIN;
     codeEditor.setBounds(OUTER_MARGIN, nextLineY, codeEditorWidth, codeEditorHeight);
     
-    errorBox.setBounds(OUTER_MARGIN + codeEditorWidth + 2,
+    errorBox.setBounds(OUTER_MARGIN + codeEditorWidth,
                        nextLineY, WINDOW_WIDTH - codeEditorWidth - OUTER_MARGIN - OUTER_MARGIN,
                        codeEditorHeight);
     
