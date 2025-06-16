@@ -21,15 +21,6 @@ ORchestraEngine::~ORchestraEngine()
         workerThread.join();
 }
 
-void ORchestraEngine::WorkerThreadLoop()
-{
-    while (!shouldExit.load())
-    {
-        PreProcessSteps();
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    }
-}
-
 void ORchestraEngine::SaveFile(std::string& data)
 {
     const bool fileSaved = mFileLoader->SaveFile(data);
@@ -59,6 +50,20 @@ char* ORchestraEngine::LoadFile(std::string& filePath)
     }
     
     return nullptr;
+}
+
+std::vector<LogEntry>& ORchestraEngine::GetErrors()
+{
+    return mVM->GetErrors();
+}
+
+void ORchestraEngine::WorkerThreadLoop()
+{
+    while (!shouldExit.load())
+    {
+        PreProcessSteps();
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
 }
 
 void ORchestraEngine::PreProcessSteps()
@@ -122,13 +127,6 @@ void ORchestraEngine::Tick(const TransportData& transportData,
         
         const int nextStepInSamples = static_cast<int>(samplesPerStep * currentStep);
         const int endOfBufferInSamples = static_cast<int>(transportData.timeInSamples + bufferLength);
-        
-//        int64_t dif = transportData.timeInSamples - samplesSinceLastStep;
-//
-//        if(dif >= samplesPerStep + bufferLength)
-//        {
-//            DBG("@");
-//        }
         
         // if the end of the buffer is longer than the next tick time
         // Check if we should tick in this buffer.

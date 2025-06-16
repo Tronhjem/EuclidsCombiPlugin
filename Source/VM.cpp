@@ -27,6 +27,12 @@ void VM::Reset()
 {
     mVariables.clear();
     mRuntimeInstructions.clear();
+    mErrorReporting->Clear();
+}
+
+std::vector<LogEntry>& VM::GetErrors()
+{
+    return mErrorReporting->GetErrors();
 }
 
 bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)

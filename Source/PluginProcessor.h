@@ -13,6 +13,7 @@
 
 #include "ORchestraEngine.h"
 #include "StepData.h"
+#include "ErrorReporting.h"
 
 
 class ORchestraAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
@@ -42,7 +43,6 @@ public:
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
 
-
     int getNumPrograms() override;
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
@@ -54,6 +54,7 @@ public:
     const TransportData& GetTransportData() { return mTransportData; };
     double mSampleRate = 44100.0;
     char* GetFileText();
+    std::vector<LogEntry>& GetErrors();
     std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mORchestraEngine->GetStepData(); }
     int GetGlobalStepCount() { return mORchestraEngine->GetGlobalStepCount(); }
     char* LoadFile(std::string& filePath);

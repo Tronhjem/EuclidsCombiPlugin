@@ -8,6 +8,7 @@
 #include "VM.h"
 #include "FileLoader.h"
 #include "StepData.h"
+#include "ErrorReporting.h"
 
 constexpr int STEP_BUFFER_SIZE = 32;
 constexpr int HALF_STEP_BUFFER_SIZE = STEP_BUFFER_SIZE / 2;
@@ -20,6 +21,7 @@ public:
     void Tick(const TransportData& transportData, const int bufferLength, juce::MidiBuffer& midiMessages);
     char* GetLoadedFileData();
     std::string GetSavedFilePath();
+    std::vector<LogEntry>& GetErrors();
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
     std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mStepRingBuffer; }

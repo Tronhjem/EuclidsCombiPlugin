@@ -83,6 +83,7 @@ public:
     void Tick(std::vector<StepData>& stepQueue, const int globalCount);
     void Reset();
     uChar GetTopStackValue() { return mStack.Top(); }
+    std::vector<LogEntry>& GetErrors();
 
 private:
     bool ProcessOpCodes(std::vector<Instruction>& setupInstructions);

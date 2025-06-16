@@ -54,6 +54,11 @@ void ORchestraAudioProcessor::SaveFile(std::string& data)
     mORchestraEngine->SaveFile(data);
 }
 
+std::vector<LogEntry>& ORchestraAudioProcessor::GetErrors()
+{
+    return mORchestraEngine->GetErrors();
+}
+
 //==============================================================================
 const juce::String ORchestraAudioProcessor::getName() const
 {

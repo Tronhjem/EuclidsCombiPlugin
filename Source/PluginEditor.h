@@ -57,6 +57,7 @@ private:
     
     Timeline timeline;
     juce::TextEditor codeEditor;
+    juce::TextEditor errorBox;
 //    juce::CodeDocument codeDocument;
 //       juce::CodeTokeniser tokeniser; // You can subclass this or use CppTokeniser, LuaTokeniser, etc.
 //       std::unique_ptr<juce::CodeEditorComponent> codeEditor;
