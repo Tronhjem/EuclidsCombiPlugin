@@ -15,7 +15,7 @@
 #include "StepData.h"
 
 
-class ORchestraAudioProcessor  : public juce::AudioProcessor
+class ORchestraAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
@@ -64,6 +64,8 @@ private:
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
     std::unique_ptr<ORchestraEngine> mORchestraEngine;
+    
+    juce::String mSavedFilePath {""};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ORchestraAudioProcessor)
 };

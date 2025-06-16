@@ -33,6 +33,8 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
 {
     setSize (WINDOW_WIDTH, WINDOW_HEIGHT);
     
+    audioProcessor.addChangeListener(this);
+    
     mGeneralLookAndFeel = std::make_unique<GeneralLookAndFeel>();
     mButtonLookAndFeel = std::make_unique<ButtonLookAndFeel>();
     mTextEditorLookAndFeel = std::make_unique<TextEditorLookAndFeel>();
@@ -100,6 +102,18 @@ ORchestraAudioProcessorEditor::~ORchestraAudioProcessorEditor()
     saveFile.setLookAndFeel(nullptr);
     loadFile.setLookAndFeel(nullptr);
     codeEditor.setLookAndFeel(nullptr);
+    
+    audioProcessor.removeChangeListener(this);
+}
+
+void ORchestraAudioProcessorEditor::changeListenerCallback(juce::ChangeBroadcaster* broadCaster)
+{
+    char* data = audioProcessor.GetFileText();
+    if(data != nullptr)
+    {
+        juce::String dataAsString {data};
+        codeEditor.setText(dataAsString);
+    }
 }
 
 void ORchestraAudioProcessorEditor::textEditorTextChanged(juce::TextEditor& editor)

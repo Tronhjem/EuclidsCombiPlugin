@@ -20,9 +20,10 @@
 //==============================================================================
 /**
 */
-class ORchestraAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                              public juce::TextEditor::Listener,
-                                              public juce::Button::Listener
+class ORchestraAudioProcessorEditor  :  public juce::AudioProcessorEditor,
+                                        public juce::TextEditor::Listener,
+                                        public juce::Button::Listener,
+                                        public juce::ChangeListener
 {
 public:
     ORchestraAudioProcessorEditor (ORchestraAudioProcessor&);
@@ -37,6 +38,12 @@ public:
     
 private:
     ORchestraAudioProcessor& audioProcessor;
+    void changeListenerCallback(juce::ChangeBroadcaster* broadCaster) override;
+    
+    std::unique_ptr<GeneralLookAndFeel> mGeneralLookAndFeel;
+    std::unique_ptr<ButtonLookAndFeel> mButtonLookAndFeel;
+    std::unique_ptr<TextEditorLookAndFeel> mTextEditorLookAndFeel;
+    
     juce::Label isPlayingLabel;
     juce::Label barCountLabel;
     juce::Label beatCountLabel;
@@ -49,15 +56,11 @@ private:
     juce::TextButton saveFile {"Save"};
     
     Timeline timeline;
-    
     juce::TextEditor codeEditor;
 //    juce::CodeDocument codeDocument;
 //       juce::CodeTokeniser tokeniser; // You can subclass this or use CppTokeniser, LuaTokeniser, etc.
 //       std::unique_ptr<juce::CodeEditorComponent> codeEditor;
     
-    std::unique_ptr<GeneralLookAndFeel> mGeneralLookAndFeel;
-    std::unique_ptr<ButtonLookAndFeel> mButtonLookAndFeel;
-    std::unique_ptr<TextEditorLookAndFeel> mTextEditorLookAndFeel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ORchestraAudioProcessorEditor)
 };

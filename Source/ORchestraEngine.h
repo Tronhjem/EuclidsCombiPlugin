@@ -19,6 +19,7 @@ public:
     ~ORchestraEngine();
     void Tick(const TransportData& transportData, const int bufferLength, juce::MidiBuffer& midiMessages);
     char* GetLoadedFileData();
+    std::string GetSavedFilePath();
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
     std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mStepRingBuffer; }

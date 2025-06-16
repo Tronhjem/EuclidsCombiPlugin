@@ -40,7 +40,13 @@ char* ORchestraAudioProcessor::GetFileText()
 
 char* ORchestraAudioProcessor::LoadFile(std::string& filePath)
 {
-    return mORchestraEngine->LoadFile(filePath);
+    char* loadedFile = mORchestraEngine->LoadFile(filePath);
+    if(loadedFile != nullptr)
+    {
+        return loadedFile;
+    }
+    
+    return nullptr;
 }
 
 void ORchestraAudioProcessor::SaveFile(std::string& data)
@@ -229,12 +235,28 @@ void ORchestraAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    juce::XmlElement xml("PluginState");
+    xml.setAttribute("filePath", mORchestraEngine->GetSavedFilePath());
+    copyXmlToBinary(xml, destData);
 }
 
 void ORchestraAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    
+    std::unique_ptr<juce::XmlElement> xml(getXmlFromBinary(data, sizeInBytes));
+    if (xml && xml->hasTagName("PluginState"))
+    {
+        juce::String filePath = xml->getStringAttribute("filePath", "");
+        if(filePath.length() > 0)
+        {
+            std::string convertedPath = filePath.toStdString();
+            LoadFile(convertedPath);
+            sendChangeMessage();
+        }
+    }
 }
 
 //==============================================================================

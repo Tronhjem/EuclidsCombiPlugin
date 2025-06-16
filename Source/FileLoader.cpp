@@ -12,8 +12,7 @@ FileLoader::FileLoader()
 
 bool FileLoader::LoadFile(std::string& filePath)
 {
-    mFilePath = filePath;
-    std::ifstream file (mFilePath);
+    std::ifstream file (filePath);
 
     if (!file) {
         std::cerr << "Could not open file " << filePath << std::endl;
@@ -21,6 +20,8 @@ bool FileLoader::LoadFile(std::string& filePath)
     }
 
     ScopedTimer timer("Read File");
+    
+    mFilePath = filePath;
 
     file.seekg(0, std::ios::end);
     size_t fileSize = static_cast<size_t>(file.tellg());
@@ -40,7 +41,7 @@ bool FileLoader::SaveFile(std::string& data)
     std::ofstream file {mFilePath, std::ios::binary};
     
     if (!file.is_open()) {
-        std::cerr << "Could not open file for writing: " << mFilePath << std::endl;
+        std::cerr << "Could not save file: " << mFilePath << std::endl;
         return false;
     }
 

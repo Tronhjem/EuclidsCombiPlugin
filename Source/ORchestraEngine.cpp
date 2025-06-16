@@ -32,22 +32,25 @@ void ORchestraEngine::WorkerThreadLoop()
 
 void ORchestraEngine::SaveFile(std::string& data)
 {
-    mReadySteps.store(0, std::memory_order_release);
-    mIsVMInit.store(false, std::memory_order_release);
-    mVM->Reset();
-    
-    bool fileSaved = mFileLoader->SaveFile(data);
+    const bool fileSaved = mFileLoader->SaveFile(data);
     
     if(fileSaved)
+    {
+        mIsVMInit.store(false, std::memory_order_release);
+        mReadySteps.store(0, std::memory_order_release);
+        mVM->Reset();
+        
         mIsVMInit.store(mVM->Prepare(mFileLoader->GetFileStart()));
+    }
 }
 
 char* ORchestraEngine::LoadFile(std::string& filePath)
 {
-    bool loaded = mFileLoader->LoadFile(filePath);
+    const bool loaded = mFileLoader->LoadFile(filePath);
+    
     if (loaded)
     {
-        mIsVMInit.store(false);
+        mIsVMInit.store(false, std::memory_order_release);
         mReadySteps.store(0, std::memory_order_release);
         mVM->Reset();
         
@@ -71,9 +74,10 @@ void ORchestraEngine::PreProcessSteps()
     
     ScopedTimer timer {"PreProcess"};
     
+    int currentGlobalStep = mCurrentGlobalStep.load();
     for(int i = 0; i < stepsToProcess; ++i)
     {
-        const int step = mCurrentGlobalStep + readySteps + i;
+        const int step = currentGlobalStep + readySteps + i;
         const int stepWrapped = step % STEP_BUFFER_SIZE;
         // tick needs global step and StepData needs it wrapped for ring buffer.
         
@@ -89,6 +93,11 @@ void ORchestraEngine::PreProcessSteps()
 char* ORchestraEngine::GetLoadedFileData()
 {
     return mFileLoader->GetFileStart();
+}
+
+std::string ORchestraEngine::GetSavedFilePath()
+{
+    return mFileLoader->GetSavedFilePath();
 }
 
 void ORchestraEngine::Tick(const TransportData& transportData,
