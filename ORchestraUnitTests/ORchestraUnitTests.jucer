@@ -41,6 +41,8 @@
       <FILE id="tdscN0" name="VM.h" compile="0" resource="0" file="../Source/VM.h"/>
     </GROUP>
     <GROUP id="{A8C95B41-B00B-6994-8AA7-9BDE10B1B3F2}" name="Source">
+      <FILE id="Qrkj5b" name="Test_ErrorHandling.h" compile="0" resource="0"
+            file="Source/Test_ErrorHandling.h"/>
       <FILE id="Qrfxtq" name="Test_EuclidAndRandom.h" compile="0" resource="0"
             file="Source/Test_EuclidAndRandom.h"/>
       <FILE id="ahmOTJ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>

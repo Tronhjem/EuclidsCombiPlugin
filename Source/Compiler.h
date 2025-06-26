@@ -24,8 +24,9 @@ private:
     inline void ThrowUnexpectedTokenError(Token& tokenForError);
     inline void ThrowMissingExpectedToken(std::string& missingToken);
     inline void ThrowMissingParamCount(int expected, int received);
+    inline void ThrowUnexpectedEnd(std::string& missingToken);
     
-    inline void MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions);
+    inline bool MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions);
     inline void MakeConstant(Token& token, std::vector<Instruction>& instructions);
     inline void MakeOperation(TokenType tokenType, std::vector<Instruction>& instructions);
 

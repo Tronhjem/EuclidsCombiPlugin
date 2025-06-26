@@ -23,7 +23,7 @@ Token& Compiler::Previous()
     return mTokens[mCurrentIndex - 1];
 }
 
-void Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions)
+bool Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& instructions)
 {
     std::string name = std::string(token.mStart, token.mLength);
     
@@ -33,21 +33,13 @@ void Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& inst
         
         CompileExpression(instructions);
         
-//        Token& indexToken = Consume();
-//        if(indexToken.mTokenType == TokenType::NUMBER)
-//        {
-//            MakeConstant(indexToken, instructions);
-//        }
-//        else if (indexToken.mTokenType == TokenType::IDENTIFIER)
-//        {
-//            MakeIdentifierGetter(indexToken, instructions);
-//        }
-//        else
-//        {
-//            ThrowUnexpectedTokenError(indexToken);
-//            return;
-//        }
-        
+        if(Peek().mTokenType != TokenType::RIGHT_BRACKET)
+        {
+            std::string missingBracket = "]";
+            ThrowMissingExpectedToken(missingBracket);
+            return false;
+        }
+            
         Consume(); // for consuming right bracket
 
         instructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER_WITH_INDEX, name});
@@ -56,6 +48,8 @@ void Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& inst
     {
         instructions.emplace_back(Instruction{OpCode::GET_IDENTIFIER_VALUE, name});
     }
+    
+    return true;
 }
 
 void Compiler::MakeConstant(Token& token, std::vector<Instruction>& instructions)
@@ -137,6 +131,7 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
     }
     
     int valueCounter = 0;
+    bool expectsValue = true;
     while (Peek().mTokenType != TokenType::RIGHT_BRACKET)
     {
         Token& currentToken = Peek();
@@ -144,7 +139,14 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
         {
             case TokenType::COMMA:
             {
+                if(expectsValue)
+                {
+                    ThrowUnexpectedTokenError(currentToken);
+                    return false;
+                }
+                
                 Consume();
+                expectsValue = true;
                 break;
             }
 
@@ -152,23 +154,44 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
             case TokenType::IDENTIFIER:
             case TokenType::LEFT_PAREN:
             {
-                CompileExpression(instructions);
+                if(!expectsValue)
+                {
+                    ThrowUnexpectedTokenError(currentToken);
+                    return false;
+                }
+                
+                if(!CompileExpression(instructions))
+                {
+                    return false;
+                }
+                
                 ++valueCounter;
+                expectsValue = false;
                 break;
             }
                 
             case TokenType::RANDOM:
             {
+                if(!expectsValue)
+                {
+                    ThrowUnexpectedTokenError(currentToken);
+                    return false;
+                }
+                
                 CompileRandom(instructions);
                 ++valueCounter;
+                expectsValue = false;
                 break;
             }
 
             case TokenType::EOL:
             case TokenType::END:
             default:
-                ThrowUnexpectedTokenError(currentToken);
+            {
+                std::string missingToken {"]"};
+                ThrowUnexpectedEnd(missingToken);
                 return false;
+            }
         }
     }
     
@@ -194,7 +217,8 @@ bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
     }
 
     // expression for hits
-    CompileExpression(instructions);
+    if(!CompileExpression(instructions))
+        return false;
 
     if(Consume().mTokenType != TokenType::COMMA)
     {
@@ -203,7 +227,8 @@ bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
     }
 
     // expression for Length
-    CompileExpression(instructions);
+    if(!CompileExpression(instructions))
+        return false;
 
     if(Peek().mTokenType != TokenType::RIGHT_BRACE)
     {
@@ -229,7 +254,8 @@ bool Compiler::CompileRandom(std::vector<Instruction>& instructions)
     }
 
     // expression for hits
-    CompileExpression(instructions);
+    if(!CompileExpression(instructions))
+        return false;
 
     if(Consume().mTokenType != TokenType::COMMA)
     {
@@ -238,7 +264,8 @@ bool Compiler::CompileRandom(std::vector<Instruction>& instructions)
     }
 
     // expression for Length
-    CompileExpression(instructions);
+    if(!CompileExpression(instructions))
+        return false;
 
     if(Peek().mTokenType != TokenType::RIGHT_BRACE)
     {
@@ -282,6 +309,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     };
     
     std::stack<TokenType> ops;
+    bool expectsValue = true;
     
     while (Peek().mTokenType != TokenType::EOL &&
            Peek().mTokenType != TokenType::END &&
@@ -294,12 +322,28 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         
         if(tType == TokenType::IDENTIFIER)
         {
-            MakeIdentifierGetter(currentToken, instructions);
+            if(!expectsValue)
+            {
+                ThrowUnexpectedTokenError(currentToken);
+                return false;
+            }
+            
+            if(!MakeIdentifierGetter(currentToken, instructions))
+                return false;
+            
+            expectsValue = false;
         }
         
         else if(tType == TokenType::NUMBER)
         {
+            if(!expectsValue)
+            {
+                ThrowUnexpectedTokenError(currentToken);
+                return false;
+            }
+            
             MakeConstant(currentToken, instructions);
+            expectsValue = false;
         }
         
         else if(tType == TokenType::RANDOM)
@@ -309,6 +353,12 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         
         else if(isOperator(tType))
         {
+            if(expectsValue)
+            {
+                ThrowUnexpectedTokenError(currentToken);
+                return false;
+            }
+            
             while (!ops.empty() && isOperator(ops.top()))
             {
                 TokenType top = ops.top();
@@ -325,16 +375,27 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
                 }
             }
             
+            expectsValue = true;
             ops.push(tType);
         }
         
         else if(tType == TokenType::LEFT_PAREN)
         {
+            if(expectsValue)
+            {
+                ThrowUnexpectedTokenError(currentToken);
+                return false;
+            }
             ops.push(tType);
         }
         
         else if(tType == TokenType::RIGHT_PAREN)
         {
+            if(expectsValue)
+            {
+                ThrowUnexpectedTokenError(currentToken);
+                return false;
+            }
             while (!ops.empty() && ops.top() != TokenType::LEFT_PAREN)
             {
                 MakeOperation(ops.top(), instructions);
@@ -344,6 +405,8 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             {
                 ops.pop(); // discard left paren
             }
+            
+            expectsValue = true;
         }
         else
         {
@@ -392,7 +455,9 @@ bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
             case TokenType::LEFT_PAREN:
             case TokenType::RANDOM:
             {
-                CompileExpression(runtimeInstructions);
+                if(!CompileExpression(runtimeInstructions))
+                    return false;
+                
                 ++paramCounter;
                 break;
             }
@@ -492,14 +557,10 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                     else if (tokenType == TokenType::NUMBER ||
                              tokenType == TokenType::IDENTIFIER)
                     {
-                        if(CompileExpression(instructions))
-                        {
-                            instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
-                        }
-                        else
-                        {
+                        if(!CompileExpression(instructions))
                             return false;
-                        }
+                        
+                        instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
                     }
                     else
                     {
@@ -520,8 +581,10 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
             {
                 if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
                 {
-                    CompileExpression(instructions);
-                    instructions.emplace_back(Instruction{OpCode::PRINT});
+                    if(CompileExpression(instructions))
+                        instructions.emplace_back(Instruction{OpCode::PRINT});
+                    else
+                        return false;
                 }
                 else
                 {
@@ -604,13 +667,13 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
 void Compiler::ThrowUnexpectedTokenError(Token& tokenForError)
 {
     std::string token = std::string(tokenForError.mStart, tokenForError.mLength);
-    std::string message = std::string("Compiler: Unexpected Character ") + token;
+    std::string message = std::string("Unexpected Character ") + token;
     mErrorReporting.LogError(Peek().mLine, message);
 }
 
 void Compiler::ThrowMissingExpectedToken(std::string& missingToken)
 {
-    std::string message = std::string("Compiler: Missing a ") + missingToken;
+    std::string message = std::string("Missing a ") + missingToken;
     mErrorReporting.LogError(Peek().mLine, message);
 }
 
@@ -621,5 +684,11 @@ void Compiler::ThrowMissingParamCount(int expected, int received)
                             std::string(" but received ") +
                             std::to_string(received);
     
+    mErrorReporting.LogError(Peek().mLine, message);
+}
+
+void Compiler::ThrowUnexpectedEnd(std::string& missingToken)
+{
+    std::string message = "Unexpted end, you're missing a " + missingToken;
     mErrorReporting.LogError(Peek().mLine, message);
 }
