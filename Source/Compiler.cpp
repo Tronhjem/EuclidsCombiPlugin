@@ -262,6 +262,13 @@ bool Compiler::CompileRandom(std::vector<Instruction>& instructions)
         ThrowUnexpectedTokenError(Peek());
         return false;
     }
+    
+    if(Peek().mTokenType != TokenType::NUMBER &&
+       Peek().mTokenType != TokenType::IDENTIFIER)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
 
     // expression for Length
     if(!CompileExpression(instructions))
