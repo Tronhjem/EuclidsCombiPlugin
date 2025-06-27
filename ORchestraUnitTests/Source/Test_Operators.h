@@ -71,6 +71,41 @@ public:
             expect (result == 12 /* (2 + 2) * 5 */);
         }
         {
+            beginTest ("Test setting parenteses");
+            
+            std::string file {"a = (2) + 2 \n test a"};
+            VM vm;
+            bool compileResult = vm.Prepare(&file[0]);
+            
+            expect (compileResult == true);
+            uChar result = vm.GetTopStackValue();
+            expect (result == 4);
+        }
+        {
+            beginTest ("Test setting parenteses with more operators");
+            
+            std::string file {"a = (2 + 2) * 2 \n test a"};
+            VM vm;
+            bool compileResult = vm.Prepare(&file[0]);
+            
+            expect (compileResult == true);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 8);
+        }
+        {
+            beginTest ("Test setting nesterd parenteses");
+            
+            std::string file {"a = ((2 - 1) + 2) * 2 \n test a"};
+            VM vm;
+            bool compileResult = vm.Prepare(&file[0]);
+            
+            expect (compileResult == true);
+            
+            uChar result = vm.GetTopStackValue();
+            expect (result == 6);
+        }
+        {
             beginTest ("Test Setting identifier from other identifier");
             
             std::string file {"a = 5 \n b = a \n test b"};

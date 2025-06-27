@@ -316,7 +316,9 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     };
     
     std::stack<TokenType> ops;
-    bool expectsValue = true;
+    
+    bool expectsValue = Peek().mTokenType != TokenType::LEFT_PAREN;
+    bool expectsMatchingParen = false;
     
     while (Peek().mTokenType != TokenType::EOL &&
            Peek().mTokenType != TokenType::END &&
@@ -326,6 +328,10 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     {
         Token& currentToken = Consume();
         TokenType tType = currentToken.mTokenType;
+        
+        // For nested parenteses where there can be more left parens after each other.
+        if(tType == TokenType::LEFT_PAREN)
+            expectsValue = false;
         
         if(tType == TokenType::IDENTIFIER)
         {
@@ -394,6 +400,9 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
                 return false;
             }
             ops.push(tType);
+            expectsValue = true;
+            
+//            expectsMatchingParen = true;
         }
         
         else if(tType == TokenType::RIGHT_PAREN)
@@ -403,6 +412,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
                 ThrowUnexpectedTokenError(currentToken);
                 return false;
             }
+            
             while (!ops.empty() && ops.top() != TokenType::LEFT_PAREN)
             {
                 MakeOperation(ops.top(), instructions);
@@ -413,13 +423,24 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
                 ops.pop(); // discard left paren
             }
             
-            expectsValue = true;
+            expectsValue = false;
+//            if(!expectsMatchingParen)
+//            {
+//                ThrowUnexpectedTokenError(Peek());
+//                return false;
+//            }
         }
         else
         {
             ThrowUnexpectedTokenError(currentToken);
             return false;
         }
+    }
+    
+    if(expectsValue)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
     }
     
     while (!ops.empty())
@@ -562,7 +583,8 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                         }
                     }
                     else if (tokenType == TokenType::NUMBER ||
-                             tokenType == TokenType::IDENTIFIER)
+                             tokenType == TokenType::IDENTIFIER ||
+                             tokenType == TokenType::LEFT_PAREN)
                     {
                         if(!CompileExpression(instructions))
                             return false;
