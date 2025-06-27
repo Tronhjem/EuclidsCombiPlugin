@@ -318,7 +318,8 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     std::stack<TokenType> ops;
     
     bool expectsValue = Peek().mTokenType != TokenType::LEFT_PAREN;
-    bool expectsMatchingParen = false;
+    int leftParen = 0;
+    int rightParen = 0;
     
     while (Peek().mTokenType != TokenType::EOL &&
            Peek().mTokenType != TokenType::END &&
@@ -401,8 +402,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             }
             ops.push(tType);
             expectsValue = true;
-            
-//            expectsMatchingParen = true;
+            ++leftParen;
         }
         
         else if(tType == TokenType::RIGHT_PAREN)
@@ -424,11 +424,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             }
             
             expectsValue = false;
-//            if(!expectsMatchingParen)
-//            {
-//                ThrowUnexpectedTokenError(Peek());
-//                return false;
-//            }
+            ++rightParen;
         }
         else
         {
@@ -440,6 +436,20 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
     if(expectsValue)
     {
         ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+    
+    if(leftParen > rightParen)
+    {
+        std::string missingToken {")"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+    
+    if(rightParen > leftParen)
+    {
+        std::string missingToken {"("};
+        ThrowMissingExpectedToken(missingToken);
         return false;
     }
     

@@ -92,6 +92,33 @@ public:
             expect (result == false);
         }
         {
+            beginTest ("Expression: matching parenteses");
+            
+            std::string file {"a = (2 - 3 \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
+        {
+            beginTest ("Expression: matching parenteses");
+            
+            std::string file {"a = 2 - 3) \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
+        {
+            beginTest ("Expression: matching parenteses");
+            
+            std::string file {"a = (2 - 3) + 2) \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
+        {
             beginTest ("Random: two numbers no comma");
             
             std::string file {"a = ran{2 3} \n"};
