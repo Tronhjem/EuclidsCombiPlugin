@@ -14,6 +14,7 @@
 #include "MidiScheduler.h"
 #include "DataSequence.h"
 #include "StepData.h"
+#include "StoredFunction.h"
 
 class Instruction;
 
@@ -90,6 +91,7 @@ private:
     std::unique_ptr<ErrorReporting> mErrorReporting;
     
     std::unordered_map<std::string, DataSequence> mVariables;
+    std::unordered_map<std::string, StoredFunction> mFunctions;
     std::vector<Instruction> mRuntimeInstructions;
     uChar RandomValue(uChar low, uChar high);
 

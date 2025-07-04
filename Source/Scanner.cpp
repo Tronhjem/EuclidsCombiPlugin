@@ -237,8 +237,8 @@ TokenType Scanner::IdentifierToken()
     // Checking if any of these are reserved words.
     switch (mStart[0])
     {
-    case 'p':
-        return checkKeyword(1, 4, "rint", TokenType::PRINT);
+    //case 'p':
+    //    return checkKeyword(1, 4, "rint", TokenType::PRINT);
     case 'r':
         return checkKeyword(1, 2, "an", TokenType::RANDOM);
     case 'n':

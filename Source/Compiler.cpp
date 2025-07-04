@@ -118,6 +118,42 @@ void Compiler::MakeOperation(TokenType tokenType, std::vector<Instruction> &inst
     instructions.emplace_back(Instruction{code});
 }
 
+bool Compiler::MakeFunctionCall(std::vector<Instruction>& instructions)
+{
+    Consume(); // For Right Parenteses
+    int paramCounter = 0;
+
+    while (Peek().mTokenType != TokenType::RIGHT_PAREN)
+    {
+        Token& currentToken = Peek();
+		switch (currentToken.mTokenType)
+        {
+            case TokenType::COMMA:
+				break;
+            case TokenType::IDENTIFIER:
+            case TokenType::NUMBER:
+            {
+                if (!CompileExpression(instructions))
+                    return false;
+                ++paramCounter;
+            }
+
+            case TokenType::EOL:
+            case TokenType::END:
+            {
+                std::string missingToken = ")";
+                ThrowUnexpectedEnd(missingToken);
+                return false;
+            }
+                
+			default:
+				break;
+        }
+    }
+
+    return true;
+}
+
 bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLength)
 {
     Consume(); // For the Left Bracket
@@ -432,7 +468,6 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             ThrowUnexpectedTokenError(currentToken);
             return false;
         }
-    }
     
     if(expectsValue)
     {
@@ -607,6 +642,14 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                         ThrowUnexpectedTokenError(Peek());
                         return false;
                     }
+                }
+                // For Functions
+                else if (Peek().mTokenType == TokenType::LEFT_PAREN)
+                {
+                    if (!MakeFunctionCall())
+                        return false;
+
+                    instructions.emplace_back(Instruction{OpCode::CALL_FUNCTION, name});
                 }
                 else
                 {
