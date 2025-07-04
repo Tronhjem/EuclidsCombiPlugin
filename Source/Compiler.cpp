@@ -363,6 +363,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         else if(tType == TokenType::RANDOM)
         {
             CompileRandom(instructions);
+            expectsValue = false;
         }
         
         else if(isOperator(tType))
@@ -439,19 +440,19 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         return false;
     }
     
-    if(leftParen > rightParen)
-    {
-        std::string missingToken {")"};
-        ThrowMissingExpectedToken(missingToken);
-        return false;
-    }
-    
-    if(rightParen > leftParen)
-    {
-        std::string missingToken {"("};
-        ThrowMissingExpectedToken(missingToken);
-        return false;
-    }
+    //if(leftParen > rightParen)
+    //{
+    //    std::string missingToken {")"};
+    //    ThrowMissingExpectedToken(missingToken);
+    //    return false;
+    //}
+    //
+    //if(rightParen > leftParen)
+    //{
+    //    std::string missingToken {"("};
+    //    ThrowMissingExpectedToken(missingToken);
+    //    return false;
+    //}
     
     while (!ops.empty())
     {

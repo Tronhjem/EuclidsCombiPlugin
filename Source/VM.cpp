@@ -314,7 +314,7 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
             {
                 const int length = (int) mStack.Pop();
                 const int hits = (int) mStack.Pop();
-                uChar data[length];
+                uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
                 
                 std::vector<uChar> vectorData {data, data + length};

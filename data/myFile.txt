@@ -1,13 +1,13 @@
-a = [64,7]
-b = {2,7}
+a = [64]
+b = {6,7}
 c = {3,9}
 x = {5,7}
 
 y = ran{60,70}
 vel = [y + 27, y, y, y]
 
-note(1, a, ran{1,127}, 1)
-note(x, 64, vel, 1)
-note(ran{0,100} > 30, a + 12, vel, 1)
-note(1, a, ran{20,50}, 1)
-note(1, a + 24, vel, 1)
+note(b, a, ran{1,127}, 1)
+note(x, a+7, vel, 1)
+//note(ran{0,100} > 30, a + 12, vel, 1)
+//note(1, a, ran{20,50}, 1)
+//note(1, a + 24, vel, 1)
