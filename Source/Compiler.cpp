@@ -468,6 +468,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             ThrowUnexpectedTokenError(currentToken);
             return false;
         }
+    }
     
     if(expectsValue)
     {
@@ -646,7 +647,7 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 // For Functions
                 else if (Peek().mTokenType == TokenType::LEFT_PAREN)
                 {
-                    if (!MakeFunctionCall())
+                    if (!MakeFunctionCall(instructions))
                         return false;
 
                     instructions.emplace_back(Instruction{OpCode::CALL_FUNCTION, name});
