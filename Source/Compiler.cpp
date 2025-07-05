@@ -118,12 +118,13 @@ void Compiler::MakeOperation(TokenType tokenType, std::vector<Instruction> &inst
     instructions.emplace_back(Instruction{code});
 }
 
-bool Compiler::MakeFunctionCall(std::vector<Instruction>& instructions)
+bool Compiler::MakeFunctionCall(std::vector<Instruction>& instructions, int expectedParamCount)
 {
-    Consume(); // For Right Parenteses
+    Consume(); // For Left Parenteses
     int paramCounter = 0;
 
-    while (Peek().mTokenType != TokenType::RIGHT_PAREN)
+    while (paramCounter != expectedParamCount &&
+           Peek().mTokenType != TokenType::RIGHT_PAREN)
     {
         Token& currentToken = Peek();
 		switch (currentToken.mTokenType)
@@ -132,25 +133,43 @@ bool Compiler::MakeFunctionCall(std::vector<Instruction>& instructions)
 				break;
             case TokenType::IDENTIFIER:
             case TokenType::NUMBER:
+            case TokenType::LEFT_PAREN:
             {
                 if (!CompileExpression(instructions))
                     return false;
                 ++paramCounter;
+                
+                break;
             }
 
-            case TokenType::EOL:
             case TokenType::END:
+            case TokenType::EOL:
             {
-                std::string missingToken = ")";
-                ThrowUnexpectedEnd(missingToken);
+                ThrowMissingParamCount(expectedParamCount, paramCounter);
                 return false;
             }
                 
 			default:
-				break;
+                ThrowUnexpectedTokenError(Peek());
+                return false;
         }
     }
-
+    
+    if(expectedParamCount != paramCounter)
+    {
+        ThrowMissingParamCount(expectedParamCount, paramCounter);
+        return false;
+    }
+    
+    if(Peek().mTokenType != TokenType::RIGHT_PAREN)
+    {
+        std::string missingToken = ")";
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+                    
+    Consume(); // For Right Paren
+    
     return true;
 }
 
@@ -363,6 +382,11 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
            Peek().mTokenType != TokenType::RIGHT_BRACKET &&
            Peek().mTokenType != TokenType::RIGHT_BRACE)
     {
+        // We assume this means we found the end of a function parenteses.
+        if(Peek().mTokenType == TokenType::RIGHT_PAREN &&
+           rightParen == leftParen)
+            break;
+        
         Token& currentToken = Consume();
         TokenType tType = currentToken.mTokenType;
         
@@ -476,19 +500,19 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         return false;
     }
     
-    //if(leftParen > rightParen)
-    //{
-    //    std::string missingToken {")"};
-    //    ThrowMissingExpectedToken(missingToken);
-    //    return false;
-    //}
-    //
-    //if(rightParen > leftParen)
-    //{
-    //    std::string missingToken {"("};
-    //    ThrowMissingExpectedToken(missingToken);
-    //    return false;
-    //}
+    if(leftParen > rightParen)
+    {
+        std::string missingToken {")"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+    
+    if(rightParen > leftParen)
+    {
+        std::string missingToken {"("};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
     
     while (!ops.empty())
     {
@@ -647,10 +671,23 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 // For Functions
                 else if (Peek().mTokenType == TokenType::LEFT_PAREN)
                 {
-                    if (!MakeFunctionCall(instructions))
-                        return false;
+                    if (mFunctions.find(name) != mFunctions.end())
+                    {
+                        StoredFunction& functon = mFunctions[name];
+                        if (!MakeFunctionCall(instructions, functon.mNumOfParams))
+                            return false;
 
-                    instructions.emplace_back(Instruction{OpCode::CALL_FUNCTION, name});
+                    
+                        
+                        for(Instruction& funcInstruction : functon.mInstructions)
+                        {
+                            instructions.emplace_back(funcInstruction);
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {

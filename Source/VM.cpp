@@ -7,10 +7,6 @@ constexpr int DEFAULT_NOTE_DURATION = 11050;
 VM::VM() 
 {
     mErrorReporting = std::make_unique<ErrorReporting>();
-    // populate built in functions
-    std::vector<Instruction> printInstructions;
-    printInstructions.emplace_back(Instruction{ OpCode::PRINT });
-    mFunctions["Print"] = StoredFunction("Print", 1, printInstructions);
 }
 
 bool VM::Prepare(char* data)
@@ -217,7 +213,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
                 break;
             }
-
+                
             case (OpCode::AND):
             {
                 uChar a = (uChar) (mStack.Pop() > 0);
