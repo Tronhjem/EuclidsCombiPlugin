@@ -140,24 +140,6 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
                 Consume();
 				break;
                 
-            case TokenType::IDENTIFIER:
-            case TokenType::NUMBER:
-            case TokenType::LEFT_PAREN:
-            {
-                if (!CompileExpression(instructions))
-                    return false;
-                ++paramCounter;
-                
-                break;
-            }
-            case TokenType::RANDOM:
-            {
-                Consume();
-                CompileFunctionCall(instructions, ranFunctionName);
-                ++paramCounter;
-                break;
-            }
-
             case TokenType::END:
             case TokenType::EOL:
             {
@@ -166,8 +148,13 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
             }
                 
 			default:
-                ThrowUnexpectedTokenError(Peek());
-                return false;
+                if (!CompileExpression(instructions))
+                {
+                    ThrowUnexpectedTokenError(Peek());
+                    return false;
+                }
+                ++paramCounter;
+                break;
         }
     }
     
