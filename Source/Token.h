@@ -45,6 +45,7 @@ enum class TokenType
     PRINT,
     TEST,
     RANDOM,
+    EUCLIDEAN,
 //    CLASS,
 //    ELSE,
 //    FALSE,

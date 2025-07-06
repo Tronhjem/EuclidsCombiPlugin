@@ -136,5 +136,41 @@ public:
             
             expect (result == false);
         }
+        {
+            beginTest ("Function: no matching parenteses");
+            
+            std::string file {"print(2 \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
+        {
+            beginTest ("Function: too many params");
+            
+            std::string file {"print(2,2) \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
+        {
+            beginTest ("Function: too little params");
+            
+            std::string file {"print() \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
+        {
+            beginTest ("Function: not valid function");
+            
+            std::string file {"invalid() \n"};
+            VM vm;
+            bool result = vm.Prepare(&file[0]);
+            
+            expect (result == false);
+        }
     }
 };

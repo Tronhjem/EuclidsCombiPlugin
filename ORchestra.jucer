@@ -11,6 +11,8 @@
         <FILE id="vkabua" name="ScopedTimer.h" compile="0" resource="0" file="Source/ScopedTimer.h"/>
       </GROUP>
       <GROUP id="{35B764F8-FA3B-1DCC-C112-5E416009EE3B}" name="Compiling">
+        <FILE id="M6WjkV" name="StoredFunction.h" compile="0" resource="0"
+              file="Source/StoredFunction.h"/>
         <FILE id="JzUIHJ" name="Instruction.h" compile="0" resource="0" file="Source/Instruction.h"/>
         <FILE id="SNG1tN" name="Compiler.h" compile="0" resource="0" file="Source/Compiler.h"/>
         <FILE id="w67Yy5" name="Compiler.cpp" compile="1" resource="0" file="Source/Compiler.cpp"/>

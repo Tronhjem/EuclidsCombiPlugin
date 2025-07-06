@@ -118,6 +118,68 @@ void Compiler::MakeOperation(TokenType tokenType, std::vector<Instruction> &inst
     instructions.emplace_back(Instruction{code});
 }
 
+bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::string& functionName)
+{
+    if (mFunctions.find(functionName) == mFunctions.end())
+    {
+        return false;
+    }
+    
+    StoredFunction& functon = mFunctions[functionName];
+
+    Consume(); // For Left Parenteses
+    int paramCounter = 0;
+
+    while (paramCounter != functon.mNumOfParams &&
+           Peek().mTokenType != TokenType::RIGHT_PAREN)
+    {
+        Token& currentToken = Peek();
+		switch (currentToken.mTokenType)
+        {
+            case TokenType::COMMA:
+                Consume();
+				break;
+                
+            case TokenType::END:
+            case TokenType::EOL:
+            {
+                ThrowMissingParamCount(functon.mNumOfParams, paramCounter);
+                return false;
+            }
+                
+			default:
+                if (!CompileExpression(instructions))
+                {
+                    ThrowUnexpectedTokenError(Peek());
+                    return false;
+                }
+                ++paramCounter;
+                break;
+        }
+    }
+    
+    if(Peek().mTokenType != TokenType::RIGHT_PAREN)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+    
+    if(functon.mNumOfParams != paramCounter)
+    {
+        ThrowMissingParamCount(functon.mNumOfParams, paramCounter);
+        return false;
+    }
+    
+    for(Instruction& funcInstruction : functon.mInstructions)
+    {
+        instructions.emplace_back(funcInstruction);
+    }
+    
+    Consume(); // For Right Paren
+    
+    return true;
+}
+
 bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLength)
 {
     Consume(); // For the Left Bracket
@@ -178,7 +240,9 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
                     return false;
                 }
                 
-                CompileRandom(instructions);
+                if(!CompileFunctionCall(instructions, ranFunctionName))
+                    return false;
+                
                 ++valueCounter;
                 expectsValue = false;
                 break;
@@ -203,87 +267,6 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
     }
     
     outLength = (uChar) valueCounter;
-    return true;
-}
-
-bool Compiler::CompileEulclidSequence(std::vector<Instruction>& instructions)
-{
-    Consume(); // for Left brace
-
-    if(Peek().mTokenType != TokenType::NUMBER && Peek().mTokenType != TokenType::IDENTIFIER)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-
-    // expression for hits
-    if(!CompileExpression(instructions))
-        return false;
-
-    if(Consume().mTokenType != TokenType::COMMA)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-
-    // expression for Length
-    if(!CompileExpression(instructions))
-        return false;
-
-    if(Peek().mTokenType != TokenType::RIGHT_BRACE)
-    {
-        std::string missingToken{"}"};
-        ThrowMissingExpectedToken(missingToken);
-        return false;
-    }
-    
-    Consume(); // For Right Brace
-    
-    return true;
-}
-
-bool Compiler::CompileRandom(std::vector<Instruction>& instructions)
-{
-    Consume(); // for Left brace
-
-    if(Peek().mTokenType != TokenType::NUMBER &&
-       Peek().mTokenType != TokenType::IDENTIFIER)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-
-    // expression for hits
-    if(!CompileExpression(instructions))
-        return false;
-
-    if(Consume().mTokenType != TokenType::COMMA)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-    
-    if(Peek().mTokenType != TokenType::NUMBER &&
-       Peek().mTokenType != TokenType::IDENTIFIER)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-
-    // expression for Length
-    if(!CompileExpression(instructions))
-        return false;
-
-    if(Peek().mTokenType != TokenType::RIGHT_BRACE)
-    {
-        std::string missingToken{"}"};
-        ThrowMissingExpectedToken(missingToken);
-        return false;
-    }
-    
-    Consume(); // For Right Brace
-    
-    instructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE});
     return true;
 }
 
@@ -327,6 +310,11 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
            Peek().mTokenType != TokenType::RIGHT_BRACKET &&
            Peek().mTokenType != TokenType::RIGHT_BRACE)
     {
+        // We assume this means we found the end of a function parenteses.
+        if(Peek().mTokenType == TokenType::RIGHT_PAREN &&
+           rightParen == leftParen)
+            break;
+        
         Token& currentToken = Consume();
         TokenType tType = currentToken.mTokenType;
         
@@ -362,7 +350,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         
         else if(tType == TokenType::RANDOM)
         {
-            CompileRandom(instructions);
+            CompileFunctionCall(instructions, ranFunctionName);
             expectsValue = false;
         }
         
@@ -440,19 +428,19 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         return false;
     }
     
-    //if(leftParen > rightParen)
-    //{
-    //    std::string missingToken {")"};
-    //    ThrowMissingExpectedToken(missingToken);
-    //    return false;
-    //}
-    //
-    //if(rightParen > leftParen)
-    //{
-    //    std::string missingToken {"("};
-    //    ThrowMissingExpectedToken(missingToken);
-    //    return false;
-    //}
+    if(leftParen > rightParen)
+    {
+        std::string missingToken {")"};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
+    
+    if(rightParen > leftParen)
+    {
+        std::string missingToken {"("};
+        ThrowMissingExpectedToken(missingToken);
+        return false;
+    }
     
     while (!ops.empty())
     {
@@ -460,79 +448,6 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
         ops.pop();
     }
     
-    return true;
-}
-
-bool Compiler::CompileTrack(std::vector<Instruction>& runtimeInstructions)
-{
-    Consume(); // For the Left Brace
-    
-    if(Peek().mTokenType != TokenType::NUMBER &&
-       Peek().mTokenType != TokenType::IDENTIFIER &&
-       Peek().mTokenType != TokenType::RANDOM)
-    {
-        ThrowUnexpectedTokenError(Peek());
-        return false;
-    }
-        
-    int paramCounter = 0;
-    while (Peek().mTokenType != TokenType::RIGHT_PAREN &&
-           Peek().mTokenType != TokenType::EOL &&
-           Peek().mTokenType != TokenType::END)
-    {
-        Token& currentToken = Peek();
-        switch(currentToken.mTokenType)
-        {
-            case TokenType::COMMA:
-            {
-                Consume();
-                break;
-            }
-
-            case TokenType::NUMBER:
-            case TokenType::IDENTIFIER:
-            case TokenType::LEFT_PAREN:
-            case TokenType::RANDOM:
-            {
-                if(!CompileExpression(runtimeInstructions))
-                    return false;
-                
-                ++paramCounter;
-                break;
-            }
-
-            case TokenType::END:
-            {
-                if(Previous().mTokenType != TokenType::RIGHT_PAREN)
-                {
-                    std::string missingToken{")"};
-                    ThrowMissingExpectedToken(missingToken);
-                    return false;
-                }
-                break;
-            }
-                
-            default:
-            {
-                ThrowUnexpectedTokenError(Peek());
-                return false;
-            }
-        }
-    }
-    
-    if(paramCounter < 4 || paramCounter > 4)
-    {
-        ThrowMissingParamCount(4, paramCounter);
-        return false;
-    }
-    
-    if(Previous().mTokenType != TokenType::RIGHT_PAREN)
-    {
-        std::string missingToken{")"};
-        ThrowMissingExpectedToken(missingToken);
-        return false;
-    }
-        
     return true;
 }
 
@@ -553,60 +468,60 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 if (Peek().mTokenType == TokenType::EQUAL)
                 {
                     Consume(); // consumes the equal sign
-
+                    
                     TokenType tokenType = Peek().mTokenType;
-                    // Data Array
-                    if(tokenType == TokenType::LEFT_BRACKET)
+                    switch (tokenType)
                     {
-                        uChar arrayLength = 0;
-                        if(CompileArray(instructions, arrayLength))
+                            // Data Array
+                        case TokenType::LEFT_BRACKET:
                         {
-                            instructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
-                            instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
+                            uChar arrayLength = 0;
+                            if(CompileArray(instructions, arrayLength))
+                            {
+                                instructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
+                                instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            
+                            break;
                         }
-                        else
+                        case TokenType::NUMBER:
+                        case TokenType::IDENTIFIER:
+                        case TokenType::LEFT_PAREN:
+                        case TokenType::RANDOM:
                         {
-                            return false;
-                        }
-                    }
-                    // Euclid Sequence
-                    else if (tokenType == TokenType::LEFT_BRACE)
-                    {
-                        if(CompileEulclidSequence(instructions))
-                        {
-                            instructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE, name});
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (tokenType == TokenType::RANDOM)
-                    {
-                        Consume();
-                        if(CompileRandom(instructions))
-                        {
+                            if(!CompileExpression(instructions))
+                                return false;
+                            
                             instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
+                            break;
                         }
-                        else
+                        case TokenType::EUCLIDEAN:
                         {
+                            Consume();
+                            if(!CompileFunctionCall(instructions, eucFunctionName))
+                                return false;
+                            
+                            instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});
+                            
+                            break;
+                        }
+                            
+                        default:
+                        {
+                            ThrowUnexpectedTokenError(Peek());
                             return false;
                         }
                     }
-                    else if (tokenType == TokenType::NUMBER ||
-                             tokenType == TokenType::IDENTIFIER ||
-                             tokenType == TokenType::LEFT_PAREN)
-                    {
-                        if(!CompileExpression(instructions))
-                            return false;
-                        
-                        instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_VALUE, name});
-                    }
-                    else
-                    {
-                        ThrowUnexpectedTokenError(Peek());
+                }
+                // For Functions
+                else if (Peek().mTokenType == TokenType::LEFT_PAREN)
+                {
+                    if (!CompileFunctionCall(instructions, name))
                         return false;
-                    }
                 }
                 else
                 {
@@ -618,19 +533,13 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
             }
 
             case TokenType::PRINT:
+            case TokenType::NOTE:
+            case TokenType::CC:
             {
-                if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
-                {
-                    if(CompileExpression(instructions))
-                        instructions.emplace_back(Instruction{OpCode::PRINT});
-                    else
-                        return false;
-                }
-                else
-                {
-                    ThrowUnexpectedTokenError(Peek());
+                std::string functionName = std::string(token.mStart, token.mLength);
+                if (!CompileFunctionCall(instructions, functionName))
                     return false;
-                }
+                
                 break;
             }
                 
@@ -648,48 +557,6 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 break;
             }
                 
-            case TokenType::NOTE:
-            {
-                if(Peek().mTokenType == TokenType::LEFT_PAREN)
-                {
-                    if(CompileTrack(instructions))
-                    {
-                        instructions.emplace_back(Instruction{OpCode::NOTE});
-                    }
-                    else
-                    {
-                        ThrowUnexpectedTokenError(Peek());
-                        return false;
-                    }
-                }
-                else
-                {
-                    ThrowUnexpectedTokenError(Peek());
-                }
-                break;
-            }
-                
-            case TokenType::CC:
-            {
-                if(Peek().mTokenType == TokenType::LEFT_PAREN)
-                {
-                    if(CompileTrack(instructions))
-                    {
-                        instructions.emplace_back(Instruction{OpCode::CC});
-                    }
-                    else
-                    {
-                        ThrowUnexpectedTokenError(Peek());
-                        return false;
-                    }
-                }
-                else
-                {
-                    ThrowUnexpectedTokenError(Peek());
-                }
-                break;
-            }
-
             case TokenType::END:
                 instructions.emplace_back(Instruction{OpCode::END});
                 return true;

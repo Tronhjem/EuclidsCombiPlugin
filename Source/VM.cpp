@@ -87,10 +87,13 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 const int hits = (int) mStack.Pop();
                 uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
-
-                std::vector<uChar> vectorData {data, data + length};
-                mVariables[instruction.mNameValue] = DataSequence{vectorData};
                 
+                for (int i = 0; i < length; ++i)
+                {
+                    mStack.Push(data[i]);
+                }
+                
+                mStack.Push((uChar)length);
                 break;
             }
 
@@ -213,7 +216,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
                 break;
             }
-
+                
             case (OpCode::AND):
             {
                 uChar a = (uChar) (mStack.Pop() > 0);
@@ -317,9 +320,12 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                 uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
                 
-                std::vector<uChar> vectorData {data, data + length};
-                mVariables[instruction.mNameValue] = DataSequence{vectorData};
+                for (int i = 0; i < length; ++i)
+                {
+                    mStack.Push(data[i]);
+                }
                 
+                mStack.Push((uChar)length);
                 break;
             }
                 
