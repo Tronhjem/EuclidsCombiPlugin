@@ -18,7 +18,23 @@ public:
         // populate built in functions
         std::vector<Instruction> printInstructions;
         printInstructions.emplace_back(Instruction{ OpCode::PRINT });
-        mFunctions["print"] = StoredFunction("print", 1, printInstructions);
+        mFunctions["print"] = StoredFunction(1, printInstructions);
+        
+        std::vector<Instruction> noteInstructions;
+        noteInstructions.emplace_back(Instruction{ OpCode::NOTE });
+        mFunctions["note"] = StoredFunction(4, noteInstructions);
+        
+        std::vector<Instruction> ccInstructions;
+        ccInstructions.emplace_back(Instruction{ OpCode::CC});
+        mFunctions["cc"] = StoredFunction(4, ccInstructions);
+        
+        std::vector<Instruction> ranInstructions;
+        ranInstructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE});
+        mFunctions[ranFunctionName] = StoredFunction(2, ranInstructions);
+        
+        std::vector<Instruction> eucInstructions;
+        eucInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE});
+        mFunctions[eucFunctionName] = StoredFunction(2, eucInstructions);
     }
     
     bool Compile(std::vector<Instruction>& runtimeInstructions);
@@ -39,17 +55,15 @@ private:
     inline void MakeConstant(Token& token, std::vector<Instruction>& instructions);
     inline void MakeOperation(TokenType tokenType, std::vector<Instruction>& instructions);
 
-    bool MakeFunctionCall(std::vector<Instruction>& instructions, int expectedParamCount);
-
     bool CompileExpression(std::vector<Instruction>& instructions);
     bool CompileArray(std::vector<Instruction>& instructions, uChar& outLength);
-    bool CompileEulclidSequence(std::vector<Instruction>& instructions);
-    bool CompileTrack(std::vector<Instruction>& instructions);
-    bool CompileRandom(std::vector<Instruction>& instructions);
+    bool CompileFunctionCall(std::vector<Instruction>& instructions, std::string& functionName);
 
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;
     ErrorReporting& mErrorReporting;
     std::unordered_map<std::string, StoredFunction> mFunctions;
+    std::string ranFunctionName = "ran";
+    std::string eucFunctionName = "euc";
 //    std::vector<Instruction> mSetupInstructions;
 };

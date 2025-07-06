@@ -13,7 +13,7 @@ public:
         {
             beginTest ("Test Euclid sequence wrong defined");
             
-            std::string file {"a = {2,4 \n test a"};
+            std::string file {"a = euc() \n test a"};
             VM vm;
             bool result = vm.Prepare(&file[0]);
             
@@ -22,7 +22,7 @@ public:
         {
             beginTest ("Test Euclid sequence wrong defined ");
             
-            std::string file {"a = {2} \n test a"};
+            std::string file {"a = euc(2) \n test a"};
             VM vm;
             bool result = vm.Prepare(&file[0]);
             
@@ -31,7 +31,7 @@ public:
         {
             beginTest ("Test Euclid sequence");
             
-            std::string file {"a = {2,4} \n test a"};
+            std::string file {"a = euc(2,4) \n test a"};
             VM vm;
             vm.Prepare(&file[0]);
             
@@ -41,7 +41,7 @@ public:
         {
             beginTest ("Test Euclid sequence");
             
-            std::string file {"a = {2,4} \n test a[1]"};
+            std::string file {"a = euc(2,4) \n test a[1]"};
             VM vm;
             vm.Prepare(&file[0]);
             
@@ -51,7 +51,7 @@ public:
         {
             beginTest ("Test Euclid sequence");
             
-            std::string file {"a = {2,4} \n test a[2]"};
+            std::string file {"a = euc(2,4) \n test a[2]"};
             VM vm;
             vm.Prepare(&file[0]);
             
@@ -61,7 +61,7 @@ public:
         {
             beginTest ("Test Euclid sequence");
             
-            std::string file {"a = {2,4} \n test a[3]"};
+            std::string file {"a = euc(2,4) \n test a[3]"};
             VM vm;
             vm.Prepare(&file[0]);
             
