@@ -55,16 +55,16 @@ bool Compiler::MakeIdentifierGetter(Token& token, std::vector<Instruction>& inst
 void Compiler::MakeConstant(Token& token, std::vector<Instruction>& instructions)
 {
     int value = std::stoi(std::string(token.mStart, token.mLength));
-    if (value > 255)
+    if (value > 127)
     {
-        value = 255;
-        std::string message = std::string("Compiler: value can only be between 0 and 255, correcting to 255");
+        value = 127;
+        std::string message = std::string("Value can't be greater than 127, correcting to 127");
         mErrorReporting.LogWarning(message);
     }
     if (value < 0)
     {
         value = 0;
-        std::string message = std::string("Compiler: value can only be between 0 and 255, correcting to 0");
+        std::string message = std::string("Value can't be smaller than 0, correcting to 0");
         mErrorReporting.LogWarning(message);
     }
     

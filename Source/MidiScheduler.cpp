@@ -1,4 +1,5 @@
 #include "MidiScheduler.h"
+#include <algorithm>
 
 MidiScheduler::MidiScheduler()
 {
@@ -11,8 +12,12 @@ void MidiScheduler::PostMidiNote(const uChar channel,
                                  const int timeStamp)
 {
     const int timeStampOff = timeStamp + durationInSamples;
-    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOn(channel, noteNumber, velocity), timeStamp});
-    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOff(channel, noteNumber), timeStampOff});
+    const int clampedChannel = std::clamp(static_cast<int>(channel), 0, 16);
+    const int clampedNote = std::clamp(static_cast<int>(noteNumber), 0, 16);
+    const unsigned char clampedVelocity = static_cast<unsigned char>(std::clamp(static_cast<int>(velocity), 0, 16));
+
+    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOn(clampedChannel, clampedNote, clampedVelocity), timeStamp});
+    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::noteOff(clampedChannel, clampedNote), timeStampOff});
 }
 
 void MidiScheduler::PostMidiCC(const uChar channel,
@@ -20,7 +25,11 @@ void MidiScheduler::PostMidiCC(const uChar channel,
                                const uChar value,
                                const int timeStamp)
 {
-    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::controllerEvent(channel, cc, value), timeStamp});
+    const int clampedChannel = std::clamp(static_cast<int>(channel), 0, 16);
+    const int clampedCC = std::clamp(static_cast<int>(cc), 0, 16);
+    const unsigned char clampedValue = static_cast<unsigned char>(std::clamp(static_cast<int>(value), 0, 16));
+
+    mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::controllerEvent(clampedChannel, clampedCC, clampedValue), timeStamp});
 }
 
 void MidiScheduler::PostStepData(const StepData& data, const int nextTickTime)

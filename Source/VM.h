@@ -80,7 +80,7 @@ class VM
 public:
     VM();
     bool Prepare(char* data);
-    void Tick(std::vector<StepData>& stepQueue, const int globalCount);
+    bool Tick(std::vector<StepData>& stepQueue, const int globalCount);
     void Reset();
     uChar GetTopStackValue() { return mStack.Top(); }
     std::vector<LogEntry>& GetErrors();
