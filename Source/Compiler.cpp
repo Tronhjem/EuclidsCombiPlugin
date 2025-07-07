@@ -68,7 +68,7 @@ void Compiler::MakeConstant(Token& token, std::vector<Instruction>& instructions
         mErrorReporting.LogWarning(message);
     }
     
-    instructions.emplace_back(Instruction{OpCode::CONSTANT, (uChar)value});
+    instructions.emplace_back(Instruction{OpCode::CONSTANT, static_cast<uChar>(value)});
 }
 
 void Compiler::MakeOperation(TokenType tokenType, std::vector<Instruction> &instructions)
@@ -266,7 +266,7 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
         return false;
     }
     
-    outLength = (uChar) valueCounter;
+    outLength = static_cast<uChar>(valueCounter);
     return true;
 }
 

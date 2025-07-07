@@ -47,6 +47,6 @@ public:
     explicit Instruction(OpCode code, std::string name) : opCode(code), mNameValue(name) {}
 
     OpCode opCode;
-    uChar mDataValue = 0.0;
+    uChar mDataValue = 0;
     std::string mNameValue;
 };

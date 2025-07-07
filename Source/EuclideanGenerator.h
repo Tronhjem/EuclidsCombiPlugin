@@ -23,12 +23,12 @@ void GenerateEuclideanSequence(uChar* sequence, const int hits, const int length
     {
         if (count >= length)
         {
-            sequence[i] = (uChar) 1;
+            sequence[i] = static_cast<uChar>(1);
             count = count - length;
         }
         else
         {
-            sequence[i] = (uChar) 0;
+            sequence[i] = static_cast<uChar>(0);
         }
         count += hits;
     }

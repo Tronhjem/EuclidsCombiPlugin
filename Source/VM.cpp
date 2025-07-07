@@ -15,10 +15,16 @@ bool VM::Prepare(char* data)
     Compiler compiler {scanner.GetTokens(), *mErrorReporting};
     
     bool success = true;
-    if (success &= scanner.ScanFile(data))
-        if(success &= compiler.Compile(mRuntimeInstructions))
-            success &= ProcessOpCodes(mRuntimeInstructions);
-        
+    success = scanner.ScanFile(data);
+    if (success)
+    {
+		success = compiler.Compile(mRuntimeInstructions);
+		if(success)
+		{
+			success = ProcessOpCodes(mRuntimeInstructions);
+        }
+    }
+
     mStack.Clear();
     return success;
 }
@@ -68,7 +74,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
-                const int arrayLength = (int) mStack.Pop();
+                const int arrayLength = static_cast<int>(mStack.Pop());
                 uChar data[20];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
@@ -83,8 +89,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::GENERATE_EUCLID_SEQUENCE):
             {
-                const int length = (int) mStack.Pop();
-                const int hits = (int) mStack.Pop();
+                const int length = static_cast<int>(mStack.Pop());
+                const int hits = static_cast<int>(mStack.Pop());
                 uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
                 
@@ -93,7 +99,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                     mStack.Push(data[i]);
                 }
                 
-                mStack.Push((uChar)length);
+                mStack.Push(static_cast<uChar>(length));
                 break;
             }
 
@@ -116,7 +122,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::GET_IDENTIFIER_WITH_INDEX):
             {
-                int index = (int) mStack.Pop();
+                const int index = static_cast<int>(mStack.Pop());
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
                     uChar value = mVariables[instruction.mNameValue].GetValue(index);
@@ -211,16 +217,16 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case(OpCode::PRINT):
             {
-                uChar value = mStack.Pop();
-                std::cout << "PRINT: " << (int)value << std::endl;
+                const uChar value = mStack.Pop();
+                std::cout << "PRINT: " << static_cast<int>(value) << std::endl;
 
                 break;
             }
                 
             case (OpCode::AND):
             {
-                uChar a = (uChar) (mStack.Pop() > 0);
-                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar a = static_cast<uChar>(mStack.Pop() > 0);
+                uChar b = static_cast<uChar>(mStack.Pop() > 0);
                 uChar result = a & b;
                 mStack.Push(result);
 
@@ -229,8 +235,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::OR):
             {
-                uChar a = (uChar) (mStack.Pop() > 0);
-                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar a = static_cast<uChar>(mStack.Pop() > 0);
+                uChar b = static_cast<uChar>(mStack.Pop() > 0);
                 uChar result = a | b;
                 mStack.Push(result);
 
@@ -239,8 +245,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
 
             case (OpCode::XOR):
             {
-                uChar a = (uChar) (mStack.Pop() > 0);
-                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar a = static_cast<uChar>(mStack.Pop() > 0);
+                uChar b = static_cast<uChar>(mStack.Pop() > 0);
                 uChar result = a ^ b;
                 mStack.Push(result);
 
@@ -249,8 +255,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                 
             case(OpCode::GET_RANDOM_IN_RANGE):
             {
-                uChar high = mStack.Pop();
-                uChar low = mStack.Pop();
+                uChar high = static_cast<uChar>(mStack.Pop());
+                uChar low = static_cast<uChar>(mStack.Pop());
                 mStack.Push(RandomValue(low, high));
                 break;
             }
@@ -315,8 +321,8 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                 
             case (OpCode::GENERATE_EUCLID_SEQUENCE):
             {
-                const int length = (int) mStack.Pop();
-                const int hits = (int) mStack.Pop();
+                const int length = static_cast<int>(mStack.Pop());
+                const int hits = static_cast<int>(mStack.Pop());
                 uChar data[20];
                 GenerateEuclideanSequence(&data[0], hits, length);
                 
@@ -325,7 +331,7 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                     mStack.Push(data[i]);
                 }
                 
-                mStack.Push((uChar)length);
+                mStack.Push(static_cast<uChar>(length));
                 break;
             }
                 
@@ -348,7 +354,7 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                 
             case (OpCode::GET_IDENTIFIER_WITH_INDEX):
             {
-                int index = (int) mStack.Pop();
+                int index = static_cast<int>(mStack.Pop());
                 if (mVariables.find(instruction.mNameValue) != mVariables.end())
                 {
                     uChar value = mVariables[instruction.mNameValue].GetValue(index);
@@ -366,8 +372,8 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                 
             case (OpCode::AND):
             {
-                uChar a = (uChar) (mStack.Pop() > 0);
-                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar a = static_cast<uChar>(mStack.Pop() > 0);
+                uChar b = static_cast<uChar>(mStack.Pop() > 0);
                 uChar result = a & b;
                 mStack.Push(result);
                 
@@ -376,8 +382,8 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                 
             case (OpCode::OR):
             {
-                uChar a = (uChar) (mStack.Pop() > 0);
-                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar a = static_cast<uChar>(mStack.Pop() > 0);
+                uChar b = static_cast<uChar>(mStack.Pop() > 0);
                 uChar result = a | b;
                 mStack.Push(result);
                 
@@ -386,8 +392,8 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
                 
             case (OpCode::XOR):
             {
-                uChar a = (uChar) (mStack.Pop() > 0);
-                uChar b = (uChar) (mStack.Pop() > 0);
+                uChar a = static_cast<uChar>(mStack.Pop() > 0);
+                uChar b = static_cast<uChar>(mStack.Pop() > 0);
                 uChar result = a ^ b;
                 mStack.Push(result);
                 
@@ -397,41 +403,30 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
             case(OpCode::ADD):
             {
                 mStack.Push(mStack.Pop() + mStack.Pop());
-                
                 break;
             }
 
             case(OpCode::SUBTRACT):
             {
-                uChar b = mStack.Pop();
-                uChar a = mStack.Pop();
-                mStack.Push(a - b);
-                
+                mStack.Push(mStack.Pop() - mStack.Pop());
                 break;
             }
 
             case(OpCode::MULTIPLY):
             {
                 mStack.Push(mStack.Pop() * mStack.Pop());
-                
                 break;
             }
 
             case(OpCode::DIVIDE):
             {
-                uChar b = mStack.Pop();
-                uChar a = mStack.Pop();
-                mStack.Push(a / b);
-                
+                mStack.Push(mStack.Pop() / mStack.Pop());
                 break;
             }
                 
             case(OpCode::LESS):
             {
-                uChar b = mStack.Pop();
-                uChar a = mStack.Pop();
-                mStack.Push(a < b);
-
+				mStack.Push(mStack.Pop() < mStack.Pop());
                 break;
             }
                 
@@ -515,7 +510,7 @@ void VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
 uChar VM::RandomValue(uChar low, uChar high)
 {
     assert(high > low);
-    uChar calculatedHighValue = high + 1 - low;
-    int value = rand() % calculatedHighValue;
-    return (uChar) value + low;
+    const uChar calculatedHighValue = high + 1 - low;
+    const int value = rand() % calculatedHighValue;
+    return static_cast<uChar>(value + low);
 }

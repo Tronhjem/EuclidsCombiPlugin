@@ -48,7 +48,7 @@ inline float smootherstep(float edge0, float edge1, float x)
 
 unsigned int WriteArrayToBytes(unsigned int* start, unsigned int length)
 {
-    unsigned int array = 0;
+    int array = 0;
     for (int i = 0; i < length; i++)
     {
         array |= start[i] << i;

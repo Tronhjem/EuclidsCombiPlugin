@@ -38,7 +38,6 @@ public:
     }
     
     bool Compile(std::vector<Instruction>& runtimeInstructions);
-//    std::vector<Instruction>& GetSetupInstructions() { return mSetupInstructions; }
 
 private:
     Token& Consume();
@@ -65,5 +64,4 @@ private:
     std::unordered_map<std::string, StoredFunction> mFunctions;
     std::string ranFunctionName = "ran";
     std::string eucFunctionName = "euc";
-//    std::vector<Instruction> mSetupInstructions;
 };
