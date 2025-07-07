@@ -101,7 +101,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
                     mStack.Push(data[i]);
                 }
                 
-                int clampedLength = std::clamp(length, 0, MAX_UCHAR_VALUE);
+                const int clampedLength = std::clamp(length, 0, MAX_UCHAR_VALUE);
                 mStack.Push(static_cast<uChar>(clampedLength));
                 break;
             }
@@ -176,9 +176,12 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& setupInstructions)
             {
                 uChar b = mStack.Pop();
                 uChar a = mStack.Pop();
-                if (b == 0) {
+                if (b == 0)
+                {
                     mStack.Push(0); // Division by zero returns 0
-                } else {
+                }
+                else
+                {
                     int result = static_cast<int>(a) / static_cast<int>(b);
                     mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE)));
                 }
