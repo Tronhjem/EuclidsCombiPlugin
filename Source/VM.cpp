@@ -16,7 +16,7 @@ bool VM::Prepare(char* data)
     Scanner scanner {*mErrorReporting};
     Compiler compiler {scanner.GetTokens(), *mErrorReporting};
     
-    bool success = true;
+    bool success = false;
     success = scanner.ScanFile(data);
     if (success)
     {
