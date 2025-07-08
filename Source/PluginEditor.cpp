@@ -101,6 +101,7 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     codeEditor.setLookAndFeel(mTextEditorLookAndFeel.get());
     errorBox.setLookAndFeel(mTextEditorLookAndFeel.get());
     mNoteDivisonBox.setLookAndFeel(mGeneralLookAndFeel.get());
+    mBpmBox.setLookAndFeel(mGeneralLookAndFeel.get());
 
     codeEditor.setReturnKeyStartsNewLine(true);
     codeEditor.setMultiLine(true);

@@ -80,6 +80,19 @@ public:
         g.setColour(fillColour.darker(0.3f));
         g.drawRoundedRectangle(bounds, 6.0f, 2.f);
     }
+
+	void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height,
+		float sliderPos, float minSliderPos, float maxSliderPos,
+		const juce::Slider::SliderStyle style, juce::Slider& slider) override
+	{
+		// Draw the track background
+		g.setColour(ORchestraColours::ButtonBackground);
+		g.fillRect(x, y, width, height);
+
+		// (Optional) Draw the original slider on top, or customize further
+		juce::LookAndFeel_V4::drawLinearSlider(g, x, y, width, height,
+			sliderPos, minSliderPos, maxSliderPos, style, slider);
+	}
     
     juce::Font getTextButtonFont (juce::TextButton&, int buttonHeight) override
     {
