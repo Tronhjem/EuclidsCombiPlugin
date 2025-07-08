@@ -30,7 +30,6 @@ public:
     
 private:
     void PreProcessSteps();
-    double mBpmDivide;
     int64_t samplesSinceLastStep = 0;
     std::atomic<int> mReadySteps;
     std::atomic<int> mCurrentGlobalStep;

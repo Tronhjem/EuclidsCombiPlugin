@@ -31,7 +31,7 @@ public:
     {
         return mFont;
     }
-    
+
 private:
     const Font mFont {MONOSPACE_FONT_OPTIONS};
 };

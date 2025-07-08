@@ -25,7 +25,7 @@ void Timeline::timerCallback()
     const TransportData& transportData = mAudioProcessor->GetTransportData();
     const int64_t timeInSamples = transportData.timeInSamples;
     
-    const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * 2.0));
+    const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * transportData.bpmDivision));
     const int currentStep = static_cast<int>(ceil(static_cast<double>(timeInSamples) / samplesPerStep));
     
 //  const double pixelPerSample = dotSize / samplesPerStep;

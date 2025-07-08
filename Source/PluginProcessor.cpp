@@ -27,6 +27,7 @@ ORchestraAudioProcessor::ORchestraAudioProcessor()
     mTransportData.timeInSamples = 0;
     mTransportData.bpm = 60.0;
     mTransportData.sampleRate = 44100;
+    mNoteDivision = NoteDivision::n4;
 }
 
 ORchestraAudioProcessor::~ORchestraAudioProcessor()
@@ -172,6 +173,7 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     
 //    FillPositionData(mTransportData);
     
+    mTransportData.bpmDivision = GetBpmDivision(mNoteDivision);
     mORchestraEngine->Tick(mTransportData, bufferLength, midiMessages);
     
     if (IsRunning)
@@ -269,4 +271,27 @@ void ORchestraAudioProcessor::setStateInformation (const void* data, int sizeInB
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new ORchestraAudioProcessor();
+}
+
+float ORchestraAudioProcessor::GetBpmDivision(NoteDivision noteDiv)
+{
+	switch (noteDiv)
+	{
+	case NoteDivision::n1:
+        return 0.25f;
+	case NoteDivision::n2:
+        return 0.5f;
+	case NoteDivision::n4:
+        return 1.f;
+	case NoteDivision::n8:
+        return 2.f;
+	case NoteDivision::n16:
+        return 4.f;
+	case NoteDivision::n32:
+        return 8.f;
+	case NoteDivision::n64:
+        return 16.f;
+	default:
+        return 0.f;
+	}
 }

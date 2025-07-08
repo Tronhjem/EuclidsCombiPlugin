@@ -54,6 +54,9 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     
     buttonXStart += buttonWidth + COMPONENT_MARGIN;
     loadFile.setBounds(buttonXStart, nextLineY, buttonWidth, buttonHeight);
+
+    buttonXStart += buttonWidth + COMPONENT_MARGIN;
+    mNoteDivisonBox.setBounds(buttonXStart, nextLineY, buttonWidth * 1.5f, buttonHeight);
     
     nextLineY += buttonHeight + COMPONENT_MARGIN;
     codeEditor.setBounds(OUTER_MARGIN, nextLineY, codeEditorWidth, codeEditorHeight);
@@ -69,6 +72,7 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     codeEditor.addListener(this);
     togglePlay.addListener(this);
     loadFile.addListener(this);
+    mNoteDivisonBox.addListener(this);
     
     juce::LookAndFeel::setDefaultLookAndFeel(mGeneralLookAndFeel.get());
     togglePlay.setLookAndFeel(mButtonLookAndFeel.get());
@@ -76,7 +80,11 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     loadFile.setLookAndFeel(mButtonLookAndFeel.get());
     codeEditor.setLookAndFeel(mTextEditorLookAndFeel.get());
     errorBox.setLookAndFeel(mTextEditorLookAndFeel.get());
+    mNoteDivisonBox.setLookAndFeel(mGeneralLookAndFeel.get());
     
+    mNoteDivisonBox.addItemList(mNoteDivisonStrings, 3);
+    mNoteDivisonBox.setSelectedItemIndex(3);
+
     codeEditor.setReturnKeyStartsNewLine(true);
     codeEditor.setMultiLine(true);
     codeEditor.setScrollbarsShown(true);
@@ -93,10 +101,11 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     
     addAndMakeVisible(togglePlay);
     addAndMakeVisible(saveFile);
-    addAndMakeVisible(timeline);
     addAndMakeVisible(loadFile);
+    addAndMakeVisible(mNoteDivisonBox);
     addAndMakeVisible(codeEditor);
     addAndMakeVisible(errorBox);
+    addAndMakeVisible(timeline);
     
     char* data = audioProcessor.GetFileText();
     if(data != nullptr)
@@ -172,6 +181,11 @@ void ORchestraAudioProcessorEditor::buttonClicked(juce::Button* button)
                 errorBox.setText("");
         });
     }
+}
+void ORchestraAudioProcessorEditor::comboBoxChanged(ComboBox* comboBoxThatHasChanged)
+{
+    int val = comboBoxThatHasChanged->getSelectedItemIndex();
+    audioProcessor.SetNoteDivision(static_cast<NoteDivision>(val));
 }
 
 //==============================================================================

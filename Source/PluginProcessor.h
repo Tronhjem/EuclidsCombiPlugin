@@ -15,6 +15,16 @@
 #include "StepData.h"
 #include "ErrorReporting.h"
 
+enum class NoteDivision
+{
+    n1,
+    n2,
+    n4,
+    n8,
+    n16,
+    n32,
+    n64
+};
 
 class ORchestraAudioProcessor  : public juce::AudioProcessor, public juce::ChangeBroadcaster
                             #if JucePlugin_Enable_ARA
@@ -59,12 +69,17 @@ public:
     int GetGlobalStepCount() { return mORchestraEngine->GetGlobalStepCount(); }
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
+    void SetNoteDivision(NoteDivision division) { mNoteDivision = division; }
     bool IsRunning = false;
     
 private:
     void FillPositionData(TransportData& data);
     TransportData mTransportData;
     std::unique_ptr<ORchestraEngine> mORchestraEngine;
+    inline float GetBpmDivision(NoteDivision noteDiv);
+
+    float mBpm = 120;
+    NoteDivision mNoteDivision;
     
     juce::String mSavedFilePath {""};
 

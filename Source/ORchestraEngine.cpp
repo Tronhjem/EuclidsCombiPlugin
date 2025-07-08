@@ -4,7 +4,6 @@
 #include "ScopedTimer.h"
 
 ORchestraEngine::ORchestraEngine() :
-    mBpmDivide(2.0),
     mIsVMInit(false)
 {
     mCurrentGlobalStep.store(0, std::memory_order_release);
@@ -111,7 +110,7 @@ void ORchestraEngine::Tick(const TransportData& transportData,
 {
     if (transportData.isPlaying)
     {
-        const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * mBpmDivide));
+        const double samplesPerStep = static_cast<double>(transportData.sampleRate) * (60.0 / (transportData.bpm * transportData.bpmDivision));
         const int currentStep = static_cast<int>(ceil(static_cast<double>(transportData.timeInSamples) / samplesPerStep));
         
         // Check if we skipped count, to regenerate everything.
