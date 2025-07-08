@@ -70,6 +70,7 @@ public:
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
     void SetNoteDivision(NoteDivision division) { mNoteDivision = division; }
+    void SetBpm(double bpm) { mBpm = bpm; }
     bool IsRunning = false;
     
 private:
@@ -78,7 +79,7 @@ private:
     std::unique_ptr<ORchestraEngine> mORchestraEngine;
     inline float GetBpmDivision(NoteDivision noteDiv);
 
-    float mBpm = 120;
+    double mBpm = 120;
     NoteDivision mNoteDivision;
     
     juce::String mSavedFilePath {""};

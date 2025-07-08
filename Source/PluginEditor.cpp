@@ -57,6 +57,9 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
 
     buttonXStart += buttonWidth + COMPONENT_MARGIN;
     mNoteDivisonBox.setBounds(buttonXStart, nextLineY, buttonWidth * 1.5f, buttonHeight);
+
+    buttonXStart += buttonWidth + COMPONENT_MARGIN;
+    mBpmBox.setBounds(buttonXStart, nextLineY, buttonWidth * 1.5f, buttonHeight);
     
     nextLineY += buttonHeight + COMPONENT_MARGIN;
     codeEditor.setBounds(OUTER_MARGIN, nextLineY, codeEditorWidth, codeEditorHeight);
@@ -68,11 +71,18 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     nextLineY += codeEditorHeight + COMPONENT_MARGIN;
     timeline.setBounds(OUTER_MARGIN, nextLineY, 760, 260);
     
+	mBpmBox.setSliderStyle(Slider::SliderStyle::LinearBarVertical);
+	mBpmBox.setSliderSnapsToMousePosition(false);
+	mBpmBox.setColour(Slider::trackColourId, ORchestraColours::ButtonBackground);
+    mBpmBox.setRange(20.0, 300.0, 1.0);
+    mBpmBox.setValue(120.0);
+
     saveFile.addListener(this);
     codeEditor.addListener(this);
     togglePlay.addListener(this);
     loadFile.addListener(this);
     mNoteDivisonBox.addListener(this);
+    mBpmBox.addListener(this);
     
     juce::LookAndFeel::setDefaultLookAndFeel(mGeneralLookAndFeel.get());
     togglePlay.setLookAndFeel(mButtonLookAndFeel.get());
@@ -106,6 +116,7 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     addAndMakeVisible(codeEditor);
     addAndMakeVisible(errorBox);
     addAndMakeVisible(timeline);
+    addAndMakeVisible(mBpmBox);
     
     char* data = audioProcessor.GetFileText();
     if(data != nullptr)
@@ -186,6 +197,11 @@ void ORchestraAudioProcessorEditor::comboBoxChanged(ComboBox* comboBoxThatHasCha
 {
     int val = comboBoxThatHasChanged->getSelectedItemIndex();
     audioProcessor.SetNoteDivision(static_cast<NoteDivision>(val));
+}
+
+void ORchestraAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    audioProcessor.SetBpm(slider->getValue());
 }
 
 //==============================================================================

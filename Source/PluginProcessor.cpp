@@ -25,8 +25,8 @@ ORchestraAudioProcessor::ORchestraAudioProcessor()
     mORchestraEngine = std::make_unique<ORchestraEngine>();
     
     mTransportData.timeInSamples = 0;
-    mTransportData.bpm = 60.0;
     mTransportData.sampleRate = 44100;
+    mBpm = 60.0;
     mNoteDivision = NoteDivision::n4;
 }
 
@@ -174,6 +174,7 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
 //    FillPositionData(mTransportData);
     
     mTransportData.bpmDivision = GetBpmDivision(mNoteDivision);
+    mTransportData.bpm = mBpm;
     mORchestraEngine->Tick(mTransportData, bufferLength, midiMessages);
     
     if (IsRunning)

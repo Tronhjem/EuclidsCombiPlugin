@@ -24,7 +24,8 @@ class ORchestraAudioProcessorEditor  :  public juce::AudioProcessorEditor,
                                         public juce::TextEditor::Listener,
                                         public juce::Button::Listener,
                                         public juce::ComboBox::Listener,
-                                        public juce::ChangeListener
+                                        public juce::ChangeListener,
+										public juce::Slider::Listener
 {
 public:
     ORchestraAudioProcessorEditor (ORchestraAudioProcessor&);
@@ -37,6 +38,7 @@ public:
     void extracted();
     void buttonClicked(juce::Button* button) override;
 	void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void sliderValueChanged(juce::Slider* slider) override;
     
 private:
     ORchestraAudioProcessor& audioProcessor;
@@ -58,6 +60,7 @@ private:
     juce::TextButton saveFile {"Save"};
     juce::ComboBox mNoteDivisonBox;
     juce::StringArray mNoteDivisonStrings{ "1n", "2n","4n", "8n", "16n", "32n", "64n"};
+    juce::Slider mBpmBox;
     
     Timeline timeline;
     juce::TextEditor codeEditor;
