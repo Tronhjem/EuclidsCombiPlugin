@@ -32,14 +32,14 @@ void MidiScheduler::PostMidiCC(const uChar channel,
     mScheduledMidiMessages.emplace_back(ScheduledMidi{juce::MidiMessage::controllerEvent(clampedChannel, clampedCC, clampedValue), timeStamp});
 }
 
-void MidiScheduler::PostStepData(const StepData& data, const int nextTickTime)
+void MidiScheduler::PostStepData(const StepData& data, const int nextTickTime, const int currentNoteLength)
 {
     if (data.mShouldTrigger < 1)
         return;
     
     if(data.mType == StepType::NOTE)
     {
-        PostMidiNote(data.mChannel, data.mFirstData, data.mSecondData, data.mDuration, nextTickTime);
+        PostMidiNote(data.mChannel, data.mFirstData, data.mSecondData, currentNoteLength, nextTickTime);
     }
     else if(data.mType == StepType::CC)
     {

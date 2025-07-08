@@ -27,7 +27,8 @@ ORchestraAudioProcessor::ORchestraAudioProcessor()
     mTransportData.timeInSamples = 0;
     mTransportData.sampleRate = 44100;
     mBpm = 60.0;
-    mNoteDivision = NoteDivision::n4;
+    mTempoDivision = NoteDivision::n4;
+    mNoteLength = NoteDivision::n4;
 }
 
 ORchestraAudioProcessor::~ORchestraAudioProcessor()
@@ -173,8 +174,9 @@ void ORchestraAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     
 //    FillPositionData(mTransportData);
     
-    mTransportData.bpmDivision = GetBpmDivision(mNoteDivision);
+    mTransportData.bpmDivision = GetBpmDivision(mTempoDivision);
     mTransportData.bpm = mBpm;
+    mTransportData.noteLengthInSamples = GetNoteLength(mNoteLength);
     mORchestraEngine->Tick(mTransportData, bufferLength, midiMessages);
     
     if (IsRunning)
@@ -295,4 +297,9 @@ float ORchestraAudioProcessor::GetBpmDivision(NoteDivision noteDiv)
 	default:
         return 0.f;
 	}
+}
+
+int ORchestraAudioProcessor::GetNoteLength(NoteDivision noteDiv)
+{
+    return static_cast<int>(mSampleRate * (60.0 / (mBpm * GetBpmDivision(noteDiv))));
 }

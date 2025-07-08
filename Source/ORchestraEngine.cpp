@@ -137,7 +137,7 @@ void ORchestraEngine::Tick(const TransportData& transportData,
             
             for(const StepData& step : currentData)
             {
-                mMidiScheduler.PostStepData(step, nextStepInSamples);
+                mMidiScheduler.PostStepData(step, nextStepInSamples, transportData.noteLengthInSamples);
             }
             
             mReadySteps.fetch_sub(1, std::memory_order_acq_rel);

@@ -25,7 +25,7 @@ public:
     
     void PostMidiNote(const uChar channel, const uChar noteNumber, const uChar velocity, const int durationInSamples, const int timeStamp);
     void PostMidiCC(const uChar channel, const uChar cc, const uChar value, const int timeStamp);
-    void PostStepData(const StepData& data, const int nextTickTime);
+    void PostStepData(const StepData& data, const int nextTickTime, const int currentNoteLength);
     void ProcessMidiPosts(juce::MidiBuffer& midiMessages, int bufferLength, int64_t endOfBufferPosition);
     void ClearAllData(juce::MidiBuffer& midiMessages);
     

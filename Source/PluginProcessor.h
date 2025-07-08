@@ -69,7 +69,8 @@ public:
     int GetGlobalStepCount() { return mORchestraEngine->GetGlobalStepCount(); }
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
-    void SetNoteDivision(NoteDivision division) { mNoteDivision = division; }
+    void SetTempoDivision(NoteDivision division) { mTempoDivision = division; }
+    void SetNoteLength(NoteDivision division) { mNoteLength = division; }
     void SetBpm(double bpm) { mBpm = bpm; }
     bool IsRunning = false;
     
@@ -78,9 +79,11 @@ private:
     TransportData mTransportData;
     std::unique_ptr<ORchestraEngine> mORchestraEngine;
     inline float GetBpmDivision(NoteDivision noteDiv);
+    inline int GetNoteLength(NoteDivision noteDiv);
 
     double mBpm = 120;
-    NoteDivision mNoteDivision;
+    NoteDivision mTempoDivision;
+    NoteDivision mNoteLength;
     
     juce::String mSavedFilePath {""};
 

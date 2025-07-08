@@ -56,11 +56,17 @@ private:
     
     juce::FileChooser chooser {"Select a file to load...", juce::File{}, "*.txt"};
     int folderChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+    
+    juce::Label mTempoDivLabel{"tempo", "Tempo Division"};
+    juce::Label mBpmLabel {"bpm","BPM"};
+    juce::Label mNoteLengthLabel {"noteLength", "Note Length"};
+    
     juce::TextButton loadFile {"Load"};
     juce::TextButton saveFile {"Save"};
     juce::ComboBox mNoteDivisonBox;
-    juce::StringArray mNoteDivisonStrings{ "1n", "2n","4n", "8n", "16n", "32n", "64n"};
+    juce::ComboBox mNoteLengthSelector;
     juce::Slider mBpmBox;
+    juce::StringArray mNoteDivisions{ "1n", "2n","4n", "8n", "16n", "32n", "64n"};
     
     Timeline timeline;
     juce::TextEditor codeEditor;
