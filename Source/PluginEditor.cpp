@@ -58,8 +58,8 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     buttonXStart += buttonWidth + COMPONENT_MARGIN;
     mNoteDivisonBox.setBounds(buttonXStart, nextLineY, buttonWidth * 1.5f, buttonHeight);
 
-    buttonXStart += buttonWidth + COMPONENT_MARGIN;
-    mBpmBox.setBounds(buttonXStart, nextLineY, buttonWidth * 1.5f, buttonHeight);
+    buttonXStart += buttonWidth * 1.5f + COMPONENT_MARGIN;
+    mBpmBox.setBounds(buttonXStart, nextLineY, buttonWidth, buttonHeight);
     
     nextLineY += buttonHeight + COMPONENT_MARGIN;
     codeEditor.setBounds(OUTER_MARGIN, nextLineY, codeEditorWidth, codeEditorHeight);
@@ -73,9 +73,19 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     
 	mBpmBox.setSliderStyle(Slider::SliderStyle::LinearBarVertical);
 	mBpmBox.setSliderSnapsToMousePosition(false);
+    
+	mBpmBox.setColour(Slider::backgroundColourId, ORchestraColours::ButtonBackground);
 	mBpmBox.setColour(Slider::trackColourId, ORchestraColours::ButtonBackground);
+	mBpmBox.setColour(Slider::thumbColourId, ORchestraColours::ButtonBackground);
+	mBpmBox.setColour(Slider::textBoxBackgroundColourId, ORchestraColours::ButtonBackground);
+	mBpmBox.setColour(Slider::textBoxHighlightColourId, ORchestraColours::ButtonBackground);
+	mBpmBox.setColour(Slider::textBoxOutlineColourId, ORchestraColours::ButtonBackground);
+
     mBpmBox.setRange(20.0, 300.0, 1.0);
     mBpmBox.setValue(120.0);
+
+    mNoteDivisonBox.addItemList(mNoteDivisonStrings, 3);
+    mNoteDivisonBox.setSelectedItemIndex(3);
 
     saveFile.addListener(this);
     codeEditor.addListener(this);
@@ -91,9 +101,6 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     codeEditor.setLookAndFeel(mTextEditorLookAndFeel.get());
     errorBox.setLookAndFeel(mTextEditorLookAndFeel.get());
     mNoteDivisonBox.setLookAndFeel(mGeneralLookAndFeel.get());
-    
-    mNoteDivisonBox.addItemList(mNoteDivisonStrings, 3);
-    mNoteDivisonBox.setSelectedItemIndex(3);
 
     codeEditor.setReturnKeyStartsNewLine(true);
     codeEditor.setMultiLine(true);
