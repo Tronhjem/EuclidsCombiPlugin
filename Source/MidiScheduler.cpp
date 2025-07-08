@@ -47,6 +47,21 @@ void MidiScheduler::PostStepData(const StepData& data, const int nextTickTime, c
     }
 }
 
+void MidiScheduler::PostStepData(const StepData& data, const int nextTickTime)
+{
+    if (data.mShouldTrigger < 1)
+        return;
+    
+    if(data.mType == StepType::NOTE)
+    {
+        PostMidiNote(data.mChannel, data.mFirstData, data.mSecondData, data.mDuration, nextTickTime);
+    }
+    else if(data.mType == StepType::CC)
+    {
+        PostMidiCC(data.mChannel, data.mFirstData, data.mSecondData, nextTickTime);
+    }
+}
+
 void MidiScheduler::ProcessMidiPosts(juce::MidiBuffer& midiMessages,
                                      int bufferLength,
                                      int64_t endOfBufferPosition)

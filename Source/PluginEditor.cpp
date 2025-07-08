@@ -8,7 +8,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-//#include <juce_gui_basics/windows/juce_DocumentWindow.h>
 
 #include "LookAndFeelConstants.h"
 #include "Colours.h"
@@ -20,10 +19,7 @@ constexpr int WINDOW_HEIGHT = 600;
 constexpr int COMPONENT_MARGIN = 15;
 constexpr int OUTER_MARGIN = 20;
 const int buttonWidth = 50;
-
 constexpr int buttonHeight = 20;
-//constexpr int buttonMargin = 15;
-
 constexpr int codeEditorWidth = 400;
 constexpr int codeEditorHeight = 300;
 
@@ -101,9 +97,6 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     mTempoDivLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     mBpmLabel.setColour(juce::Label::textColourId, juce::Colours::black);
     mNoteLengthLabel.setColour(juce::Label::textColourId, juce::Colours::black);
-//    mTempoDivLabel.setText("Tempo Division");
-//    mBpmLabel.setText("BPM");
-//    mNoteLengthLabel.setText("Note Length");
     
     mBpmBox.setRange(20.0, 300.0, 1.0);
     mBpmBox.setValue(120.0);
@@ -123,9 +116,6 @@ ORchestraAudioProcessorEditor::ORchestraAudioProcessorEditor (ORchestraAudioProc
     mBpmBox.addListener(this);
     
     juce::LookAndFeel::setDefaultLookAndFeel(mGeneralLookAndFeel.get());
-//    mTempoDivLabel.setLookAndFeel(mGeneralLookAndFeel.get());
-//    mBpmLabel.setLookAndFeel(mGeneralLookAndFeel.get());
-//    mNoteLengthLabel.setLookAndFeel(mGeneralLookAndFeel.get());
     
     togglePlay.setLookAndFeel(mButtonLookAndFeel.get());
     saveFile.setLookAndFeel(mButtonLookAndFeel.get());
