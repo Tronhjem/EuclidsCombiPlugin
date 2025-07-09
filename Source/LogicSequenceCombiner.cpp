@@ -14,7 +14,7 @@ void LogicSequenceCombiner::AddLogic(LogicSequence logicSeq, Operation operation
 
 const uChar LogicSequenceCombiner::operator [](const int index) const
 {
-#if DEBUG
+#if _DEBUG
     assert(mLogicSequences.size() - 1 == mOperations.size());
 #endif
     

@@ -17,33 +17,6 @@
 
 class Instruction;
 
-//class ManagedMemory
-//{
-//public:
-//    ManagedMemory() : mFreeIndex(0) {}
-//
-//    int* Write(int* start, int length)
-//    {
-//        int* startIndex = &mFreeIndex;
-//        for (int i = mFreeIndex; i < mFreeIndex + length; ++i)
-//        {
-//            mMemory[i] = *(start + i);
-//        }
-//        mFreeIndex += length;
-//
-//        return startIndex;
-//    }
-//
-//    int* Get(int index)
-//    {
-//        return &mMemory[index];
-//    }
-//
-//private:
-//    int mFreeIndex;
-//    std::array<int, 512> mMemory;
-//};
-
 class Stack
 {
 public:
@@ -87,8 +60,9 @@ public:
 
 private:
     bool ProcessOpCodes(std::vector<Instruction>& setupInstructions);
-    std::unique_ptr<ErrorReporting> mErrorReporting;
+    bool ProcessInstruction(const Instruction& instruction, const int stepCount);
     
+    std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unordered_map<std::string, DataSequence> mVariables;
     std::vector<Instruction> mRuntimeInstructions;
     uChar RandomValue(uChar low, uChar high);

@@ -9,7 +9,6 @@ public:
     bool LoadFile(std::string& filePath);
     bool SaveFile(std::string& data);
     char* GetFileStart() { return &mData[0]; };
-//    char* GetSavedFilePath() { return &mFilePath[0]; };
     std::string GetSavedFilePath() { return mFilePath; };
 
 private:

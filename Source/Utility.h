@@ -73,3 +73,30 @@ void PrintBinary(unsigned x)
     }
     std::cout << std::endl;
 }
+
+//class ManagedMemory
+//{
+//public:
+//    ManagedMemory() : mFreeIndex(0) {}
+//
+//    int* Write(int* start, int length)
+//    {
+//        int* startIndex = &mFreeIndex;
+//        for (int i = mFreeIndex; i < mFreeIndex + length; ++i)
+//        {
+//            mMemory[i] = *(start + i);
+//        }
+//        mFreeIndex += length;
+//
+//        return startIndex;
+//    }
+//
+//    int* Get(int index)
+//    {
+//        return &mMemory[index];
+//    }
+//
+//private:
+//    int mFreeIndex;
+//    std::array<int, 512> mMemory;
+//};
