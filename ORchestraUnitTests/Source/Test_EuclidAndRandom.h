@@ -15,25 +15,21 @@ public:
             
             std::string file {"a = euc() \n test a"};
             VM vm;
-            bool result = vm.Prepare(&file[0]);
-            
-            expect (result == false);
+            expect(vm.Prepare(&file[0]) == false);
         }
         {
             beginTest ("Test Euclid sequence wrong defined ");
             
             std::string file {"a = euc(2) \n test a"};
             VM vm;
-            bool result = vm.Prepare(&file[0]);
-            
-            expect (result == false);
+            expect(vm.Prepare(&file[0]) == false);
         }
         {
             beginTest ("Test Euclid sequence");
             
             std::string file {"a = euc(2,4) \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -43,7 +39,7 @@ public:
             
             std::string file {"a = euc(2,4) \n test a[1]"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -53,7 +49,7 @@ public:
             
             std::string file {"a = euc(2,4) \n test a[2]"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -63,7 +59,7 @@ public:
             
             std::string file {"a = euc(2,4) \n test a[3]"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);

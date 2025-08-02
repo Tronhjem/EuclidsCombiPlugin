@@ -15,7 +15,7 @@ public:
             
             std::string file {"a = 74 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 74);
@@ -25,7 +25,7 @@ public:
             
             std::string file {"a = 74+1 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 74 + 1);
@@ -35,7 +35,7 @@ public:
             
             std::string file {"a = 74-1 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 74 - 1);
@@ -45,7 +45,7 @@ public:
             
             std::string file {"a = 2*2 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 2 * 2);
@@ -55,7 +55,7 @@ public:
             
             std::string file {"a = 2/2 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 2 / 2);
@@ -65,7 +65,7 @@ public:
             
             std::string file {"a = 2 + 2 * 5 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 12 /* (2 + 2) * 5 */);
@@ -75,9 +75,8 @@ public:
             
             std::string file {"a = (2) + 2 \n test a"};
             VM vm;
-            bool compileResult = vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
-            expect (compileResult == true);
             uChar result = vm.GetTopStackValue();
             expect (result == 4);
         }
@@ -86,9 +85,7 @@ public:
             
             std::string file {"a = (2 + 2) * 2 \n test a"};
             VM vm;
-            bool compileResult = vm.Prepare(&file[0]);
-            
-            expect (compileResult == true);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 8);
@@ -98,9 +95,7 @@ public:
             
             std::string file {"a = ((2 - 1) + 2) * 2 \n test a"};
             VM vm;
-            bool compileResult = vm.Prepare(&file[0]);
-            
-            expect (compileResult == true);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 6);
@@ -110,7 +105,7 @@ public:
             
             std::string file {"a = 5 \n b = a \n test b"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 5);
@@ -120,7 +115,7 @@ public:
             
             std::string file {"a = 5 \n b = a + 2 * 5 \n test b"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 5 + (2 * 5));
@@ -130,7 +125,7 @@ public:
             
             std::string file {"a = [64,65,63] \n test a[0]"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 64);
@@ -140,7 +135,7 @@ public:
             
             std::string file {"a = [64,65,63] \n b = a[0] + 2 \n test b"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == (64 + 2));
@@ -151,7 +146,7 @@ public:
             // Global index when not running is 0
             std::string file {"a = [64,65,63] \n b = a \n test b"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 64);
@@ -161,9 +156,9 @@ public:
             beginTest ("Test Logical AND operator with true");
             
             // Global index when not running is 0
-            std::string file {"a = 64 & 64 \n test b"};
+            std::string file {"a = 64 & 64 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -172,9 +167,9 @@ public:
             beginTest ("Test Logical AND operator with zero");
             
             // Global index when not running is 0
-            std::string file {"a = 64 & 0 \n test b"};
+            std::string file {"a = 64 & 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -183,9 +178,9 @@ public:
             beginTest ("Test Logical OR operator with true");
             
             // Global index when not running is 0
-            std::string file {"a = 64 | 64 \n test b"};
+            std::string file {"a = 64 | 64 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -194,9 +189,9 @@ public:
             beginTest ("Test Logical OR operator with zero");
             
             // Global index when not running is 0
-            std::string file {"a = 64 | 0 \n test b"};
+            std::string file {"a = 64 | 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -205,9 +200,9 @@ public:
             beginTest ("Test Logical XOR operator with 64 and 64");
             
             // Global index when not running is 0
-            std::string file {"a = 64 ^ 64 \n test b"};
+            std::string file {"a = 64 ^ 64 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -216,9 +211,9 @@ public:
             beginTest ("Test Logical XOR operator with 1 and 0");
             
             // Global index when not running is 0
-            std::string file {"a = 1 ^ 0 \n test b"};
+            std::string file {"a = 1 ^ 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -227,9 +222,9 @@ public:
             beginTest ("Test Logical XOR operator with 0 and 0");
             
             // Global index when not running is 0
-            std::string file {"a = 0 ^ 0 \n test b"};
+            std::string file {"a = 0 ^ 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -238,9 +233,9 @@ public:
             beginTest ("Test > operator with 1 and 0");
             
             // Global index when not running is 0
-            std::string file {"a = 1 > 0 \n test b"};
+            std::string file {"a = 1 > 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -249,9 +244,9 @@ public:
             beginTest ("Test > operator with 1 and 5");
             
             // Global index when not running is 0
-            std::string file {"a = 1 > 5 \n test b"};
+            std::string file {"a = 1 > 5 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -260,9 +255,9 @@ public:
             beginTest ("Test >= operator with 1 and 1");
             
             // Global index when not running is 0
-            std::string file {"a = 1 >= 1 \n test b"};
+            std::string file {"a = 1 >= 1 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -271,9 +266,9 @@ public:
             beginTest ("Test >= operator with 1 and 1");
             
             // Global index when not running is 0
-            std::string file {"a = 1 >= 0 \n test b"};
+            std::string file {"a = 1 >= 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -282,9 +277,9 @@ public:
             beginTest ("Test >= operator with 1 and 5");
             
             // Global index when not running is 0
-            std::string file {"a = 1 >= 5 \n test b"};
+            std::string file {"a = 1 >= 5 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -295,9 +290,9 @@ public:
             beginTest ("Test < operator with 1 and 0");
             
             // Global index when not running is 0
-            std::string file {"a = 1 < 0 \n test b"};
+            std::string file {"a = 1 < 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);
@@ -306,9 +301,9 @@ public:
             beginTest ("Test M operator with 1 and 5");
             
             // Global index when not running is 0
-            std::string file {"a = 1 < 5 \n test b"};
+            std::string file {"a = 1 < 5 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -317,9 +312,9 @@ public:
             beginTest ("Test <= operator with 1 and 1");
             
             // Global index when not running is 0
-            std::string file {"a = 1 <= 1 \n test b"};
+            std::string file {"a = 1 <= 1 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -328,9 +323,9 @@ public:
             beginTest ("Test <= operator with 1 and 5");
             
             // Global index when not running is 0
-            std::string file {"a = 1 <= 5 \n test b"};
+            std::string file {"a = 1 <= 5 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
@@ -339,9 +334,9 @@ public:
             beginTest ("Test <= operator with 1 and 0");
             
             // Global index when not running is 0
-            std::string file {"a = 1 <= 0 \n test b"};
+            std::string file {"a = 1 <= 0 \n test a"};
             VM vm;
-            vm.Prepare(&file[0]);
+            expect(vm.Prepare(&file[0]));
             
             uChar result = vm.GetTopStackValue();
             expect (result == 0);

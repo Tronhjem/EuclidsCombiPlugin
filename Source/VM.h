@@ -65,7 +65,7 @@ private:
     std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unordered_map<std::string, DataSequence> mVariables;
     std::vector<Instruction> mRuntimeInstructions;
-    uChar RandomValue(uChar low, uChar high);
+    inline uChar RandomValue(uChar low, uChar high);
 
     Stack mStack;
 };

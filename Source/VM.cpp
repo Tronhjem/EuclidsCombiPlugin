@@ -6,6 +6,31 @@
 constexpr int DEFAULT_NOTE_DURATION = 11050;
 constexpr int MAX_UCHAR_VALUE = 127;
 
+#define DO_BINARY_OPERATION_AND_PUSH(OP) \
+    do { \
+        const uChar b = static_cast<uChar>(mStack.Pop() > 0); \
+        const uChar a = static_cast<uChar>(mStack.Pop() > 0); \
+        const uChar result = a OP b; \
+        mStack.Push(result); \
+    } while(0)
+
+#define DO_OPERATION_AND_PUSH(OP) \
+    do { \
+        const uChar b = static_cast<uChar>(mStack.Pop()); \
+        const uChar a = static_cast<uChar>(mStack.Pop()); \
+        const uChar result = a OP b; \
+        mStack.Push(result); \
+    } while(0)
+
+#define DO_OPERATION_WITH_CLAMP_AND_PUSH(OP) \
+    do { \
+        const uChar b = mStack.Pop(); \
+        const uChar a = mStack.Pop(); \
+        const int result = static_cast<int>(a) OP static_cast<int>(b); \
+        mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE))); \
+    } while(0)
+
+
 VM::VM() 
 {
     mErrorReporting = std::make_unique<ErrorReporting>();
@@ -70,8 +95,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& instructions)
 
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
-                const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 20); // Clamp to array bounds
-                uChar data[20];
+                const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32); // Clamp to array bounds
+                uChar data[32];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
                     data[i] = mStack.Pop();
@@ -101,8 +126,6 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& instructions)
 
 bool VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
 {
-//    ScopedTimer timer("VM Runtime");
-    
     int currentIndex = 0;
     auto consume = [&]() -> Instruction&
     {
@@ -152,15 +175,14 @@ bool VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
 uChar VM::RandomValue(uChar low, uChar high)
 {
     if (high <= low) {
-        return low; // Safety: if high <= low, return low
+        return low;
     }
     
-    // Prevent overflow in calculation
     int calculatedRange = static_cast<int>(high) - static_cast<int>(low) + 1;
     calculatedRange = std::clamp(calculatedRange, 1, MAX_UCHAR_VALUE);
     
     const int value = rand() % calculatedRange;
-    int result = value + static_cast<int>(low);
+    const int result = value + static_cast<int>(low);
     return static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE));
 }
 
@@ -177,7 +199,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
         
         case (OpCode::SET_IDENTIFIER_VALUE):
         {
-            uChar value = mStack.Pop();
+            const uChar value = mStack.Pop();
             mVariables[instruction.mNameValue].SetValue(0, value);
             
             break;
@@ -185,7 +207,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
 
         case (OpCode::SET_IDENTIFIER_ARRAY):
         {
-            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 20); // Clamp to array bounds
+            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32); // Clamp to array bounds
             for (int i = arrayLength - 1; i >=0; --i)
             {
                 mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
@@ -196,9 +218,9 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
         case (OpCode::GENERATE_EUCLID_SEQUENCE):
         {
-            const int length = std::clamp(static_cast<int>(mStack.Pop()), 0, 20); // Clamp to array bounds
+            const int length = std::clamp(static_cast<int>(mStack.Pop()), 0, 32); // Clamp to array bounds
             const int hits = std::clamp(static_cast<int>(mStack.Pop()), 0, length); // Hits can't exceed length
-            uChar data[20];
+            uChar data[32];
             GenerateEuclideanSequence(&data[0], hits, length);
             
             for (int i = 0; i < length; ++i)
@@ -206,7 +228,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
                 mStack.Push(data[i]);
             }
             
-            int clampedLength = std::clamp(length, 0, MAX_UCHAR_VALUE);
+            const int clampedLength = std::clamp(length, 0, MAX_UCHAR_VALUE);
             mStack.Push(static_cast<uChar>(clampedLength));
             break;
         }
@@ -215,12 +237,12 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
         {
             if (mVariables.find(instruction.mNameValue) != mVariables.end())
             {
-                uChar value = mVariables[instruction.mNameValue].GetValue(stepCount);
+                const uChar value = mVariables[instruction.mNameValue].GetValue(stepCount);
                 mStack.Push(value);
             }
             else
             {
-                std::string error = std::string("VM: Variable not defined");
+                const std::string error = std::string("VM: Variable not defined");
                 mErrorReporting->LogError(error);
                 return false;
             }
@@ -234,12 +256,12 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             {
                 const int index = mStack.Pop();
                 // index is working with a modulo inside GetValue so no need to worry about out of bounds value
-                uChar value = mVariables[instruction.mNameValue].GetValue(index);
+                const uChar value = mVariables[instruction.mNameValue].GetValue(index);
                 mStack.Push(value);
             }
             else
             {
-                std::string error = std::string("VM: Variable not defined");
+                const std::string error = std::string("VM: Variable not defined");
                 mErrorReporting->LogError(error);
                 return false;
             }
@@ -249,140 +271,122 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
         case (OpCode::AND):
         {
-            uChar a = static_cast<uChar>(mStack.Pop() > 0);
-            uChar b = static_cast<uChar>(mStack.Pop() > 0);
-            uChar result = a & b;
-            mStack.Push(result);
+            DO_BINARY_OPERATION_AND_PUSH(&);
             
             break;
         }
             
         case (OpCode::OR):
         {
-            uChar a = static_cast<uChar>(mStack.Pop() > 0);
-            uChar b = static_cast<uChar>(mStack.Pop() > 0);
-            uChar result = a | b;
-            mStack.Push(result);
+            DO_BINARY_OPERATION_AND_PUSH(|);
             
             break;
         }
             
         case (OpCode::XOR):
         {
-            uChar a = static_cast<uChar>(mStack.Pop() > 0);
-            uChar b = static_cast<uChar>(mStack.Pop() > 0);
-            uChar result = a ^ b;
-            mStack.Push(result);
+            DO_BINARY_OPERATION_AND_PUSH(^);
             
             break;
         }
             
         case(OpCode::ADD):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            int result = static_cast<int>(a) + static_cast<int>(b);
-            mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE)));
+            DO_OPERATION_WITH_CLAMP_AND_PUSH(+);
+            
             break;
         }
 
         case(OpCode::SUBTRACT):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            int result = static_cast<int>(a) - static_cast<int>(b);
-            mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE)));
+            DO_OPERATION_WITH_CLAMP_AND_PUSH(-);
+            
             break;
         }
 
         case(OpCode::MULTIPLY):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            int result = static_cast<int>(a) * static_cast<int>(b);
-            mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE)));
+            DO_OPERATION_WITH_CLAMP_AND_PUSH(*);
+            
             break;
         }
 
         case(OpCode::DIVIDE):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
+            const uChar b = mStack.Pop();
+            const uChar a = mStack.Pop();
             if (b == 0)
             {
                 mStack.Push(0); // Division by zero returns 0
             }
             else
             {
-                int result = static_cast<int>(a) / static_cast<int>(b);
+                const int result = static_cast<int>(a) / static_cast<int>(b);
                 mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE)));
             }
+            
             break;
         }
             
         case(OpCode::LESS):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            mStack.Push(a < b);
+            DO_OPERATION_AND_PUSH(<);
+            
             break;
         }
             
         case(OpCode::LESS_EQUAL):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            mStack.Push(a <= b);
+            DO_OPERATION_AND_PUSH(<=);
 
             break;
         }
             
         case(OpCode::GREATER):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            mStack.Push(a > b);
+            DO_OPERATION_AND_PUSH(>);
 
             break;
         }
             
         case(OpCode::GREATER_EQUAL):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            mStack.Push(a >= b);
-
+            DO_OPERATION_AND_PUSH(>=);
+            
             break;
         }
             
         case(OpCode::EQUAL):
         {
-            uChar b = mStack.Pop();
-            uChar a = mStack.Pop();
-            mStack.Push(a == b);
+            DO_OPERATION_AND_PUSH(==);
 
             break;
         }
             
         case(OpCode::GET_RANDOM_IN_RANGE):
         {
-            uChar high = mStack.Pop();
-            uChar low = mStack.Pop();
-            mStack.Push(RandomValue(low, high));
+            const uChar high = mStack.Pop();
+            const uChar low = mStack.Pop();
+            const uChar value = RandomValue(low, high);
+            mStack.Push(value);
+            
             break;
         }
             
         case(OpCode::PRINT):
         {
             const uChar value = mStack.Pop();
-            std::cout << "PRINT: " << static_cast<int>(value) << std::endl;
+            const std::string message = "PRINT: " + std::to_string(static_cast<int>(value));
+            std::cout << message << std::endl;
+            mErrorReporting->LogMessage(message);
 
             break;
         }
             
         default:
-            std::string err {"Unexpected Operation code"};
+            const std::string err {"Unexpected Operation code"};
             mErrorReporting->LogError(err);
+            
             return false;
     }
     

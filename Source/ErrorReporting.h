@@ -16,11 +16,11 @@ struct LogEntry
 class ErrorReporting
 {
 public:
-    void LogError(int line, std::string& message);
-    void LogError(std::string& message);
-    void LogWarning(int line, std::string& message);
-    void LogWarning(std::string& message);
-    void LogMessage(std::string& message);
+    void LogError(const int line, std::string& message);
+    void LogError(const std::string& message);
+    void LogWarning(const int line, std::string& message);
+    void LogWarning(const std::string& message);
+    void LogMessage(const std::string& message);
     void Clear();
     std::vector<LogEntry>& GetErrors() {return mLogEntries; } 
     
