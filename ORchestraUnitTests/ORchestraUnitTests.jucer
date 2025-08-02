@@ -13,6 +13,10 @@
       <FILE id="fvz1fK" name="DataSequence.cpp" compile="1" resource="0"
             file="../Source/DataSequence.cpp"/>
       <FILE id="JmBZNS" name="DataSequence.h" compile="0" resource="0" file="../Source/DataSequence.h"/>
+      <FILE id="Kk9qfY" name="DataSequenceStep.cpp" compile="1" resource="0"
+            file="../Source/DataSequenceStep.cpp"/>
+      <FILE id="fdjPoC" name="DataSequenceStep.h" compile="0" resource="0"
+            file="../Source/DataSequenceStep.h"/>
       <FILE id="U304zC" name="ErrorReporting.cpp" compile="1" resource="0"
             file="../Source/ErrorReporting.cpp"/>
       <FILE id="IMzVZ1" name="ErrorReporting.h" compile="0" resource="0"
@@ -41,6 +45,8 @@
       <FILE id="tdscN0" name="VM.h" compile="0" resource="0" file="../Source/VM.h"/>
     </GROUP>
     <GROUP id="{A8C95B41-B00B-6994-8AA7-9BDE10B1B3F2}" name="Source">
+      <FILE id="RUkzmX" name="Test_DataSequence.h" compile="0" resource="0"
+            file="Source/Test_DataSequence.h"/>
       <FILE id="Qrkj5b" name="Test_ErrorHandling.h" compile="0" resource="0"
             file="Source/Test_ErrorHandling.h"/>
       <FILE id="Qrfxtq" name="Test_EuclidAndRandom.h" compile="0" resource="0"
