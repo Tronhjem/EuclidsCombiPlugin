@@ -1,13 +1,13 @@
 #pragma once
 #include "Types.h"
 
-enum class StepType
+enum class StepType : uChar
 {
-    NOTE,
-    CC
+    NOTE = 0,
+    CC = 1
 };
 
-struct StepData
+class StepData
 {
 public:
     StepData(StepType type, uChar shouldTrigger, const uChar firstData, const uChar secondData, const uChar channel, const int duration) :
@@ -21,7 +21,6 @@ public:
     }
     
     ~StepData() {}
-    StepData() = delete;
     
     StepType mType;
     uChar mShouldTrigger;
@@ -29,4 +28,7 @@ public:
     uChar mSecondData;
     uChar mChannel;
     int mDuration;
+    
+private:
+    StepData() = delete;
 };

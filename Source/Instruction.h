@@ -10,7 +10,6 @@ enum class OpCode : uChar
     
     GENERATE_EUCLID_SEQUENCE,
     
-
     // Math
     ADD,
     SUBTRACT,
