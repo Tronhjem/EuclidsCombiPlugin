@@ -3,14 +3,7 @@
 #include <vector>
 
 #include "Types.h"
-
-enum class DataSequenceType : uChar
-{
-    Note,
-    Velocity,
-    CC,
-    CCValue
-};
+#include "DataSequenceStep.h"
 
 class DataSequence
 {
