@@ -39,6 +39,8 @@
         <FILE id="Mm5aP7" name="LogicSequenceCombiner.cpp" compile="1" resource="0"
               file="Source/LogicSequenceCombiner.cpp"/>
         <GROUP id="{C855EF0D-C022-95C7-9D19-9CAEE7B3CA00}" name="Sequences">
+          <FILE id="j61Doa" name="DataStep.cpp" compile="1" resource="0" file="Source/DataStep.cpp"/>
+          <FILE id="F6IJO4" name="DataStep.h" compile="0" resource="0" file="Source/DataStep.h"/>
           <FILE id="UBDucC" name="DataSequence.h" compile="0" resource="0" file="Source/DataSequence.h"/>
           <FILE id="q27wf3" name="DataSequence.cpp" compile="1" resource="0"
                 file="Source/DataSequence.cpp"/>
