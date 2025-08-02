@@ -6,7 +6,7 @@ class FileLoader
 {
 public:
     FileLoader();
-    bool LoadFile(std::string& filePath);
+    bool LoadFile(const std::string& filePath);
     bool SaveFile(std::string& data);
     char* GetFileStart() { return &mData[0]; };
     std::string GetSavedFilePath() { return mFilePath; };

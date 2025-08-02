@@ -10,7 +10,7 @@ FileLoader::FileLoader()
 {
 }
 
-bool FileLoader::LoadFile(std::string& filePath)
+bool FileLoader::LoadFile(const std::string& filePath)
 {
     std::ifstream file (filePath);
 

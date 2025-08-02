@@ -4,9 +4,9 @@ DataSequence::DataSequence(const std::vector<uChar>& data) : mData(data)
 {
 }
 
-uChar DataSequence::GetValue(int index)
+uChar DataSequence::GetValue(const int index) const
 {
-    int indexWrapped = index % mData.size();
+    const int indexWrapped = index % mData.size();
     return mData[indexWrapped];
 }
 

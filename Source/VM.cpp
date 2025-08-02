@@ -172,7 +172,7 @@ bool VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
     }
 }
 
-uChar VM::RandomValue(uChar low, uChar high)
+uChar VM::RandomValue(const uChar low, const uChar high)
 {
     if (high <= low) {
         return low;

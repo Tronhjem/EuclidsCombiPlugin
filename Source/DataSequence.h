@@ -17,8 +17,8 @@ class DataSequence
 public:
     DataSequence() {}
     DataSequence(const std::vector<uChar>& data);
-    uChar GetValue(int index);
-    void SetValue(int index, uChar value);
+    uChar GetValue(const int index) const;
+    void SetValue(const int index, uChar value);
     
 private:
     std::vector<uChar> mData;
