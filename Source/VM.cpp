@@ -48,7 +48,7 @@ bool VM::Prepare(char* data)
 		success = compiler.Compile(mRuntimeInstructions);
 		if(success)
 		{
-			success = ProcessOpCodes(mRuntimeInstructions);
+            success = ProcessOpCodes(mRuntimeInstructions);
         }
     }
 
@@ -95,7 +95,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& instructions)
 
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
-                const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32); // Clamp to array bounds
+                const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32);
                 uChar data[32];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
@@ -207,7 +207,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
 
         case (OpCode::SET_IDENTIFIER_ARRAY):
         {
-            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32); // Clamp to array bounds
+            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32);
             for (int i = arrayLength - 1; i >=0; --i)
             {
                 mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
@@ -218,10 +218,10 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
         case (OpCode::GENERATE_EUCLID_SEQUENCE):
         {
-            const int length = std::clamp(static_cast<int>(mStack.Pop()), 0, 32); // Clamp to array bounds
-            const int hits = std::clamp(static_cast<int>(mStack.Pop()), 0, length); // Hits can't exceed length
+            const int length = std::clamp(static_cast<int>(mStack.Pop()), 0, 32);
+            const int hits = std::clamp(static_cast<int>(mStack.Pop()), 0, length);
             uChar data[32];
-            GenerateEuclideanSequence(&data[0], hits, length);
+            GenerateEuclideanSequence(data, hits, length);
             
             for (int i = 0; i < length; ++i)
             {
@@ -255,7 +255,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             if (mVariables.find(instruction.mNameValue) != mVariables.end())
             {
                 const int index = mStack.Pop();
-                // index is working with a modulo inside GetValue so no need to worry about out of bounds value
+                // GetGalue is done with modulo inside, so no need to worry about out of bounds value
                 const uChar value = mVariables[instruction.mNameValue].GetValue(index);
                 mStack.Push(value);
             }

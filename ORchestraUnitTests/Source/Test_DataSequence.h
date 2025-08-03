@@ -2,6 +2,7 @@
 
 using namespace juce;
 #include "../../Source/VM.h"
+#include "../../Source/DataSequenceStep.h"
 
 class Test_DataSequence  : public UnitTest
 {
@@ -19,6 +20,23 @@ public:
             
             uChar result = vm.GetTopStackValue();
             expect (result == 1);
+        }
+        {
+            beginTest ("Check Data Step Get");
+            
+            uChar data[3] {1,0,0};
+            DataSequenceStep dataSeqStep{data, 3};
+            expect (dataSeqStep.Get(0) == 1);
+        }
+        {
+            beginTest ("Check Data Step Get");
+            
+            uChar dataOne[2] {1, 1};
+            uChar dataTwo[4] {1, 0, 1, 0};
+            
+            DataSequenceStep dataStepOne {dataOne, 2};
+            DataSequenceStep dataStepTwo {dataTwo, 4};
+            
         }
     }
 };
