@@ -15,9 +15,13 @@ DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
     }
 }
 
-uChar DataSequenceStep::GetActiveValueForSubStep(const int index)
+uChar DataSequenceStep::GetActiveValueAtIndex(const int index) const
 {
-    return 0;
+#if _DEBUG
+    assert(index < mLength);
+#endif
+    
+    return mData[index];
 }
 
 bool DataSequenceStep::IsActiveAtSubStep(const int index)

@@ -10,9 +10,10 @@ constexpr int MAX_SUB_DIVISION = 8;
 class DataSequenceStep
 {
 public:
+    DataSequenceStep() {};
     DataSequenceStep(const uChar* data, const int length);
-    uChar GetActiveValueForSubStep(const int index);
     bool IsActiveAtSubStep(const int index);
+    uChar GetActiveValueAtIndex(const int index) const;
     
 //    uChar Get(const int index)
 //    {
@@ -30,8 +31,6 @@ public:
 //    }
     
 private:
-    DataSequenceStep() = delete;
-    
     int mLength;
     uChar mData[MAX_SUB_DIVISION];
 };
