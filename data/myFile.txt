@@ -1,10 +1,9 @@
 a = [1,0,1]
-b = [0,1]
-c = ran(40,100)
-
-note(a|b, ran(55,65),ran(4,100),1)
-note(a, ran(55,65),ran(4,100),1)
-note(b, ran(55,65),ran(4,100),1)
-note(c, ran(55,65),ran(4,100),1)
-note(c+10, ran(55,65),ran(4,100),1)
-note(c+63, ran(55,65),ran(99,100)+ 2,1)
+b = [1,1]
+c = [1,1,1,1,1]
+note(a|c, ran(55,65),ran(70,100),1)
+note(a|b|c, ran(55,65),ran(70,100),1)
+note(a|b&c, ran(55,65)+20,ran(70,100),1)
+note(a, ran(55,65)+10,ran(70,100),1)
+note(c, ran(55,65),ran(70,100),1)
+note(a&c&b, ran(55,65),ran(70,100),1)
