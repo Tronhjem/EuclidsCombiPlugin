@@ -14,39 +14,9 @@
 #include "MidiScheduler.h"
 #include "DataSequence.h"
 #include "StepData.h"
+#include "CustomStack.h"
 
 class Instruction;
-
-class Stack
-{
-public:
-    Stack() {};
-    uChar Pop()
-    {
-        assert(stackPointer > 0);
-        return mStack[--stackPointer];
-    }
-    
-    void Push(uChar i)
-    {
-        assert(stackPointer + 1 <= 64);
-        mStack[stackPointer++] = i;
-    }
-    
-    void Clear()
-    {
-        stackPointer = 0;
-    }
-    
-    uChar Top()
-    {
-        return mStack[stackPointer];
-    }
-
-private:
-    std::array<uChar, 64> mStack;
-    int stackPointer = 0;
-};
 
 class VM
 {
@@ -67,5 +37,5 @@ private:
     std::vector<Instruction> mRuntimeInstructions;
     inline uChar RandomValue(const uChar low, const uChar high);
 
-    Stack mStack;
+    Stack<uChar> mStack;
 };
