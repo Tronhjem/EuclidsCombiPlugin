@@ -1,9 +1,11 @@
 a = [1,0,1]
 b = [1,1]
 c = [1,1,1,1,1]
+
 note(a|c, ran(55,65),ran(70,100),1)
 note(a|b|c, ran(55,65),ran(70,100),1)
 note(a|b&c, ran(55,65)+20,ran(70,100),1)
 note(a, ran(55,65)+10,ran(70,100),1)
 note(c, ran(55,65),ran(70,100),1)
+note(a&c&b, ran(55,65),ran(70,100),1)
 note(a&c&b, ran(55,65),ran(70,100),1)
