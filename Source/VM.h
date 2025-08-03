@@ -25,7 +25,7 @@ public:
     bool Prepare(char* data);
     bool Tick(std::vector<SequenceStep>& stepQueue, const int globalCount);
     void Reset();
-    uChar GetTopStackValue() { return mStack.Top(); }
+    StepData GetTopStackValue() { return mStack.Top(); }
     std::vector<LogEntry>& GetErrors();
 
 private:

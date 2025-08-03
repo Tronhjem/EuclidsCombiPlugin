@@ -8,26 +8,26 @@ constexpr int MAX_UCHAR_VALUE = 127;
 
 #define DO_BINARY_OPERATION_AND_PUSH(OP) \
     do { \
-        const uChar b = static_cast<uChar>(mStack.Pop() > 0); \
-        const uChar a = static_cast<uChar>(mStack.Pop() > 0); \
+        const uChar b = static_cast<uChar>(mStack.Pop().GetActiveValueAtIndex(0) > 0); \
+        const uChar a = static_cast<uChar>(mStack.Pop().GetActiveValueAtIndex(0) > 0); \
         const uChar result = a OP b; \
-        mStack.Push(result); \
+        mStack.Push(StepData{result}); \
     } while(0)
 
 #define DO_OPERATION_AND_PUSH(OP) \
     do { \
-        const uChar b = static_cast<uChar>(mStack.Pop()); \
-        const uChar a = static_cast<uChar>(mStack.Pop()); \
+        const uChar b = static_cast<uChar>(mStack.Pop().GetActiveValueAtIndex(0)); \
+        const uChar a = static_cast<uChar>(mStack.Pop().GetActiveValueAtIndex(0)); \
         const uChar result = a OP b; \
-        mStack.Push(result); \
+        mStack.Push(StepData{result}); \
     } while(0)
 
 #define DO_OPERATION_WITH_CLAMP_AND_PUSH(OP) \
     do { \
-        const uChar b = mStack.Pop(); \
-        const uChar a = mStack.Pop(); \
+        const uChar b = static_cast<uChar>(mStack.Pop().GetActiveValueAtIndex(0)); \
+        const uChar a = static_cast<uChar>(mStack.Pop().GetActiveValueAtIndex(0)); \
         const int result = static_cast<int>(a) OP static_cast<int>(b); \
-        mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE))); \
+        mStack.Push(StepData{static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE))}); \
     } while(0)
 
 
@@ -52,6 +52,12 @@ bool VM::Prepare(char* data)
         }
     }
 
+
+    
+    size_t s = sizeof(StepData);
+    std::string size = std::to_string(s);
+    mErrorReporting->LogMessage(size);
+    
     mStack.Clear();
     return success;
 }
@@ -86,8 +92,8 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& instructions)
         {
             case (OpCode::SET_IDENTIFIER_VALUE):
             {
-                uChar value = mStack.Pop();
-                std::vector<uChar> vectorData {value};
+                StepData value = mStack.Pop();
+                std::vector<StepData> vectorData {value};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
 
                 break;
@@ -95,14 +101,14 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& instructions)
 
             case (OpCode::SET_IDENTIFIER_ARRAY):
             {
-                const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32);
-                uChar data[32];
+                const int arrayLength = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, 32);
+                StepData data[32];
                 for (int i = arrayLength - 1; i >=0; --i)
                 {
                     data[i] = mStack.Pop();
                 }
 
-                std::vector<uChar> vectorData {data, data + arrayLength};
+                std::vector<StepData> vectorData {data, data + arrayLength};
                 mVariables[instruction.mNameValue] = DataSequence{vectorData};
 
                 break;
@@ -199,7 +205,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
         
         case (OpCode::SET_IDENTIFIER_VALUE):
         {
-            const uChar value = mStack.Pop();
+            const StepData value = mStack.Pop();
             mVariables[instruction.mNameValue].SetValue(0, value);
             
             break;
@@ -207,7 +213,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
 
         case (OpCode::SET_IDENTIFIER_ARRAY):
         {
-            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop()), 0, 32);
+            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, 32);
             for (int i = arrayLength - 1; i >=0; --i)
             {
                 mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
@@ -218,9 +224,9 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
         case (OpCode::GENERATE_EUCLID_SEQUENCE):
         {
-            const int length = std::clamp(static_cast<int>(mStack.Pop()), 0, 32);
-            const int hits = std::clamp(static_cast<int>(mStack.Pop()), 0, length);
-            uChar data[32];
+            const int length = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, 32);
+            const int hits = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, length);
+            StepData data[32];
             GenerateEuclideanSequence(data, hits, length);
             
             for (int i = 0; i < length; ++i)
@@ -229,7 +235,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             }
             
             const int clampedLength = std::clamp(length, 0, MAX_UCHAR_VALUE);
-            mStack.Push(static_cast<uChar>(clampedLength));
+            mStack.Push(StepData{clampedLength});
             break;
         }
             
@@ -237,7 +243,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
         {
             if (mVariables.find(instruction.mNameValue) != mVariables.end())
             {
-                const uChar value = mVariables[instruction.mNameValue].GetValue(stepCount);
+                const StepData value = mVariables[instruction.mNameValue].GetValue(stepCount);
                 mStack.Push(value);
             }
             else
@@ -254,9 +260,9 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
         {
             if (mVariables.find(instruction.mNameValue) != mVariables.end())
             {
-                const int index = mStack.Pop();
+                const int index = mStack.Pop().GetActiveValueAtIndex(0);
                 // GetGalue is done with modulo inside, so no need to worry about out of bounds value
-                const uChar value = mVariables[instruction.mNameValue].GetValue(index);
+                const StepData value = mVariables[instruction.mNameValue].GetValue(index);
                 mStack.Push(value);
             }
             else
@@ -313,16 +319,16 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
 
         case(OpCode::DIVIDE):
         {
-            const uChar b = mStack.Pop();
-            const uChar a = mStack.Pop();
+            const uChar b = mStack.Pop().GetActiveValueAtIndex(0);
+            const uChar a = mStack.Pop().GetActiveValueAtIndex(0);
             if (b == 0)
             {
-                mStack.Push(0); // Division by zero returns 0
+                mStack.Push(StepData{0}); // Division by zero returns 0
             }
             else
             {
                 const int result = static_cast<int>(a) / static_cast<int>(b);
-                mStack.Push(static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE)));
+                mStack.Push(StepData{static_cast<int>(std::clamp(result, 0, MAX_UCHAR_VALUE))});
             }
             
             break;
@@ -365,17 +371,17 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
         case(OpCode::GET_RANDOM_IN_RANGE):
         {
-            const uChar high = mStack.Pop();
-            const uChar low = mStack.Pop();
-            const uChar value = RandomValue(low, high);
-            mStack.Push(value);
+            const uChar high = mStack.Pop().GetActiveValueAtIndex(0);
+            const uChar low = mStack.Pop().GetActiveValueAtIndex(0);
+            const int value = (int)RandomValue(low, high);
+            mStack.Push(StepData{value});
             
             break;
         }
             
         case(OpCode::PRINT):
         {
-            const uChar value = mStack.Pop();
+            const uChar value = mStack.Pop().GetActiveValueAtIndex(0);
             const std::string message = "PRINT: " + std::to_string(static_cast<int>(value));
             std::cout << message << std::endl;
             mErrorReporting->LogMessage(message);
