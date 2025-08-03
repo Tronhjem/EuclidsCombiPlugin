@@ -85,7 +85,7 @@ void ORchestraEngine::PreProcessSteps()
         const int stepWrapped = step % STEP_BUFFER_SIZE;
         // tick needs global step and StepData needs it wrapped for ring buffer.
         
-        std::vector<StepData>& currentData = mStepRingBuffer[stepWrapped];
+        std::vector<SequenceStep>& currentData = mStepRingBuffer[stepWrapped];
         currentData.clear();
         
         mVM->Tick(currentData, step);
@@ -133,9 +133,9 @@ void ORchestraEngine::Tick(const TransportData& transportData,
         {
             samplesSinceLastStep = transportData.timeInSamples;
             const int wrappedGlobalStep = currentStep % STEP_BUFFER_SIZE;
-            const std::vector<StepData>& currentData = mStepRingBuffer[wrappedGlobalStep];
+            const std::vector<SequenceStep>& currentData = mStepRingBuffer[wrappedGlobalStep];
             
-            for(const StepData& step : currentData)
+            for(const SequenceStep& step : currentData)
             {
                 mMidiScheduler.PostStepData(step, nextStepInSamples, transportData.noteLengthInSamples);
             }

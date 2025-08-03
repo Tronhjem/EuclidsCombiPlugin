@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 typedef unsigned char uChar;
-typedef uChar StepDataContainer;
+typedef uChar StepData;
 
 //static_assert(sizeof(uChar) == 1);
 

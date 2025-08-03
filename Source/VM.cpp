@@ -124,7 +124,7 @@ bool VM::ProcessOpCodes(std::vector<Instruction>& instructions)
     }
 }
 
-bool VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
+bool VM::Tick(std::vector<SequenceStep>& stepQueue, const int globalCount)
 {
     int currentIndex = 0;
     auto consume = [&]() -> Instruction&
@@ -140,24 +140,24 @@ bool VM::Tick(std::vector<StepData>& stepQueue, const int globalCount)
         {
             case (OpCode::NOTE):
             {
-                const uChar channel = mStack.Pop();
-                const uChar vel = mStack.Pop();
-                const uChar note = mStack.Pop();
-                const uChar shouldTrigger = mStack.Pop();
+                const StepData channel = mStack.Pop();
+                const StepData vel = mStack.Pop();
+                const StepData note = mStack.Pop();
+                const StepData shouldTrigger = mStack.Pop();
                 
-                stepQueue.emplace_back(StepData{StepType::NOTE, shouldTrigger, note, vel, channel, DEFAULT_NOTE_DURATION});
+                stepQueue.emplace_back(SequenceStep{StepType::NOTE, shouldTrigger, note, vel, channel, DEFAULT_NOTE_DURATION});
                 
                 break;
             }
                 
             case (OpCode::CC):
             {
-                const uChar channel = mStack.Pop();
-                const uChar ccValue = mStack.Pop();
-                const uChar ccNumber = mStack.Pop();
-                const uChar shouldTrigger = mStack.Pop();
+                const StepData channel = mStack.Pop();
+                const StepData ccValue = mStack.Pop();
+                const StepData ccNumber = mStack.Pop();
+                const StepData shouldTrigger = mStack.Pop();
                 
-                stepQueue.emplace_back(StepData{StepType::CC, shouldTrigger, ccNumber, ccValue, channel, DEFAULT_NOTE_DURATION});
+                stepQueue.emplace_back(SequenceStep{StepType::CC, shouldTrigger, ccNumber, ccValue, channel, DEFAULT_NOTE_DURATION});
                 
                 break;
             }

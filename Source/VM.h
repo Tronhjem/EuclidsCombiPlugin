@@ -23,7 +23,7 @@ class VM
 public:
     VM();
     bool Prepare(char* data);
-    bool Tick(std::vector<StepData>& stepQueue, const int globalCount);
+    bool Tick(std::vector<SequenceStep>& stepQueue, const int globalCount);
     void Reset();
     uChar GetTopStackValue() { return mStack.Top(); }
     std::vector<LogEntry>& GetErrors();
@@ -37,5 +37,5 @@ private:
     std::vector<Instruction> mRuntimeInstructions;
     inline uChar RandomValue(const uChar low, const uChar high);
 
-    Stack<uChar> mStack;
+    Stack<StepData> mStack;
 };

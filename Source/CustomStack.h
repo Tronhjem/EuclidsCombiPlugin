@@ -26,7 +26,7 @@ public:
         stackPointer = 0;
     }
     
-    uChar Top()
+    T Top()
     {
         return mStack[stackPointer];
     }

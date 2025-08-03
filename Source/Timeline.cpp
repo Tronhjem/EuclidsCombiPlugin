@@ -52,7 +52,7 @@ void Timeline::paint(juce::Graphics& g)
         // We start behind the global step, as it's always one ahead and we
         // want to paint the current step being triggered.
         const int stepWrapped = (globalStepOffset + step) % STEP_BUFFER_SIZE;
-        std::vector<StepData>& stepDatas = mAudioProcessor->GetStepData()[stepWrapped];
+        std::vector<SequenceStep>& stepDatas = mAudioProcessor->GetStepData()[stepWrapped];
         
         // Calculate alpha values for fadeing steps.
         float alpha = 1.f;
@@ -65,7 +65,7 @@ void Timeline::paint(juce::Graphics& g)
         const int size = static_cast<int>(stepDatas.size());
         for (int i = 0; i < size; ++i)
         {
-            const StepData& stepData = stepDatas[i];
+            const SequenceStep& stepData = stepDatas[i];
 
             juce::Colour colorToSet;
             if (stepData.mShouldTrigger > 0)

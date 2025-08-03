@@ -68,7 +68,7 @@ void Compiler::MakeConstant(Token& token, std::vector<Instruction>& instructions
         mErrorReporting.LogWarning(message);
     }
     
-    instructions.emplace_back(Instruction{OpCode::CONSTANT, static_cast<uChar>(value)});
+    instructions.emplace_back(Instruction{OpCode::CONSTANT, static_cast<StepData>(value)});
 }
 
 void Compiler::MakeOperation(TokenType tokenType, std::vector<Instruction> &instructions)
@@ -180,7 +180,7 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
     return true;
 }
 
-bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLength)
+bool Compiler::CompileArray(std::vector<Instruction>& instructions, StepData& outLength)
 {
     Consume(); // For the Left Bracket
 
@@ -266,7 +266,7 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, uChar& outLe
         return false;
     }
     
-    outLength = static_cast<uChar>(valueCounter);
+    outLength = static_cast<StepData>(valueCounter);
     return true;
 }
 
@@ -475,7 +475,7 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                             // Data Array
                         case TokenType::LEFT_BRACKET:
                         {
-                            uChar arrayLength = 0;
+                            StepData arrayLength = 0;
                             if(CompileArray(instructions, arrayLength))
                             {
                                 instructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});

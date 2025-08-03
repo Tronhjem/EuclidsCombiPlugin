@@ -65,7 +65,7 @@ public:
     double mSampleRate = 44100.0;
     char* GetFileText();
     std::vector<LogEntry>& GetErrors();
-    std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mORchestraEngine->GetStepData(); }
+    std::array<std::vector<SequenceStep>, STEP_BUFFER_SIZE>& GetStepData() { return mORchestraEngine->GetStepData(); }
     int GetGlobalStepCount() { return mORchestraEngine->GetGlobalStepCount(); }
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);

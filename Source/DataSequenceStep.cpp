@@ -2,7 +2,7 @@
 
 #include "DataSequenceStep.h"
 
-DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
+DataSequenceStep::DataSequenceStep(const StepData* data, const int length)
     : mLength(length)
 {
 #if _DEBUG
@@ -15,7 +15,7 @@ DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
     }
 }
 
-uChar DataSequenceStep::GetActiveValueAtIndex(const int index) const
+StepData DataSequenceStep::GetActiveValueAtIndex(const int index) const
 {
 #if _DEBUG
     assert(index < mLength);

@@ -7,10 +7,10 @@ enum class StepType : uChar
     CC = 1
 };
 
-class StepData
+class SequenceStep
 {
 public:
-    StepData(StepType type, uChar shouldTrigger, const uChar firstData, const uChar secondData, const uChar channel, const int duration) :
+    SequenceStep(StepType type, StepData shouldTrigger, const StepData firstData, const StepData secondData, const StepData channel, const int duration) :
         mType(type),
         mShouldTrigger(shouldTrigger),
         mFirstData(firstData),
@@ -20,15 +20,15 @@ public:
     {
     }
     
-    ~StepData() {}
+    ~SequenceStep() {}
     
     StepType mType;
-    uChar mShouldTrigger;
-    uChar mFirstData;
-    uChar mSecondData;
-    uChar mChannel;
+    StepData mShouldTrigger;
+    StepData mFirstData;
+    StepData mSecondData;
+    StepData mChannel;
     int mDuration;
     
 private:
-    StepData() = delete;
+    SequenceStep() = delete;
 };

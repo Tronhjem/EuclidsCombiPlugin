@@ -9,10 +9,10 @@ class DataSequence
 {
 public:
     DataSequence() {}
-    DataSequence(const std::vector<uChar>& data);
-    uChar GetValue(const int index) const;
-    void SetValue(const int index, uChar value);
+    DataSequence(const std::vector<StepData>& data);
+    StepData GetValue(const int index) const;
+    void SetValue(const int index, StepData value);
     
 private:
-    std::vector<uChar> mData;
+    std::vector<StepData> mData;
 };

@@ -24,7 +24,7 @@ public:
     std::vector<LogEntry>& GetErrors();
     char* LoadFile(std::string& filePath);
     void SaveFile(std::string& data);
-    std::array<std::vector<StepData>, STEP_BUFFER_SIZE>& GetStepData() { return mStepRingBuffer; }
+    std::array<std::vector<SequenceStep>, STEP_BUFFER_SIZE>& GetStepData() { return mStepRingBuffer; }
     int GetGlobalStepCount() { return mCurrentGlobalStep.load(); }
     void WorkerThreadLoop();
     
@@ -39,6 +39,6 @@ private:
     std::thread workerThread;
     std::unique_ptr<VM> mVM;
     std::unique_ptr<FileLoader> mFileLoader;
-    std::array<std::vector<StepData>,STEP_BUFFER_SIZE> mStepRingBuffer;
+    std::array<std::vector<SequenceStep>, STEP_BUFFER_SIZE> mStepRingBuffer;
     MidiScheduler mMidiScheduler;
 };

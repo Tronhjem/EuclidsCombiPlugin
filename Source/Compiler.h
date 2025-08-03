@@ -55,7 +55,7 @@ private:
     inline void MakeOperation(TokenType tokenType, std::vector<Instruction>& instructions);
 
     bool CompileExpression(std::vector<Instruction>& instructions);
-    bool CompileArray(std::vector<Instruction>& instructions, uChar& outLength);
+    bool CompileArray(std::vector<Instruction>& instructions, StepData& outLength);
     bool CompileFunctionCall(std::vector<Instruction>& instructions, std::string& functionName);
 
     int mCurrentIndex = 0;
