@@ -34,31 +34,31 @@ void MidiScheduler::PostMidiCC(const uChar channel,
 
 void MidiScheduler::PostStepData(const SequenceStep& data, const int nextTickTime, const int currentNoteLength)
 {
-    if (data.mShouldTrigger.GetActiveValueAtIndex(0) < 1)
+    if (data.mShouldTrigger.GetValue(0) < 1)
         return;
     
     if(data.mType == StepType::NOTE)
     {
-        PostMidiNote(data.mChannel.GetActiveValueAtIndex(0), data.mFirstData.GetActiveValueAtIndex(0), data.mSecondData.GetActiveValueAtIndex(0), currentNoteLength, nextTickTime);
+        PostMidiNote(data.mChannel.GetValue(0), data.mFirstData.GetValue(0), data.mSecondData.GetValue(0), currentNoteLength, nextTickTime);
     }
     else if(data.mType == StepType::CC)
     {
-        PostMidiCC(data.mChannel.GetActiveValueAtIndex(0), data.mFirstData.GetActiveValueAtIndex(0), data.mSecondData.GetActiveValueAtIndex(0), nextTickTime);
+        PostMidiCC(data.mChannel.GetValue(0), data.mFirstData.GetValue(0), data.mSecondData.GetValue(0), nextTickTime);
     }
 }
 
 void MidiScheduler::PostStepData(const SequenceStep& data, const int nextTickTime)
 {
-    if (data.mShouldTrigger.GetActiveValueAtIndex(0) < 1)
+    if (data.mShouldTrigger.GetValue(0) < 1)
         return;
     
     if(data.mType == StepType::NOTE)
     {
-        PostMidiNote(data.mChannel.GetActiveValueAtIndex(0), data.mFirstData.GetActiveValueAtIndex(0), data.mSecondData.GetActiveValueAtIndex(0), data.mDuration, nextTickTime);
+        PostMidiNote(data.mChannel.GetValue(0), data.mFirstData.GetValue(0), data.mSecondData.GetValue(0), data.mDuration, nextTickTime);
     }
     else if(data.mType == StepType::CC)
     {
-        PostMidiCC(data.mChannel.GetActiveValueAtIndex(0), data.mFirstData.GetActiveValueAtIndex(0), data.mSecondData.GetActiveValueAtIndex(0), nextTickTime);
+        PostMidiCC(data.mChannel.GetValue(0), data.mFirstData.GetValue(0), data.mSecondData.GetValue(0), nextTickTime);
     }
 }
 

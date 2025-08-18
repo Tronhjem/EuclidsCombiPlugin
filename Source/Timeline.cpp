@@ -68,9 +68,9 @@ void Timeline::paint(juce::Graphics& g)
             const SequenceStep& stepData = stepDatas[i];
 
             juce::Colour colorToSet;
-            if (stepData.mShouldTrigger.GetActiveValueAtIndex(0) > 0)
+            if (stepData.mShouldTrigger.GetValue(0) > 0)
             {
-                float t = static_cast<float>(stepData.mSecondData.GetActiveValueAtIndex(0)) / 127.f;
+                float t = static_cast<float>(stepData.mSecondData.GetValue(0)) / 127.f;
                 colorToSet = smoothstepColour(ORchestraColours::MinVelocity,
                                         ORchestraColours::MaxVelocity,
                                         t);
@@ -84,14 +84,14 @@ void Timeline::paint(juce::Graphics& g)
             const float x = step * stepX;
             
             g.fillRect(x, y, drawnStepWidth, drawnStepHeight);
-            if (step == 0 && stepData.mShouldTrigger.GetActiveValueAtIndex(0))
+            if (step == 0 && stepData.mShouldTrigger.GetValue(0))
             {
                 g.setColour(juce::Colours::black);
                 g.drawRect(x, y, drawnStepWidth, drawnStepHeight, 2.f);
             }
             
             g.setColour(juce::Colours::black);
-            std::string first {std::to_string((int)stepData.mFirstData.GetActiveValueAtIndex(0))};
+            std::string first {std::to_string((int)stepData.mFirstData.GetValue(0))};
             g.drawText(first, x, y + quaterStepHeight, stepWidth, 15.f, juce::Justification::centred);
         }
     }

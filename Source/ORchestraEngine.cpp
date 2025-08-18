@@ -137,26 +137,26 @@ void ORchestraEngine::Tick(const TransportData& transportData,
             
             for(const SequenceStep& step : currentData)
             {
-                const int length = static_cast<int>(step.mShouldTrigger.GetLength());
-                for(int i = 0; i < length; ++i)
+                const int triggerLength = static_cast<int>(step.mShouldTrigger.GetLength());
+                for(int i = 0; i < triggerLength; ++i)
                 {
-                    const uChar shouldTrigger = step.mShouldTrigger.GetActiveValueAtIndex(i);
+                    const uChar shouldTrigger = step.mShouldTrigger.GetValue(i);
                     if(!shouldTrigger)
                         continue;
                     
-                    const int timeStamp = nextStepInSamples + i * (samplesPerStep / length);
-                    const uChar channel = step.mChannel.GetActiveValueAtIndex(i);
+                    const int timeStamp = nextStepInSamples + i * (samplesPerStep / triggerLength);
+                    const uChar channel = step.mChannel.GetEquivalentValueAtIndex(i, triggerLength);
                     
                     if(step.mType == StepType::NOTE)
                     {
-                        const uChar noteNumber = step.mFirstData.GetActiveValueAtIndex(i);
-                        const uChar velocity = step.mSecondData.GetActiveValueAtIndex(i);
+                        const uChar noteNumber = step.mFirstData.GetEquivalentValueAtIndex(i, triggerLength);
+                        const uChar velocity = step.mSecondData.GetEquivalentValueAtIndex(i, triggerLength);
                         mMidiScheduler.PostMidiNote(channel, noteNumber, velocity, step.mDuration, timeStamp);
                     }
                     else if(step.mType == StepType::CC)
                     {
-                        const uChar ccNumber = step.mFirstData.GetActiveValueAtIndex(i);
-                        const uChar ccValue = step.mSecondData.GetActiveValueAtIndex(i);
+                        const uChar ccNumber = step.mFirstData.GetEquivalentValueAtIndex(i, triggerLength);
+                        const uChar ccValue = step.mSecondData.GetEquivalentValueAtIndex(i, triggerLength);
                         mMidiScheduler.PostMidiCC(channel, ccNumber, ccValue, timeStamp);
                     }
                 }

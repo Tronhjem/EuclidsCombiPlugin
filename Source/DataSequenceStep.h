@@ -13,25 +13,10 @@ public:
     DataSequenceStep() : mLength(0) {};
     DataSequenceStep(const uChar* data, const int length);
     DataSequenceStep(const int i);
-    bool IsActiveAtSubStep(const int index);
-    uChar GetActiveValueAtIndex(const int index) const;
+    uChar GetValue(const int index) const;
+    uChar GetEquivalentValueAtIndex(const int index, const int otherLength) const;
     void SetData(const uChar* data, const int length);
     uChar GetLength() const { return mLength; };
-    
-//    uChar Get(const int index)
-//    {
-//#if _DEBUG
-//        assert(index < MAX_SUB_DIVISION);
-//#endif
-//        return mData[index];
-//    }
-    
-//    uChar GetDataAtSubDivision(const int subDiv)
-//    {
-//        const int index = std::floor((static_cast<float>(subDiv) /
-//                                      static_cast<float>(MAX_SUB_DIVISION)) * mLength);
-//        return mData[index];
-//    }
     
 private:
     uChar mLength;
