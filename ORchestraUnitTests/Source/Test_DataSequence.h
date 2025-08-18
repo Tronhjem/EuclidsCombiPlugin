@@ -127,36 +127,111 @@ public:
         }
         {
             beginTest ("Sub step subtraction");
+                
+            const int length = 3;
+            uChar dataOne[length] {10, 10, 10};
+            uChar dataTwo[length] {1, 0, 1};
             
-            uChar dataOne[3] {10, 10, 10};
-            uChar dataTwo[3] {1, 0, 1};
+            DataSequenceStep dataStepOne {dataOne, length};
+            DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep dataStepOne {dataOne, 3};
-            DataSequenceStep dataStepTwo {dataTwo, 3};
+            DataSequenceStep result = dataStepOne - dataStepTwo;
+            expect(result.GetLength() == length);
             
-            DataSequenceStep added = dataStepOne - dataStepTwo;
-            expect( added.GetLength() == 3);
-            
-            expect( added.GetValue(0) == 9);
-            expect( added.GetValue(1) == 10);
-            expect( added.GetValue(2) == 9);
+            for(int i = 0; i < length; ++i)
+            {
+                expect(result.GetValue(i) == dataOne[i] - dataTwo[i]);
+            }
         }
-        
         {
-            beginTest ("Sub step subtraction");
+            beginTest ("Sub step multiplication");
             
-            uChar dataOne[3] {10, 10, 10};
-            uChar dataTwo[3] {1, 0, 2};
+            const int length = 3;
+            uChar dataOne[length] {10, 10, 10};
+            uChar dataTwo[length] {1, 0, 1};
             
-            DataSequenceStep dataStepOne {dataOne, 3};
-            DataSequenceStep dataStepTwo {dataTwo, 3};
+            DataSequenceStep dataStepOne {dataOne, length};
+            DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep added = dataStepOne * dataStepTwo;
-            expect( added.GetLength() == 3);
+            DataSequenceStep result = dataStepOne * dataStepTwo;
+            expect(result.GetLength() == length);
             
-            expect( added.GetValue(0) == 10);
-            expect( added.GetValue(1) == 0);
-            expect( added.GetValue(2) == 20);
+            for(int i = 0; i < length; ++i)
+            {
+                expect(result.GetValue(i) == dataOne[i] * dataTwo[i]);
+            }
+        }
+        {
+            beginTest ("Sub step division");
+            
+            const int length = 3;
+            uChar dataOne[length] {10, 10, 10};
+            uChar dataTwo[length] {2, 1, 4};
+            
+            DataSequenceStep dataStepOne {dataOne, length};
+            DataSequenceStep dataStepTwo {dataTwo, length};
+            
+            DataSequenceStep result = dataStepOne / dataStepTwo;
+            expect(result.GetLength() == length);
+            
+            for(int i = 0; i < length; ++i)
+            {
+                expect(result.GetValue(i) == dataOne[i] / dataTwo[i]);
+            }
+        }
+        {
+            beginTest ("Sub step AND");
+            
+            const int length = 3;
+            uChar dataOne[length] {10, 10, 10};
+            uChar dataTwo[length] {2, 1, 4};
+            
+            DataSequenceStep dataStepOne {dataOne, length};
+            DataSequenceStep dataStepTwo {dataTwo, length};
+            
+            DataSequenceStep result = dataStepOne & dataStepTwo;
+            expect(result.GetLength() == length);
+            
+            for(int i = 0; i < length; ++i)
+            {
+                expect(result.GetValue(i) == (dataOne[i] & dataTwo[i]));
+            }
+        }
+        {
+            beginTest ("Sub step XOR");
+            
+            const int length = 3;
+            uChar dataOne[length] {10, 10, 10};
+            uChar dataTwo[length] {2, 1, 4};
+            
+            DataSequenceStep dataStepOne {dataOne, length};
+            DataSequenceStep dataStepTwo {dataTwo, length};
+            
+            DataSequenceStep result = dataStepOne ^ dataStepTwo;
+            expect(result.GetLength() == length);
+            
+            for(int i = 0; i < length; ++i)
+            {
+                expect(result.GetValue(i) == (dataOne[i] ^ dataTwo[i]));
+            }
+        }
+        {
+            beginTest ("Sub step OR");
+            
+            const int length = 3;
+            uChar dataOne[length] {10, 10, 10};
+            uChar dataTwo[length] {2, 1, 4};
+            
+            DataSequenceStep dataStepOne {dataOne, length};
+            DataSequenceStep dataStepTwo {dataTwo, length};
+            
+            DataSequenceStep result = dataStepOne | dataStepTwo;
+            expect(result.GetLength() == length);
+            
+            for(int i = 0; i < length; ++i)
+            {
+                expect(result.GetValue(i) == (dataOne[i] | dataTwo[i]));
+            }
         }
     }
 };
