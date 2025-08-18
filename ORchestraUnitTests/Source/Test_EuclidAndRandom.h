@@ -31,8 +31,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test Euclid sequence");
@@ -41,8 +41,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         {
             beginTest ("Test Euclid sequence");
@@ -51,8 +51,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test Euclid sequence");
@@ -61,8 +61,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
     }
 };

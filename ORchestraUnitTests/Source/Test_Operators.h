@@ -17,8 +17,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 74);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 74);
         }
         {
             beginTest ("Test Setting single expression addition value");
@@ -27,8 +27,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 74 + 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 74 + 1);
         }
         {
             beginTest ("Test Setting single expression subtraction value");
@@ -37,8 +37,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 74 - 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 74 - 1);
         }
         {
             beginTest ("Test Setting single expression multiplication value");
@@ -47,8 +47,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 2 * 2);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 2 * 2);
         }
         {
             beginTest ("Test Setting single expression multiplication value");
@@ -57,8 +57,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 2 / 2);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 2 / 2);
         }
         {
             beginTest ("Test Setting single expression math precedence");
@@ -67,8 +67,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 12 /* (2 + 2) * 5 */);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 12 /* (2 + 2) * 5 */);
         }
         {
             beginTest ("Test setting parenteses");
@@ -77,8 +77,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 4);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 4);
         }
         {
             beginTest ("Test setting parenteses with more operators");
@@ -87,8 +87,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 8);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 8);
         }
         {
             beginTest ("Test setting nesterd parenteses");
@@ -97,8 +97,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 6);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 6);
         }
         {
             beginTest ("Test Setting identifier from other identifier");
@@ -107,8 +107,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 5);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 5);
         }
         {
             beginTest ("Test Setting identifier from other plus math identifier");
@@ -116,9 +116,9 @@ public:
             std::string file {"a = 5 \n b = a + 2 * 5 \n test b"};
             VM vm;
             expect(vm.Prepare(&file[0]));
-            
-            uChar result = vm.GetTopStackValue();
-            expect (result == 5 + (2 * 5));
+           
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 5 + (2 * 5));
         }
         {
             beginTest ("Test Setting getting array index from identifier");
@@ -127,8 +127,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 64);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 64);
         }
         {
             beginTest ("Test Setting getting array index from identifier");
@@ -137,8 +137,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == (64 + 2));
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 64 + 2);
         }
         {
             beginTest ("Test Setting setting identifier with getting global index");
@@ -148,8 +148,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 64);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 64);
         }
         
         {
@@ -160,8 +160,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test Logical AND operator with zero");
@@ -171,8 +171,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         {
             beginTest ("Test Logical OR operator with true");
@@ -182,8 +182,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test Logical OR operator with zero");
@@ -193,8 +193,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test Logical XOR operator with 64 and 64");
@@ -204,8 +204,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         {
             beginTest ("Test Logical XOR operator with 1 and 0");
@@ -215,8 +215,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test Logical XOR operator with 0 and 0");
@@ -226,8 +226,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         {
             beginTest ("Test > operator with 1 and 0");
@@ -237,8 +237,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test > operator with 1 and 5");
@@ -248,8 +248,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         {
             beginTest ("Test >= operator with 1 and 1");
@@ -259,8 +259,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test >= operator with 1 and 1");
@@ -270,8 +270,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test >= operator with 1 and 5");
@@ -281,8 +281,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         
         // Operator <
@@ -294,8 +294,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
         {
             beginTest ("Test M operator with 1 and 5");
@@ -305,8 +305,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test <= operator with 1 and 1");
@@ -316,8 +316,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test <= operator with 1 and 5");
@@ -327,8 +327,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Test <= operator with 1 and 0");
@@ -338,8 +338,8 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 0);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 0);
         }
     }
 };

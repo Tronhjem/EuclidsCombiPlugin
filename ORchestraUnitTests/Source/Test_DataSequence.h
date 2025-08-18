@@ -18,15 +18,62 @@ public:
             VM vm;
             expect(vm.Prepare(&file[0]));
             
-            uChar result = vm.GetTopStackValue();
-            expect (result == 1);
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
         }
         {
             beginTest ("Check Data Step Get");
             
             uChar data[3] {1,0,0};
             DataSequenceStep dataSeqStep{data, 3};
-            expect (dataSeqStep.Get(0) == 1);
+            expect (dataSeqStep.GetValue(0) == 1);
+        }
+        {
+            beginTest ("Sub Step steps");
+            std::string file {"a = [[1,4,5],0,0] \n test a[0]"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
+            expect (result.GetValue(1) == 4);
+            expect (result.GetValue(2) == 5);
+        }
+        {
+            beginTest ("Sub step get equivalent value from other sequence");
+            std::string file {"a = [[60,64],0,0] \n test a[0]"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            const int otherIndexLength = 4;
+            expect (result.GetEquivalentValueAtIndex(0, otherIndexLength) == 60);
+            expect (result.GetEquivalentValueAtIndex(1, otherIndexLength) == 60);
+            expect (result.GetEquivalentValueAtIndex(2, otherIndexLength) == 64);
+            expect (result.GetEquivalentValueAtIndex(3, otherIndexLength) == 64);
+        }
+        {
+            beginTest ("Sub step get equivalent value from other sequence");
+            std::string file {"a = [[60,64],0,0] \n test a[0]"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            const int otherIndexLength = 3;
+            expect (result.GetEquivalentValueAtIndex(0, otherIndexLength) == 60);
+            expect (result.GetEquivalentValueAtIndex(1, otherIndexLength) == 60);
+            expect (result.GetEquivalentValueAtIndex(2, otherIndexLength) == 64);
+        }
+        {
+            beginTest ("Sub Step steps");
+            std::string file {"a = [[1,1,0],0,0] \n test a[0]"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 1);
+            expect (result.GetValue(1) == 1);
+            expect (result.GetValue(2) == 0);
         }
         {
             beginTest ("Check Data Step Get");
