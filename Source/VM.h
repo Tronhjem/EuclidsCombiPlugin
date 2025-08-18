@@ -40,7 +40,7 @@ private:
         
         const StepData& b = mStack.Pop();
         const StepData& a = mStack.Pop();
-        const StepData result = a.ApplyOperation(b, op);
+        const StepData result = a.ApplySequenceWithOperation(b, op);
         mStack.Push(StepData{result});
     }
     

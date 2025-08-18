@@ -45,11 +45,6 @@ bool VM::Prepare(char* data)
         }
     }
 
-
-    
-    size_t s = sizeof(StepData);
-    std::string size = std::to_string(s);
-    mErrorReporting->LogMessage(size);
     
     mStack.Clear();
     return success;

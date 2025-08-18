@@ -39,7 +39,7 @@ public:
 // ===========================================================================
     
     template<typename Operation>
-    DataSequenceStep ApplyOperation(const DataSequenceStep& otherSequence,
+    DataSequenceStep ApplySequenceWithOperation(const DataSequenceStep& otherSequence,
                                     Operation OperationLambda) const
     {
         static_assert(std::is_invocable_v<Operation, const int, const int>,

@@ -106,7 +106,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 4};
             
-            DataSequenceStep added = dataStepOne.ApplyOperation(dataStepTwo, Add);
+            DataSequenceStep added = dataStepOne.ApplySequenceWithOperation(dataStepTwo, Add);
             expect( added.GetLength() == 4);
             
             expect( added.GetValue(0) == 2);
@@ -123,7 +123,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 3};
             
-            DataSequenceStep added = dataStepOne.ApplyOperation(dataStepTwo, Add);
+            DataSequenceStep added = dataStepOne.ApplySequenceWithOperation(dataStepTwo, Add);
             expect( added.GetLength() == 3);
             
             expect( added.GetValue(0) == 2);
@@ -139,7 +139,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 4};
             
-            DataSequenceStep added = dataStepOne.ApplyOperation(dataStepTwo, Add);
+            DataSequenceStep added = dataStepOne.ApplySequenceWithOperation(dataStepTwo, Add);
             expect( added.GetLength() == 4);
             
             expect( added.GetValue(0) == 127);
@@ -157,7 +157,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, Subtract);
+            DataSequenceStep result = dataStepOne.ApplySequenceWithOperation(dataStepTwo, Subtract);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -175,7 +175,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, Multiply);
+            DataSequenceStep result = dataStepOne.ApplySequenceWithOperation(dataStepTwo, Multiply);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -193,7 +193,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, Divide);
+            DataSequenceStep result = dataStepOne.ApplySequenceWithOperation(dataStepTwo, Divide);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -211,7 +211,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, BinaryAND);
+            DataSequenceStep result = dataStepOne.ApplySequenceWithOperation(dataStepTwo, BinaryAND);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -229,7 +229,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, BinaryXOR);
+            DataSequenceStep result = dataStepOne.ApplySequenceWithOperation(dataStepTwo, BinaryXOR);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -247,7 +247,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, BinaryOR);
+            DataSequenceStep result = dataStepOne.ApplySequenceWithOperation(dataStepTwo, BinaryOR);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
