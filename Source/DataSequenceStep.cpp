@@ -74,3 +74,18 @@ DataSequenceStep DataSequenceStep::operator/ (const DataSequenceStep& other)
 {
     return ApplyOperation(other, [](int a, int b ) { return a / b; });
 }
+
+DataSequenceStep DataSequenceStep::operator& (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a & b; });
+}
+
+DataSequenceStep DataSequenceStep::operator^ (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a ^ b; });
+}
+
+DataSequenceStep DataSequenceStep::operator| (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a | b; });
+}

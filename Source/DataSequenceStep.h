@@ -23,6 +23,10 @@ public:
     DataSequenceStep operator* (const DataSequenceStep& other);
     DataSequenceStep operator/ (const DataSequenceStep& other);
     
+    DataSequenceStep operator& (const DataSequenceStep& other);
+    DataSequenceStep operator^ (const DataSequenceStep& other);
+    DataSequenceStep operator| (const DataSequenceStep& other);
+    
 private:
     uChar mLength;
     uChar mData[MAX_SUB_DIVISION_LENGTH];

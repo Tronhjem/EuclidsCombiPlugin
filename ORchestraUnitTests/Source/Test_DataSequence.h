@@ -125,5 +125,38 @@ public:
             expect( added.GetValue(2) == 127);
             expect( added.GetValue(3) == 127);
         }
+        {
+            beginTest ("Sub step subtraction");
+            
+            uChar dataOne[3] {10, 10, 10};
+            uChar dataTwo[3] {1, 0, 1};
+            
+            DataSequenceStep dataStepOne {dataOne, 3};
+            DataSequenceStep dataStepTwo {dataTwo, 3};
+            
+            DataSequenceStep added = dataStepOne - dataStepTwo;
+            expect( added.GetLength() == 3);
+            
+            expect( added.GetValue(0) == 9);
+            expect( added.GetValue(1) == 10);
+            expect( added.GetValue(2) == 9);
+        }
+        
+        {
+            beginTest ("Sub step subtraction");
+            
+            uChar dataOne[3] {10, 10, 10};
+            uChar dataTwo[3] {1, 0, 2};
+            
+            DataSequenceStep dataStepOne {dataOne, 3};
+            DataSequenceStep dataStepTwo {dataTwo, 3};
+            
+            DataSequenceStep added = dataStepOne * dataStepTwo;
+            expect( added.GetLength() == 3);
+            
+            expect( added.GetValue(0) == 10);
+            expect( added.GetValue(1) == 0);
+            expect( added.GetValue(2) == 20);
+        }
     }
 };
