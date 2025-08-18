@@ -8,6 +8,8 @@ enum class OpCode : uChar
     SET_IDENTIFIER_VALUE,
     SET_IDENTIFIER_ARRAY,
     
+    SET_SUBSTEP_ARRAY,
+    
     GENERATE_EUCLID_SEQUENCE,
     
     // Math

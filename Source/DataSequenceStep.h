@@ -3,20 +3,20 @@
 #include <cassert>
 #include <cmath>
 
-//#include "Types.h"
-
 typedef unsigned char uChar;
 
-constexpr int MAX_SUB_DIVISION = 8;
+constexpr int MAX_SUB_DIVISION_LENGTH = 4;
 
 class DataSequenceStep
 {
 public:
-    DataSequenceStep() {};
+    DataSequenceStep() : mLength(0) {};
     DataSequenceStep(const uChar* data, const int length);
     DataSequenceStep(const int i);
     bool IsActiveAtSubStep(const int index);
     uChar GetActiveValueAtIndex(const int index) const;
+    void SetData(const uChar* data, const int length);
+    uChar GetLength() const { return mLength; };
     
 //    uChar Get(const int index)
 //    {
@@ -34,6 +34,6 @@ public:
 //    }
     
 private:
-    int mLength;
-    uChar mData[MAX_SUB_DIVISION];
+    uChar mLength;
+    uChar mData[MAX_SUB_DIVISION_LENGTH];
 };

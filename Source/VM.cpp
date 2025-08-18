@@ -213,7 +213,8 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
 
         case (OpCode::SET_IDENTIFIER_ARRAY):
         {
-            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, 32);
+            const int arrayLength = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, MAX_DATASEQUENCE_LENGTH);
+            
             for (int i = arrayLength - 1; i >=0; --i)
             {
                 mVariables[instruction.mNameValue].SetValue(i, mStack.Pop());
@@ -222,11 +223,28 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             break;
         }
             
+        case (OpCode::SET_SUBSTEP_ARRAY):
+        {
+            const int subStepArrayLength = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, MAX_SUB_DIVISION_LENGTH);
+            uChar data[MAX_SUB_DIVISION_LENGTH];
+            
+            for (int i = subStepArrayLength - 1; i >=0; --i)
+            {
+                data[i] = mStack.Pop().GetActiveValueAtIndex(0);
+            }
+            
+            StepData newStepData {data, subStepArrayLength};
+            mStack.Push(newStepData);
+            
+            break;
+        }
+            
         case (OpCode::GENERATE_EUCLID_SEQUENCE):
         {
-            const int length = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, 32);
+            const int length = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, MAX_DATASEQUENCE_LENGTH);
             const int hits = std::clamp(static_cast<int>(mStack.Pop().GetActiveValueAtIndex(0)), 0, length);
             StepData data[32];
+            
             GenerateEuclideanSequence(data, hits, length);
             
             for (int i = 0; i < length; ++i)
@@ -236,6 +254,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
             const int clampedLength = std::clamp(length, 0, MAX_UCHAR_VALUE);
             mStack.Push(StepData{clampedLength});
+            
             break;
         }
             
@@ -321,6 +340,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
         {
             const uChar b = mStack.Pop().GetActiveValueAtIndex(0);
             const uChar a = mStack.Pop().GetActiveValueAtIndex(0);
+            
             if (b == 0)
             {
                 mStack.Push(StepData{0}); // Division by zero returns 0

@@ -6,7 +6,7 @@ DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
     : mLength(length)
 {
 #if _DEBUG
-    assert(length < MAX_SUB_DIVISION);
+    assert(length <= MAX_SUB_DIVISION_LENGTH);
 #endif
     
     for(int i = 0; i < length; ++i)
@@ -17,7 +17,7 @@ DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
 
 DataSequenceStep::DataSequenceStep(const int i)
 {
-    for(int i = 0; i < MAX_SUB_DIVISION; ++i)
+    for(int i = 0; i < MAX_SUB_DIVISION_LENGTH; ++i)
     {
         mData[i] = 0;
     }
@@ -29,7 +29,16 @@ DataSequenceStep::DataSequenceStep(const int i)
 uChar DataSequenceStep::GetActiveValueAtIndex(const int index) const
 {
 #if _DEBUG
-    assert(index < mLength);
+    assert(index < MAX_SUB_DIVISION_LENGTH);
+#endif
+    
+    if (mLength == 1)
+        return mData[0];
+    
+    const int realIndex = index;
+    
+#if _DEBUG
+    assert(realIndex < mLength);
 #endif
     
     return mData[index];
@@ -38,4 +47,10 @@ uChar DataSequenceStep::GetActiveValueAtIndex(const int index) const
 bool DataSequenceStep::IsActiveAtSubStep(const int index)
 {
     return false;
+}
+
+void DataSequenceStep::SetData(const uChar* data, const int length)
+{
+    memcpy(mData, data, length);
+    mLength = length;
 }

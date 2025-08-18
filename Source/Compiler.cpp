@@ -5,6 +5,35 @@
 #include "Compiler.h"
 #include "ErrorReporting.h"
 #include "ScopedTimer.h"
+#include "DataSequenceStep.h"
+#include "Types.h"
+
+static std::string ranFunctionName = "ran";
+static std::string eucFunctionName = "euc";
+
+Compiler::Compiler(std::vector<Token>& tokens, ErrorReporting& log) : mTokens(tokens), mErrorReporting(log)
+{
+    // populate built in functions
+    std::vector<Instruction> printInstructions;
+    printInstructions.emplace_back(Instruction{ OpCode::PRINT });
+    mFunctions["print"] = StoredFunction(1, printInstructions);
+    
+    std::vector<Instruction> noteInstructions;
+    noteInstructions.emplace_back(Instruction{ OpCode::NOTE });
+    mFunctions["note"] = StoredFunction(4, noteInstructions);
+    
+    std::vector<Instruction> ccInstructions;
+    ccInstructions.emplace_back(Instruction{ OpCode::CC});
+    mFunctions["cc"] = StoredFunction(4, ccInstructions);
+    
+    std::vector<Instruction> ranInstructions;
+    ranInstructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE});
+    mFunctions[ranFunctionName] = StoredFunction(2, ranInstructions);
+    
+    std::vector<Instruction> eucInstructions;
+    eucInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE});
+    mFunctions[eucFunctionName] = StoredFunction(2, eucInstructions);
+}
 
 Token& Compiler::Consume()
 {
@@ -137,8 +166,10 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
 		switch (currentToken.mTokenType)
         {
             case TokenType::COMMA:
+            {
                 Consume();
-				break;
+                break;
+            }
                 
             case TokenType::END:
             case TokenType::EOL:
@@ -148,6 +179,8 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
             }
                 
 			default:
+            {
+                
                 if (!CompileExpression(instructions))
                 {
                     ThrowUnexpectedTokenError(Peek());
@@ -155,6 +188,7 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
                 }
                 ++paramCounter;
                 break;
+            }
         }
     }
     
@@ -180,13 +214,23 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
     return true;
 }
 
-bool Compiler::CompileArray(std::vector<Instruction>& instructions, StepData& outLength)
+bool Compiler::CompileArray(std::vector<Instruction>& instructions,
+                            StepData& outLength,
+                            int maxLength,
+                            bool isLastRecursiveLevel)
 {
     Consume(); // For the Left Bracket
-
+    
+    if(isLastRecursiveLevel && Peek().mTokenType == TokenType::LEFT_BRACKET)
+    {
+        ThrowUnexpectedTokenError(Peek());
+        return false;
+    }
+    
     if(Peek().mTokenType != TokenType::NUMBER &&
        Peek().mTokenType != TokenType::IDENTIFIER &&
-       Peek().mTokenType != TokenType::RANDOM)
+       Peek().mTokenType != TokenType::RANDOM &&
+       Peek().mTokenType != TokenType::LEFT_BRACKET)
     {
         ThrowUnexpectedTokenError(Peek());
         return false;
@@ -196,6 +240,13 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, StepData& ou
     bool expectsValue = true;
     while (Peek().mTokenType != TokenType::RIGHT_BRACKET)
     {
+        if(valueCounter >= maxLength)
+        {
+            std::string message = std::string("Max Length for array exceeded. Can't be longer than ") + std::to_string(maxLength);
+            mErrorReporting.LogError(Peek().mLine, message);
+            return false;
+        }
+        
         Token& currentToken = Peek();
         switch(currentToken.mTokenType)
         {
@@ -211,7 +262,31 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, StepData& ou
                 expectsValue = true;
                 break;
             }
-
+                
+            case TokenType::LEFT_BRACKET:
+            {
+                if(!expectsValue)
+                {
+                    return false;
+                }
+                    
+                StepData arrayLength;
+                const bool isNextRecursionLast = true;
+                if(CompileArray(instructions, arrayLength, MAX_SUB_DIVISION_LENGTH, isNextRecursionLast))
+                {
+                    instructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
+                    instructions.emplace_back(Instruction{OpCode::SET_SUBSTEP_ARRAY});
+                }
+                else
+                {
+                    return false;
+                }
+                
+                ++valueCounter;
+                expectsValue = false;
+                break;
+            }
+                
             case TokenType::NUMBER:
             case TokenType::IDENTIFIER:
             case TokenType::LEFT_PAREN:
@@ -247,7 +322,7 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, StepData& ou
                 expectsValue = false;
                 break;
             }
-
+                
             case TokenType::EOL:
             case TokenType::END:
             default:
@@ -266,7 +341,8 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions, StepData& ou
         return false;
     }
     
-    outLength = static_cast<StepData>(valueCounter);
+    uChar data[1] = {static_cast<uChar>(valueCounter)};
+    outLength.SetData(data, 1);
     return true;
 }
 
@@ -476,7 +552,8 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                         case TokenType::LEFT_BRACKET:
                         {
                             StepData arrayLength = 0;
-                            if(CompileArray(instructions, arrayLength))
+                            const bool isLastRecursiveLevel = false;
+                            if(CompileArray(instructions, arrayLength, MAX_DATASEQUENCE_LENGTH, isLastRecursiveLevel))
                             {
                                 instructions.emplace_back(Instruction{OpCode::CONSTANT, arrayLength});
                                 instructions.emplace_back(Instruction{OpCode::SET_IDENTIFIER_ARRAY, name});

@@ -137,7 +137,29 @@ void ORchestraEngine::Tick(const TransportData& transportData,
             
             for(const SequenceStep& step : currentData)
             {
-                mMidiScheduler.PostStepData(step, nextStepInSamples, transportData.noteLengthInSamples);
+                const int length = static_cast<int>(step.mShouldTrigger.GetLength());
+                for(int i = 0; i < length; ++i)
+                {
+                    const uChar shouldTrigger = step.mShouldTrigger.GetActiveValueAtIndex(i);
+                    if(!shouldTrigger)
+                        continue;
+                    
+                    const int timeStamp = nextStepInSamples + i * (samplesPerStep / length);
+                    const uChar channel = step.mChannel.GetActiveValueAtIndex(i);
+                    
+                    if(step.mType == StepType::NOTE)
+                    {
+                        const uChar noteNumber = step.mFirstData.GetActiveValueAtIndex(i);
+                        const uChar velocity = step.mSecondData.GetActiveValueAtIndex(i);
+                        mMidiScheduler.PostMidiNote(channel, noteNumber, velocity, step.mDuration, timeStamp);
+                    }
+                    else if(step.mType == StepType::CC)
+                    {
+                        const uChar ccNumber = step.mFirstData.GetActiveValueAtIndex(i);
+                        const uChar ccValue = step.mSecondData.GetActiveValueAtIndex(i);
+                        mMidiScheduler.PostMidiCC(channel, ccNumber, ccValue, timeStamp);
+                    }
+                }
             }
             
             mReadySteps.fetch_sub(1, std::memory_order_acq_rel);

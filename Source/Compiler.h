@@ -13,30 +13,7 @@ class ErrorReporting;
 class Compiler
 {
 public:
-    Compiler(std::vector<Token>& tokens, ErrorReporting& log) : mTokens(tokens), mErrorReporting(log)
-    {
-        // populate built in functions
-        std::vector<Instruction> printInstructions;
-        printInstructions.emplace_back(Instruction{ OpCode::PRINT });
-        mFunctions["print"] = StoredFunction(1, printInstructions);
-        
-        std::vector<Instruction> noteInstructions;
-        noteInstructions.emplace_back(Instruction{ OpCode::NOTE });
-        mFunctions["note"] = StoredFunction(4, noteInstructions);
-        
-        std::vector<Instruction> ccInstructions;
-        ccInstructions.emplace_back(Instruction{ OpCode::CC});
-        mFunctions["cc"] = StoredFunction(4, ccInstructions);
-        
-        std::vector<Instruction> ranInstructions;
-        ranInstructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE});
-        mFunctions[ranFunctionName] = StoredFunction(2, ranInstructions);
-        
-        std::vector<Instruction> eucInstructions;
-        eucInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE});
-        mFunctions[eucFunctionName] = StoredFunction(2, eucInstructions);
-    }
-    
+    Compiler(std::vector<Token>& tokens, ErrorReporting& log);
     bool Compile(std::vector<Instruction>& runtimeInstructions);
 
 private:
@@ -55,13 +32,15 @@ private:
     inline void MakeOperation(TokenType tokenType, std::vector<Instruction>& instructions);
 
     bool CompileExpression(std::vector<Instruction>& instructions);
-    bool CompileArray(std::vector<Instruction>& instructions, StepData& outLength);
+    bool CompileArray(std::vector<Instruction>& instructions,
+                      StepData& outLength,
+                      int maxLength,
+                      bool isLastRecursiveLevel);
+    
     bool CompileFunctionCall(std::vector<Instruction>& instructions, std::string& functionName);
 
     int mCurrentIndex = 0;
     std::vector<Token>& mTokens;
     ErrorReporting& mErrorReporting;
     std::unordered_map<std::string, StoredFunction> mFunctions;
-    std::string ranFunctionName = "ran";
-    std::string eucFunctionName = "euc";
 };
