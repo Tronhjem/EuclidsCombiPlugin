@@ -32,6 +32,18 @@ private:
     bool ProcessOpCodes(std::vector<Instruction>& setupInstructions);
     bool ProcessInstruction(const Instruction& instruction, const int stepCount);
     
+    template<typename Operation>
+    void PopDoOperationAndPush(Operation op)
+    {
+        static_assert(std::is_invocable_v<Operation, const int, const int>,
+                             "Operation must be callable with two int parameters");
+        
+        const StepData& b = mStack.Pop();
+        const StepData& a = mStack.Pop();
+        const StepData result = a.ApplyOperation(b, op);
+        mStack.Push(StepData{result});
+    }
+    
     std::unique_ptr<ErrorReporting> mErrorReporting;
     std::unordered_map<std::string, DataSequence> mVariables;
     std::vector<Instruction> mRuntimeInstructions;

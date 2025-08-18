@@ -3,32 +3,26 @@
 #include "EuclideanGenerator.h"
 #include <algorithm>
 
+static const auto Add = [](const int a, const int b) {return a + b; };
+static const auto Subtract = [](const int a, const int b) {return a - b; };
+static const auto Multiply = [](const int a, const int b) {return a * b; };
+
+static const auto Divide = [](const int a, const int b) {
+    if (b == 0)
+        return 0;
+    return a / b;
+};
+
+static const auto BinaryAND = [](const int a, const int b) {return (a > 0) & (b > 0); };
+static const auto BinaryOR = [](const int a, const int b) {return (a > 0) | (b > 0); };
+static const auto BinaryXOR = [](const int a, const int b) {return (a > 0) ^ (b > 0); };
+static const auto Greater = [](const int a, const int b) {return a > b; };
+static const auto GreaterEqual = [](const int a, const int b) {return a >= b; };
+static const auto Lesser = [](const int a, const int b) {return a < b; };
+static const auto LesserEqual = [](const int a, const int b) {return a <= b; };
+static const auto Equal = [](const int a, const int b) {return a == b; };
+
 constexpr int DEFAULT_NOTE_DURATION = 11050;
-
-#define DO_BINARY_OPERATION_AND_PUSH(OP) \
-    do { \
-        const uChar b = static_cast<uChar>(mStack.Pop().GetValue(0) > 0); \
-        const uChar a = static_cast<uChar>(mStack.Pop().GetValue(0) > 0); \
-        const uChar result = a OP b; \
-        mStack.Push(StepData{result}); \
-    } while(0)
-
-#define DO_OPERATION_AND_PUSH(OP) \
-    do { \
-        const uChar b = static_cast<uChar>(mStack.Pop().GetValue(0)); \
-        const uChar a = static_cast<uChar>(mStack.Pop().GetValue(0)); \
-        const uChar result = a OP b; \
-        mStack.Push(StepData{result}); \
-    } while(0)
-
-#define DO_OPERATION_WITH_CLAMP_AND_PUSH(OP) \
-    do { \
-        const uChar b = static_cast<uChar>(mStack.Pop().GetValue(0)); \
-        const uChar a = static_cast<uChar>(mStack.Pop().GetValue(0)); \
-        const int result = static_cast<int>(a) OP static_cast<int>(b); \
-        mStack.Push(StepData{static_cast<uChar>(std::clamp(result, 0, MAX_UCHAR_VALUE))}); \
-    } while(0)
-
 
 VM::VM() 
 {
@@ -295,96 +289,73 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             
         case (OpCode::AND):
         {
-            DO_BINARY_OPERATION_AND_PUSH(&);
-            
+            PopDoOperationAndPush(BinaryAND);
             break;
         }
             
         case (OpCode::OR):
         {
-            DO_BINARY_OPERATION_AND_PUSH(|);
-            
+            PopDoOperationAndPush(BinaryOR);
             break;
         }
             
         case (OpCode::XOR):
         {
-            DO_BINARY_OPERATION_AND_PUSH(^);
-            
+            PopDoOperationAndPush(BinaryXOR);
             break;
         }
             
         case(OpCode::ADD):
         {
-            DO_OPERATION_WITH_CLAMP_AND_PUSH(+);
-            
+            PopDoOperationAndPush(Add);
             break;
         }
 
         case(OpCode::SUBTRACT):
         {
-            DO_OPERATION_WITH_CLAMP_AND_PUSH(-);
-            
+            PopDoOperationAndPush(Subtract);
             break;
         }
 
         case(OpCode::MULTIPLY):
         {
-            DO_OPERATION_WITH_CLAMP_AND_PUSH(*);
-            
+            PopDoOperationAndPush(Multiply);
             break;
         }
 
         case(OpCode::DIVIDE):
         {
-            const uChar b = mStack.Pop().GetValue(0);
-            const uChar a = mStack.Pop().GetValue(0);
-            
-            if (b == 0)
-            {
-                mStack.Push(StepData{0}); // Division by zero returns 0
-            }
-            else
-            {
-                const int result = static_cast<int>(a) / static_cast<int>(b);
-                mStack.Push(StepData{static_cast<int>(std::clamp(result, 0, MAX_UCHAR_VALUE))});
-            }
-            
+            PopDoOperationAndPush(Divide);
             break;
         }
             
         case(OpCode::LESS):
         {
-            DO_OPERATION_AND_PUSH(<);
-            
+            PopDoOperationAndPush(Lesser);
             break;
         }
             
         case(OpCode::LESS_EQUAL):
         {
-            DO_OPERATION_AND_PUSH(<=);
-
+            PopDoOperationAndPush(LesserEqual);
             break;
         }
             
         case(OpCode::GREATER):
         {
-            DO_OPERATION_AND_PUSH(>);
-
+            PopDoOperationAndPush(Greater);
             break;
         }
             
         case(OpCode::GREATER_EQUAL):
         {
-            DO_OPERATION_AND_PUSH(>=);
-            
+            PopDoOperationAndPush(GreaterEqual);
             break;
         }
             
         case(OpCode::EQUAL):
         {
-            DO_OPERATION_AND_PUSH(==);
-
+            PopDoOperationAndPush(Equal);
             break;
         }
             

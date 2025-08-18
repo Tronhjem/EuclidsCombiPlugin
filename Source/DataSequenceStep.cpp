@@ -10,10 +10,7 @@ DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
     assert(length <= MAX_SUB_DIVISION_LENGTH);
 #endif
     
-    for(int i = 0; i < length; ++i)
-    {
-        mData[i] = data[i];
-    }
+    SetData(data, length);
 }
 
 DataSequenceStep::DataSequenceStep(const int i)
@@ -55,37 +52,65 @@ void DataSequenceStep::SetData(const uChar* data, const int length)
     mLength = length;
 }
 
-DataSequenceStep DataSequenceStep::operator+ (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a + b; });
-}
-
-DataSequenceStep DataSequenceStep::operator- (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a - b; });
-}
-
-DataSequenceStep DataSequenceStep::operator* (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a * b; });
-}
-
-DataSequenceStep DataSequenceStep::operator/ (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a / b; });
-}
-
-DataSequenceStep DataSequenceStep::operator& (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a & b; });
-}
-
-DataSequenceStep DataSequenceStep::operator^ (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a ^ b; });
-}
-
-DataSequenceStep DataSequenceStep::operator| (const DataSequenceStep& other)
-{
-    return ApplyOperation(other, [](int a, int b ) { return a | b; });
-}
+// Keeping these for now in case we need them again.
+// But really should use the Apply Operation Directly instead of operation overload.
+//
+//DataSequenceStep DataSequenceStep::operator+ (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a + b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator- (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a - b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator* (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a * b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator/ (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a / b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator& (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return (a > 0) & (b > 0); });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator^ (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return (a > 0) ^ (b > 0); });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator| (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return (a > 0) | (b > 0); });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator< (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a < b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator<= (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a <= b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator> (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a > b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator>= (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a >= b; });
+//}
+//
+//DataSequenceStep DataSequenceStep::operator== (const DataSequenceStep& other) const
+//{
+//    return ApplyOperation(other, [](int a, int b ) { return a == b; });
+//}

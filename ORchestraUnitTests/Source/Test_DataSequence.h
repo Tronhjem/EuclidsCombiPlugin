@@ -4,6 +4,28 @@ using namespace juce;
 #include "../../Source/VM.h"
 #include "../../Source/DataSequenceStep.h"
 
+// ======================================================================================
+// COPIED FROM VM
+static const auto Add = [](const int a, const int b) {return a + b; };
+static const auto Subtract = [](const int a, const int b) {return a - b; };
+static const auto Multiply = [](const int a, const int b) {return a * b; };
+
+static const auto Divide = [](const int a, const int b) {
+    if (b == 0)
+        return 0;
+    return a / b;
+};
+
+static const auto BinaryAND = [](const int a, const int b) {return (a > 0) & (b > 0); };
+static const auto BinaryOR = [](const int a, const int b) {return (a > 0) | (b > 0); };
+static const auto BinaryXOR = [](const int a, const int b) {return (a > 0) ^ (b > 0); };
+static const auto Greater = [](const int a, const int b) {return a > b; };
+static const auto GreaterEqual = [](const int a, const int b) {return a >= b; };
+static const auto Lesser = [](const int a, const int b) {return a < b; };
+static const auto LesserEqual = [](const int a, const int b) {return a <= b; };
+static const auto Equal = [](const int a, const int b) {return a == b; };
+// ======================================================================================
+
 class Test_DataSequence  : public UnitTest
 {
 public:
@@ -76,7 +98,7 @@ public:
             expect (result.GetValue(2) == 0);
         }
         {
-            beginTest ("Sub step addition");
+            beginTest ("Sub step addition off different lengths");
             
             uChar dataOne[2] {1, 1};
             uChar dataTwo[4] {1, 0, 1, 0};
@@ -84,7 +106,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 4};
             
-            DataSequenceStep added = dataStepOne + dataStepTwo;
+            DataSequenceStep added = dataStepOne.ApplyOperation(dataStepTwo, Add);
             expect( added.GetLength() == 4);
             
             expect( added.GetValue(0) == 2);
@@ -93,7 +115,7 @@ public:
             expect( added.GetValue(3) == 1);
         }
         {
-            beginTest ("Sub step addition");
+            beginTest ("Sub step addition of different lenths");
             
             uChar dataOne[2] {1, 1};
             uChar dataTwo[3] {1, 0, 1};
@@ -101,7 +123,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 3};
             
-            DataSequenceStep added = dataStepOne + dataStepTwo;
+            DataSequenceStep added = dataStepOne.ApplyOperation(dataStepTwo, Add);
             expect( added.GetLength() == 3);
             
             expect( added.GetValue(0) == 2);
@@ -117,7 +139,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 4};
             
-            DataSequenceStep added = dataStepOne + dataStepTwo;
+            DataSequenceStep added = dataStepOne.ApplyOperation(dataStepTwo, Add);
             expect( added.GetLength() == 4);
             
             expect( added.GetValue(0) == 127);
@@ -135,7 +157,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne - dataStepTwo;
+            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, Subtract);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -153,7 +175,7 @@ public:
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne * dataStepTwo;
+            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, Multiply);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -165,13 +187,13 @@ public:
             beginTest ("Sub step division");
             
             const int length = 3;
-            uChar dataOne[length] {10, 10, 10};
-            uChar dataTwo[length] {2, 1, 4};
+            uChar dataOne[length] {20, 10, 10};
+            uChar dataTwo[length] {2, 1, 2};
             
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne / dataStepTwo;
+            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, Divide);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
@@ -184,17 +206,17 @@ public:
             
             const int length = 3;
             uChar dataOne[length] {10, 10, 10};
-            uChar dataTwo[length] {2, 1, 4};
+            uChar dataTwo[length] {1, 0, 1};
             
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne & dataStepTwo;
+            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, BinaryAND);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
             {
-                expect(result.GetValue(i) == (dataOne[i] & dataTwo[i]));
+                expect(result.GetValue(i) == ((dataOne[i] > 0) & (dataTwo[i] > 0)));
             }
         }
         {
@@ -202,17 +224,17 @@ public:
             
             const int length = 3;
             uChar dataOne[length] {10, 10, 10};
-            uChar dataTwo[length] {2, 1, 4};
+            uChar dataTwo[length] {1, 0, 1};
             
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne ^ dataStepTwo;
+            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, BinaryXOR);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
             {
-                expect(result.GetValue(i) == (dataOne[i] ^ dataTwo[i]));
+                expect(result.GetValue(i) == ((dataOne[i] > 0) ^ (dataTwo[i] > 0)));
             }
         }
         {
@@ -220,18 +242,40 @@ public:
             
             const int length = 3;
             uChar dataOne[length] {10, 10, 10};
-            uChar dataTwo[length] {2, 1, 4};
+            uChar dataTwo[length] {1, 0, 1};
             
             DataSequenceStep dataStepOne {dataOne, length};
             DataSequenceStep dataStepTwo {dataTwo, length};
             
-            DataSequenceStep result = dataStepOne | dataStepTwo;
+            DataSequenceStep result = dataStepOne.ApplyOperation(dataStepTwo, BinaryOR);
             expect(result.GetLength() == length);
             
             for(int i = 0; i < length; ++i)
             {
-                expect(result.GetValue(i) == (dataOne[i] | dataTwo[i]));
+                expect(result.GetValue(i) == ((dataOne[i] > 0) | (dataTwo[i] > 0)));
             }
+        }
+        {
+            beginTest ("Sub Division Add with single digit");
+            
+            std::string file {"a = [[60,65,70], 0, 0] \n b = a + 10 \n test b[0]"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 60 + 10);
+            expect (result.GetValue(1) == 65 + 10);
+            expect (result.GetValue(2) == 70 + 10);
+        }
+        {
+            beginTest ("Sub Division Add with single digit");
+            
+            std::string file {"a = [[60,65,70], 5, 0] \n b = a[1] + 10 \n test b[1]"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) == 5 + 10);
         }
     }
 };

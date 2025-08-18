@@ -17,25 +17,32 @@ public:
     uChar GetEquivalentValueAtIndex(const int index, const int otherLength) const;
     void SetData(const uChar* data, const int length);
     uChar GetLength() const { return mLength; };
-    
-    DataSequenceStep operator+ (const DataSequenceStep& other);
-    DataSequenceStep operator- (const DataSequenceStep& other);
-    DataSequenceStep operator* (const DataSequenceStep& other);
-    DataSequenceStep operator/ (const DataSequenceStep& other);
-    
-    DataSequenceStep operator& (const DataSequenceStep& other);
-    DataSequenceStep operator^ (const DataSequenceStep& other);
-    DataSequenceStep operator| (const DataSequenceStep& other);
-    
-private:
-    uChar mLength;
-    uChar mData[MAX_SUB_DIVISION_LENGTH];
+
+//===========================================================================
+// Keeping these for now in case we need them again.
+// But really should use the Apply Operation Directly instead of operation overload.
+//===========================================================================
+//    DataSequenceStep operator+ (const DataSequenceStep& other) const;
+//    DataSequenceStep operator- (const DataSequenceStep& other) const;
+//    DataSequenceStep operator* (const DataSequenceStep& other) const;
+//    DataSequenceStep operator/ (const DataSequenceStep& other) const;
+//
+//    DataSequenceStep operator& (const DataSequenceStep& other) const;
+//    DataSequenceStep operator^ (const DataSequenceStep& other) const;
+//    DataSequenceStep operator| (const DataSequenceStep& other) const;
+//
+//    DataSequenceStep operator< (const DataSequenceStep& other) const;
+//    DataSequenceStep operator<= (const DataSequenceStep& other) const;
+//    DataSequenceStep operator> (const DataSequenceStep& other) const;
+//    DataSequenceStep operator>= (const DataSequenceStep& other) const;
+//    DataSequenceStep operator== (const DataSequenceStep& other) const;
+// ===========================================================================
     
     template<typename Operation>
     DataSequenceStep ApplyOperation(const DataSequenceStep& otherSequence,
-                                    Operation OperationLambda)
+                                    Operation OperationLambda) const
     {
-        static_assert(std::is_invocable_v<Operation, int, int>,
+        static_assert(std::is_invocable_v<Operation, const int, const int>,
                              "Operation must be callable with two int parameters");
         
         const DataSequenceStep& longest = this->GetLength() > otherSequence.GetLength() ? *this : otherSequence;
@@ -47,12 +54,17 @@ private:
         
         for(int i = 0; i < newLength; ++i)
         {
-            const int newValue = OperationLambda(shortest.GetEquivalentValueAtIndex(i, newLength), longest.GetValue(i));
+            const int newValue = OperationLambda(static_cast<int>(shortest.GetEquivalentValueAtIndex(i, newLength)),
+                                                 static_cast<int>(longest.GetValue(i)));
             newStep.mData[i] = static_cast<uChar>(std::clamp(newValue, 0, 127));
         }
         
         return newStep;
     }
+    
+private:
+    uChar mLength;
+    uChar mData[MAX_SUB_DIVISION_LENGTH];
     
 };
 
