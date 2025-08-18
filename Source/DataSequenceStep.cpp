@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include "DataSequenceStep.h"
+#include "Types.h"
 
 DataSequenceStep::DataSequenceStep(const uChar* data, const int length)
     : mLength(length)
@@ -52,4 +53,24 @@ void DataSequenceStep::SetData(const uChar* data, const int length)
 {
     memcpy(mData, data, length);
     mLength = length;
+}
+
+DataSequenceStep DataSequenceStep::operator+ (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a + b; });
+}
+
+DataSequenceStep DataSequenceStep::operator- (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a - b; });
+}
+
+DataSequenceStep DataSequenceStep::operator* (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a * b; });
+}
+
+DataSequenceStep DataSequenceStep::operator/ (const DataSequenceStep& other)
+{
+    return ApplyOperation(other, [](int a, int b ) { return a / b; });
 }

@@ -8,6 +8,7 @@ typedef unsigned char uChar;
 typedef DataSequenceStep StepData;
 
 constexpr int MAX_DATASEQUENCE_LENGTH = 32;
+constexpr int MAX_UCHAR_VALUE = 127;
 
 //static_assert(sizeof(uChar) == 1);
 

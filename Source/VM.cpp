@@ -4,7 +4,6 @@
 #include <algorithm>
 
 constexpr int DEFAULT_NOTE_DURATION = 11050;
-constexpr int MAX_UCHAR_VALUE = 127;
 
 #define DO_BINARY_OPERATION_AND_PUSH(OP) \
     do { \

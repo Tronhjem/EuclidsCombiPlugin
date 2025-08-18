@@ -76,7 +76,7 @@ public:
             expect (result.GetValue(2) == 0);
         }
         {
-            beginTest ("Check Data Step Get");
+            beginTest ("Sub step addition");
             
             uChar dataOne[2] {1, 1};
             uChar dataTwo[4] {1, 0, 1, 0};
@@ -84,6 +84,46 @@ public:
             DataSequenceStep dataStepOne {dataOne, 2};
             DataSequenceStep dataStepTwo {dataTwo, 4};
             
+            DataSequenceStep added = dataStepOne + dataStepTwo;
+            expect( added.GetLength() == 4);
+            
+            expect( added.GetValue(0) == 2);
+            expect( added.GetValue(1) == 1);
+            expect( added.GetValue(2) == 2);
+            expect( added.GetValue(3) == 1);
+        }
+        {
+            beginTest ("Sub step addition");
+            
+            uChar dataOne[2] {1, 1};
+            uChar dataTwo[3] {1, 0, 1};
+            
+            DataSequenceStep dataStepOne {dataOne, 2};
+            DataSequenceStep dataStepTwo {dataTwo, 3};
+            
+            DataSequenceStep added = dataStepOne + dataStepTwo;
+            expect( added.GetLength() == 3);
+            
+            expect( added.GetValue(0) == 2);
+            expect( added.GetValue(1) == 1);
+            expect( added.GetValue(2) == 2);
+        }
+        {
+            beginTest ("Sub step addition clamp");
+            
+            uChar dataOne[2] {127, 127};
+            uChar dataTwo[4] {127, 0, 127, 0};
+            
+            DataSequenceStep dataStepOne {dataOne, 2};
+            DataSequenceStep dataStepTwo {dataTwo, 4};
+            
+            DataSequenceStep added = dataStepOne + dataStepTwo;
+            expect( added.GetLength() == 4);
+            
+            expect( added.GetValue(0) == 127);
+            expect( added.GetValue(1) == 127);
+            expect( added.GetValue(2) == 127);
+            expect( added.GetValue(3) == 127);
         }
     }
 };
