@@ -18,6 +18,11 @@
 
 class Instruction;
 
+/// This is the virtual machine that takes care of initializing the Scanner and Compiler
+/// to first read the file, compile it into OpCodes and then later run the OpCodes on each Tick
+/// to populate the SequenceSteps for the ORChestra Engine and MidiScheduler.
+/// It's a simple stack based virtual machine that goes through all the OpCodes from the compiler
+/// and executes them.
 class VM
 {
 public:

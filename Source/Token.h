@@ -12,7 +12,6 @@ enum class TokenType
     LEFT_BRACKET,
     RIGHT_BRACKET,
     COMMA,
-//    SEMICOLON,
     
     // MATH
     DOT,
@@ -24,8 +23,7 @@ enum class TokenType
     // One or two character tokens.
     EQUAL,
     EQUAL_EQUAL,
-//    BANG,
-//    BANG_EQUAL,
+    BANG_EQUAL,
     GREATER,
     GREATER_EQUAL,
     LESS,
@@ -46,6 +44,20 @@ enum class TokenType
     TEST,
     RANDOM,
     EUCLIDEAN,
+    ERROR,
+    
+    // Specific
+    //TRACK,
+    NOTE,
+    CC,
+
+    // ENDS
+    EOL, // End Of Line
+    END,
+    
+// UNUSED STUFF
+//    SEMICOLON,
+//    BANG,
 //    CLASS,
 //    ELSE,
 //    FALSE,
@@ -59,16 +71,7 @@ enum class TokenType
 //    TRUE,
 //    VAR,
 //    WHILE,
-    ERROR,
     
-    // Specific
-    //TRACK,
-    NOTE,
-    CC,
-
-    // ENDS
-    EOL, // End Of Line
-    END,
 };
 
 class Token

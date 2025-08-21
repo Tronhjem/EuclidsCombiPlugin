@@ -3,10 +3,14 @@
 #include <cassert>
 #include <cmath>
 
+#include "Defines.h"
+
 typedef unsigned char uChar;
 
-constexpr int MAX_SUB_DIVISION_LENGTH = 4;
-
+/// Each Step in the DataSequences holds a number of unsigned chars that makes up
+/// the sub division of a step. It's necessary to have all values as these DataSequenceSteps
+/// with an array of data, as we need to always be able to combine a single value with a substep
+/// of any length.
 class DataSequenceStep
 {
 public:
@@ -38,6 +42,10 @@ public:
 //    DataSequenceStep operator== (const DataSequenceStep& other) const;
 // ===========================================================================
     
+    /// Takes another DataSequenceStep and returns a new DataSequenceStep
+    /// with the length of the longest of the two.
+    /// A lambda is passed that takes 2 ints, and this operation will be applied to each
+    /// Sub Division step in the sequence.
     template<typename Operation>
     DataSequenceStep ApplySequenceWithOperation(const DataSequenceStep& otherSequence,
                                     Operation OperationLambda) const
@@ -65,8 +73,4 @@ public:
 private:
     uChar mLength;
     uChar mData[MAX_SUB_DIVISION_LENGTH];
-    
 };
-
-
-

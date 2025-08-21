@@ -5,6 +5,8 @@
 #include "Types.h"
 #include "DataSequenceStep.h"
 
+/// DataSequence holds a number of StepData aka. DataSequenceSteps.
+/// These are the ones we access with the global index to send data.
 class DataSequence
 {
 public:

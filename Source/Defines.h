@@ -29,5 +29,4 @@ const auto Divide = [](const int a, const int b) {
 constexpr int MAX_DATASEQUENCE_LENGTH = 32;
 constexpr int MAX_UCHAR_VALUE = 127;
 constexpr int DEFAULT_NOTE_DURATION = 11050;
-
-
+constexpr int MAX_SUB_DIVISION_LENGTH = 4;
