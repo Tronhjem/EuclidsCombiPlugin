@@ -45,7 +45,6 @@ bool VM::Prepare(char* data)
         }
     }
 
-    
     mStack.Clear();
     return success;
 }
