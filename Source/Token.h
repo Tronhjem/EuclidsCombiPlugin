@@ -20,14 +20,6 @@ enum class TokenType
     SLASH,
     STAR,
 
-    // One or two character tokens.
-    EQUAL,
-    EQUAL_EQUAL,
-    BANG_EQUAL,
-    GREATER,
-    GREATER_EQUAL,
-    LESS,
-    LESS_EQUAL,
 
     // Literals.
     IDENTIFIER,
@@ -38,6 +30,14 @@ enum class TokenType
     AND,
     OR,
     XOR,
+    
+    EQUAL,
+    EQUAL_EQUAL,
+    BANG_EQUAL,
+    GREATER,
+    GREATER_EQUAL,
+    LESS,
+    LESS_EQUAL,
     
     // Keywords.
     PRINT,

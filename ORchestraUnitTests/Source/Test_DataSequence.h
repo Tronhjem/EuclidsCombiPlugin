@@ -13,6 +13,17 @@ public:
     void runTest() override
     {
         {
+            beginTest ("Check that ran works in data sequence");
+            
+            std::string file {"a = [ran(50,60), 5, 0] \n test a"};
+            VM vm;
+            expect(vm.Prepare(&file[0]));
+            
+            StepData result = vm.GetTopStackValue();
+            expect (result.GetValue(0) >= 50);
+            expect (result.GetValue(0) <= 60);
+        }
+        {
             beginTest ("Basic Get in Data Sequence");
             
             std::string file {"a = [1,0,0] \n test a[0]"};
@@ -256,5 +267,6 @@ public:
             StepData result = vm.GetTopStackValue();
             expect (result.GetValue(0) == 5 + 10);
         }
+        
     }
 };

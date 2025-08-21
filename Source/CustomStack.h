@@ -32,6 +32,7 @@ public:
     }
 
 private:
+    // TODO: Should we make this smaller or bigger??
     std::array<T, 64> mStack;
     int stackPointer = 0;
 };

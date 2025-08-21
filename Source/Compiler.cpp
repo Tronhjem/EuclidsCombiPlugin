@@ -316,6 +316,8 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions,
                     return false;
                 }
                 
+                Consume(); // Consumes the ran function token
+                
                 if(!CompileFunctionCall(instructions, ranFunctionName))
                     return false;
                 
