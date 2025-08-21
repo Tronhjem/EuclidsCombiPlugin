@@ -7,8 +7,6 @@ It uses logic operations like `&`, `^`, and `|` to combine sequences into tracks
 Each part loops and is evaluated with the specified operator, allowing sequences of different lengths 
 to phase and create complex rhythmic patterns. Where it gets really powerful is when combining sequences 
 of different legnths and hear how the operations creates interesting evolving patterns.
-
-See more in the prototype repo.
 ____
 
 Starting work on the plugin version of the prototype Euclids Combinator.
