@@ -17,6 +17,7 @@
             file="../Source/DataSequenceStep.cpp"/>
       <FILE id="fdjPoC" name="DataSequenceStep.h" compile="0" resource="0"
             file="../Source/DataSequenceStep.h"/>
+      <FILE id="uWIZlK" name="Defines.h" compile="0" resource="0" file="../Source/Defines.h"/>
       <FILE id="U304zC" name="ErrorReporting.cpp" compile="1" resource="0"
             file="../Source/ErrorReporting.cpp"/>
       <FILE id="IMzVZ1" name="ErrorReporting.h" compile="0" resource="0"

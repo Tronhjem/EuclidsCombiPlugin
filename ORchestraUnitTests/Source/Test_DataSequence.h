@@ -3,28 +3,7 @@
 using namespace juce;
 #include "../../Source/VM.h"
 #include "../../Source/DataSequenceStep.h"
-
-// ======================================================================================
-// COPIED FROM VM
-static const auto Add = [](const int a, const int b) {return a + b; };
-static const auto Subtract = [](const int a, const int b) {return a - b; };
-static const auto Multiply = [](const int a, const int b) {return a * b; };
-
-static const auto Divide = [](const int a, const int b) {
-    if (b == 0)
-        return 0;
-    return a / b;
-};
-
-static const auto BinaryAND = [](const int a, const int b) {return (a > 0) & (b > 0); };
-static const auto BinaryOR = [](const int a, const int b) {return (a > 0) | (b > 0); };
-static const auto BinaryXOR = [](const int a, const int b) {return (a > 0) ^ (b > 0); };
-static const auto Greater = [](const int a, const int b) {return a > b; };
-static const auto GreaterEqual = [](const int a, const int b) {return a >= b; };
-static const auto Lesser = [](const int a, const int b) {return a < b; };
-static const auto LesserEqual = [](const int a, const int b) {return a <= b; };
-static const auto Equal = [](const int a, const int b) {return a == b; };
-// ======================================================================================
+#include "../../Source/Defines.h"
 
 class Test_DataSequence  : public UnitTest
 {

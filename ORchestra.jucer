@@ -76,6 +76,7 @@
         <FILE id="zn7Zk7" name="PluginEditor.cpp" compile="1" resource="0"
               file="Source/PluginEditor.cpp"/>
       </GROUP>
+      <FILE id="o5qFml" name="Defines.h" compile="0" resource="0" file="Source/Defines.h"/>
       <FILE id="gYku1Q" name="Types.h" compile="0" resource="0" file="Source/Types.h"/>
       <FILE id="Od2hLp" name="TransportData.h" compile="0" resource="0" file="Source/TransportData.h"/>
       <FILE id="IFOmAR" name="MidiScheduler.h" compile="0" resource="0" file="Source/MidiScheduler.h"/>

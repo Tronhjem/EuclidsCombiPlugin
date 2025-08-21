@@ -7,6 +7,7 @@
 #include "ScopedTimer.h"
 #include "DataSequenceStep.h"
 #include "Types.h"
+#include "Defines.h"
 
 static std::string ranFunctionName = "ran";
 static std::string eucFunctionName = "euc";

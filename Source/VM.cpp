@@ -1,30 +1,12 @@
-#include "VM.h"
-#include "ScopedTimer.h"
-#include "EuclideanGenerator.h"
 #include <algorithm>
 
-static const auto Add = [](const int a, const int b) {return a + b; };
-static const auto Subtract = [](const int a, const int b) {return a - b; };
-static const auto Multiply = [](const int a, const int b) {return a * b; };
+#include "VM.h"
 
-static const auto Divide = [](const int a, const int b) {
-    if (b == 0)
-        return 0;
-    return a / b;
-};
+#include "ScopedTimer.h"
+#include "EuclideanGenerator.h"
+#include "Defines.h"
 
-static const auto BinaryAND = [](const int a, const int b) {return (a > 0) & (b > 0); };
-static const auto BinaryOR = [](const int a, const int b) {return (a > 0) | (b > 0); };
-static const auto BinaryXOR = [](const int a, const int b) {return (a > 0) ^ (b > 0); };
-static const auto Greater = [](const int a, const int b) {return a > b; };
-static const auto GreaterEqual = [](const int a, const int b) {return a >= b; };
-static const auto Lesser = [](const int a, const int b) {return a < b; };
-static const auto LesserEqual = [](const int a, const int b) {return a <= b; };
-static const auto Equal = [](const int a, const int b) {return a == b; };
-
-constexpr int DEFAULT_NOTE_DURATION = 11050;
-
-VM::VM() 
+VM::VM()
 {
     mErrorReporting = std::make_unique<ErrorReporting>();
 }
