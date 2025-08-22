@@ -16,23 +16,25 @@ Compiler::Compiler(std::vector<Token>& tokens, ErrorReporting& log) : mTokens(to
 {
     // populate built in functions
     std::vector<Instruction> printInstructions;
+#if _DEBUG
     printInstructions.emplace_back(Instruction{ OpCode::PRINT });
     mFunctions["print"] = StoredFunction(1, printInstructions);
+#endif
     
     std::vector<Instruction> noteInstructions;
     noteInstructions.emplace_back(Instruction{ OpCode::NOTE });
     mFunctions["note"] = StoredFunction(4, noteInstructions);
     
     std::vector<Instruction> ccInstructions;
-    ccInstructions.emplace_back(Instruction{ OpCode::CC});
+    ccInstructions.emplace_back(Instruction{ OpCode::CC });
     mFunctions["cc"] = StoredFunction(4, ccInstructions);
     
     std::vector<Instruction> ranInstructions;
-    ranInstructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE});
+    ranInstructions.emplace_back(Instruction{OpCode::GET_RANDOM_IN_RANGE });
     mFunctions[ranFunctionName] = StoredFunction(2, ranInstructions);
     
     std::vector<Instruction> eucInstructions;
-    eucInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE});
+    eucInstructions.emplace_back(Instruction{OpCode::GENERATE_EUCLID_SEQUENCE });
     mFunctions[eucFunctionName] = StoredFunction(2, eucInstructions);
 }
 
@@ -43,13 +45,18 @@ Token& Compiler::Consume()
 
 Token& Compiler::Peek()
 {
+#if _DEBUG
     assert(mCurrentIndex < mTokens.size());
+#endif
     return mTokens[mCurrentIndex];
 }
 
 Token& Compiler::Previous()
 {
+#if _DEBUG
     assert(mCurrentIndex < mTokens.size());
+    assert(mCurrentIndex - 1 >= 0);
+#endif
     return mTokens[mCurrentIndex - 1];
 }
 
@@ -181,7 +188,6 @@ bool Compiler::CompileFunctionCall(std::vector<Instruction>& instructions, std::
                 
 			default:
             {
-                
                 if (!CompileExpression(instructions))
                 {
                     ThrowUnexpectedTokenError(Peek());
@@ -266,7 +272,7 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions,
                 
             case TokenType::LEFT_BRACKET:
             {
-                if(!expectsValue)
+                if(!expectsValue || isLastRecursiveLevel)
                 {
                     return false;
                 }
@@ -328,10 +334,15 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions,
                 
             case TokenType::EOL:
             case TokenType::END:
-            default:
             {
                 std::string missingToken {"]"};
                 ThrowUnexpectedEnd(missingToken);
+                return false;
+            }
+                
+            default:
+            {
+                ThrowUnexpectedTokenError(currentToken);
                 return false;
             }
         }
@@ -344,14 +355,15 @@ bool Compiler::CompileArray(std::vector<Instruction>& instructions,
         return false;
     }
     
-    uChar data[1] = {static_cast<uChar>(valueCounter)};
+    const uChar data[1] = {static_cast<uChar>(valueCounter)};
     outLength.SetData(data, 1);
+    
     return true;
 }
 
 bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
 {
-    auto isOperator = [&](TokenType t) -> bool
+    auto isOperator = [&](const TokenType t) -> bool
     {
         return  t == TokenType::PLUS ||
             t == TokenType::MINUS ||
@@ -367,7 +379,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             t == TokenType::EQUAL_EQUAL;
     };
     
-    auto precedence = [&](TokenType t) -> int
+    auto precedence = [&](const TokenType t) -> int
     {
         if(t == TokenType::PLUS || t == TokenType::MINUS)
             return 1;
@@ -395,7 +407,7 @@ bool Compiler::CompileExpression(std::vector<Instruction>& instructions)
             break;
         
         Token& currentToken = Consume();
-        TokenType tType = currentToken.mTokenType;
+        const TokenType tType = currentToken.mTokenType;
         
         // For nested parenteses where there can be more left parens after each other.
         if(tType == TokenType::LEFT_PAREN)
@@ -612,7 +624,9 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 break;
             }
 
+#if _DEBUG
             case TokenType::PRINT:
+#endif
             case TokenType::NOTE:
             case TokenType::CC:
             {
@@ -622,7 +636,8 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 
                 break;
             }
-                
+             
+#if _TEST
             case TokenType::TEST:
             {
                 if(Peek().mTokenType == TokenType::IDENTIFIER || Peek().mTokenType == TokenType::NUMBER)
@@ -636,6 +651,7 @@ bool Compiler::Compile(std::vector<Instruction>& instructions)
                 }
                 break;
             }
+#endif
                 
             case TokenType::END:
                 instructions.emplace_back(Instruction{OpCode::END});

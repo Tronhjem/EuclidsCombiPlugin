@@ -36,9 +36,11 @@ enum class OpCode : uChar
     
     // Built in Functions
     CALL_FUNCTION,
-    PRINT,
     GET_RANDOM_IN_RANGE,
-    END
+    END,
+#if _DEBUG
+    PRINT
+#endif
 };
 
 class Instruction {

@@ -345,6 +345,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
             break;
         }
             
+#if _DEBUG
         case(OpCode::PRINT):
         {
             const uChar value = mStack.Pop().GetValue(0);
@@ -354,7 +355,7 @@ bool VM::ProcessInstruction(const Instruction& instruction, const int stepCount)
 
             break;
         }
-            
+#endif
         default:
             const std::string err {"Unexpected Operation code"};
             mErrorReporting->LogError(err);

@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="I6NKaC" name="ORchestraUnitTests" projectType="consoleapp"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
-              jucerFormatVersion="1">
+              jucerFormatVersion="1" defines="_TEST">
   <MAINGROUP id="KXJX3f" name="ORchestraUnitTests">
     <GROUP id="{99D7554C-0247-92F8-F092-B98D5967FFD8}" name="FileRefs">
       <FILE id="OZor33" name="Compiler.cpp" compile="1" resource="0" file="../Source/Compiler.cpp"/>

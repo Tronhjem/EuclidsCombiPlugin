@@ -40,8 +40,6 @@ enum class TokenType
     LESS_EQUAL,
     
     // Keywords.
-    PRINT,
-    TEST,
     RANDOM,
     EUCLIDEAN,
     ERROR,
@@ -55,6 +53,14 @@ enum class TokenType
     EOL, // End Of Line
     END,
     
+    // DEBUGGING
+    
+#if _DEBUG
+    PRINT,
+#endif
+#if _TEST
+    TEST,
+#endif
 // UNUSED STUFF
 //    SEMICOLON,
 //    BANG,
@@ -71,7 +77,6 @@ enum class TokenType
 //    TRUE,
 //    VAR,
 //    WHILE,
-    
 };
 
 class Token
