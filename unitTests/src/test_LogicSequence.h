@@ -1,6 +1,6 @@
 #pragma once
 using namespace juce;
-#include "../../Source/LogicSequence.h"
+#include "LogicSequence.h"
 
 constexpr int test_logicSequenceLength = 8;
 class Test_LogicSequence  : public UnitTest

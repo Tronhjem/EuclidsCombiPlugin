@@ -1,7 +1,7 @@
 #pragma once
 
 using namespace juce;
-#include "../../Source/VM.h"
+#include "VM.h"
 
 class Test_Operators  : public UnitTest
 {

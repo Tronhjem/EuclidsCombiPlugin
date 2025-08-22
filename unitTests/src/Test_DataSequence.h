@@ -1,9 +1,9 @@
 #pragma once
 
 using namespace juce;
-#include "../../Source/VM.h"
-#include "../../Source/DataSequenceStep.h"
-#include "../../Source/Defines.h"
+#include "VM.h"
+#include "DataSequenceStep.h"
+#include "Defines.h"
 
 class Test_DataSequence  : public UnitTest
 {
